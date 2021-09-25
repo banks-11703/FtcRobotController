@@ -33,7 +33,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -44,17 +43,17 @@ import com.qualcomm.robotcore.util.Range;
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- * <p>
+ *
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- * <p>
+ *
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "Basic Drive Code", group = "Linear Opmode")
-// @Disabled
-public class BasicDriveCode extends LinearOpMode {
+@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
+//@Disabled
+public class BasicOpMode_Linear extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -136,14 +135,14 @@ public class BasicDriveCode extends LinearOpMode {
             BackRightDrive.setPower(rightPower);*/
 
             forward_reverse = gamepad1.left_stick_y;
-            rotate = gamepad1.left_stick_x;
-            strafe = gamepad1.right_stick_x;
+            rotate = gamepad1.right_stick_x;
+            strafe = gamepad1.left_stick_x;
             button_a_pressed = gamepad1.a;
 
-            BackLeftDrive.setPower((+forward_reverse - rotate + strafe) / 2);
-            FrontLeftDrive.setPower((+forward_reverse - rotate - strafe) / 2);
-            FrontRightDrive.setPower((+forward_reverse + rotate + strafe) / 2);
-            BackRightDrive.setPower((+forward_reverse + rotate - strafe) / 2);
+            BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
+            FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
+            FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
+            BackRightDrive.setPower((+forward_reverse - rotate - strafe));
 
             if (button_a_pressed && !button_a_was_pressed) {
                 toggleFlag();
