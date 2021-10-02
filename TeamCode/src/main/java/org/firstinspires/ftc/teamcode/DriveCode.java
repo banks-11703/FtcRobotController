@@ -59,7 +59,7 @@ public class DriveCode extends LinearOpMode {
     private DcMotor BackLeftDrive = null;
     private DcMotor FrontRightDrive = null;
     private DcMotor BackRightDrive = null;
-    private DcMotor PivotMotor = null;
+    private DcMotor PivotMotor;
     Servo servo;
 
     boolean flag_raised = false;
@@ -107,8 +107,8 @@ public class DriveCode extends LinearOpMode {
             double rotate;
             double strafe;
             boolean button_a_pressed;
-            boolean pivot_up;
-            boolean pivot_down;
+            boolean pivot_up = false;
+            boolean pivot_down = false;
 
             //static final double MAX_POS     =  1.0;     // Maximum rotational position
             //static final double MIN_POS     =  0.0;     // Minimum rotational position
@@ -139,8 +139,8 @@ public class DriveCode extends LinearOpMode {
             rotate = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             button_a_pressed = gamepad1.a;
-            pivot_up = gamepad1.right_trigger;
-            pivot_down = gamepad1.left_trigger;
+            pivot_up = gamepad1.right_trigger == 1;
+            pivot_down = gamepad1.left_trigger == 1;
 
             BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
             FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
