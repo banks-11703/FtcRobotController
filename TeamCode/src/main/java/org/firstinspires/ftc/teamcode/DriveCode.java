@@ -29,13 +29,11 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -51,9 +49,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
+@TeleOp(name="DriveCode", group="Linear Opmode")
 //@Disabled
-public class BasicOpMode_Linear extends LinearOpMode {
+public class DriveCode extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -61,7 +59,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
     private DcMotor BackLeftDrive = null;
     private DcMotor FrontRightDrive = null;
     private DcMotor BackRightDrive = null;
-
+    private DcMotor PivotMotor = null;
     Servo servo;
 
     boolean flag_raised = false;
@@ -81,6 +79,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
         FrontRightDrive = hardwareMap.get(DcMotor.class, "fr");
         BackLeftDrive = hardwareMap.get(DcMotor.class, "bl");
         BackRightDrive = hardwareMap.get(DcMotor.class, "br");
+        PivotMotor = hardwareMap.get(DcMotor.class, "pm");
+
 
         servo = hardwareMap.get(Servo.class, "servo");
 
@@ -108,6 +108,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
             double strafe;
 
             boolean button_a_pressed;
+            boolean trigger_right_bottom;
+            boolean trigger_left_bottom;
 
             //static final double MAX_POS     =  1.0;     // Maximum rotational position
             //static final double MIN_POS     =  0.0;     // Minimum rotational position
@@ -138,6 +140,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
             rotate = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             button_a_pressed = gamepad1.a;
+            trigger_right_bottom = gamepad1.right_bumper;
+            trigger_left_bottom = gamepad1.left_bumper;
 
             BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
             FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
@@ -150,7 +154,15 @@ public class BasicOpMode_Linear extends LinearOpMode {
             } else if (!button_a_pressed && button_a_was_pressed) {
                 button_a_was_pressed = false;
             }
-
+            if (gamepad1.right_bumper){
+                PivotMotor.setPower(1);
+            }
+            else if (gamepad1.left_bumper){
+                PivotMotor.setPower(-1);
+            }
+            else{
+                PivotMotor.setPower(0);
+            }
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
