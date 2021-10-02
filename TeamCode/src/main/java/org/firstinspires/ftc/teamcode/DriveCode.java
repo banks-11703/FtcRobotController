@@ -106,10 +106,9 @@ public class DriveCode extends LinearOpMode {
             double forward_reverse;
             double rotate;
             double strafe;
-
             boolean button_a_pressed;
-            boolean trigger_right_bottom;
-            boolean trigger_left_bottom;
+            boolean pivot_up;
+            boolean pivot_down;
 
             //static final double MAX_POS     =  1.0;     // Maximum rotational position
             //static final double MIN_POS     =  0.0;     // Minimum rotational position
@@ -140,8 +139,8 @@ public class DriveCode extends LinearOpMode {
             rotate = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             button_a_pressed = gamepad1.a;
-            trigger_right_bottom = gamepad1.right_bumper;
-            trigger_left_bottom = gamepad1.left_bumper;
+            pivot_up = gamepad1.right_trigger;
+            pivot_down = gamepad1.left_trigger;
 
             BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
             FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
@@ -154,10 +153,10 @@ public class DriveCode extends LinearOpMode {
             } else if (!button_a_pressed && button_a_was_pressed) {
                 button_a_was_pressed = false;
             }
-            if (gamepad1.right_bumper){
+            if (pivot_up){
                 PivotMotor.setPower(1);
             }
-            else if (gamepad1.left_bumper){
+            else if (pivot_down){
                 PivotMotor.setPower(-1);
             }
             else{
