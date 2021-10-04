@@ -41,15 +41,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
+ * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="DriveCode", group="Linear Opmode")
+@TeleOp(name = "DriveCode", group = "Linear Opmode")
 //@Disabled
 public class DriveCode extends LinearOpMode {
 
@@ -63,7 +63,7 @@ public class DriveCode extends LinearOpMode {
     private Servo HighGoal;
     private Servo LowGoal;
     Servo servo;
-
+    int i = 0;
     boolean flag_raised = false;
 
     final double hold = 1.0;     // Maximum rotational position
@@ -73,7 +73,7 @@ public class DriveCode extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         // TODO: 10/3/2021 Get this working
-        //telemetry.addData("Mode");
+        telemetry.addData("i=", i);
         telemetry.update();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -88,7 +88,9 @@ public class DriveCode extends LinearOpMode {
         servo = hardwareMap.get(Servo.class, "servo");
         HighGoal = hardwareMap.get(Servo.class, "hg");
         LowGoal = hardwareMap.get(Servo.class, "lg");
-
+        final double Hold = 1.0; //
+        final double Score = 0.5; //
+        final double Release = 0.0; //
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         FrontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -99,23 +101,24 @@ public class DriveCode extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-
+        boolean dpad_up_was_pressed = false;
         boolean button_a_was_pressed = false;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
+            telemetry.update();
+            telemetry.addData("i=", i%4);
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
             double forward_reverse;
             double rotate;
             double strafe;
-            boolean button_a_pressed;
+            boolean button_a_is_pressed;
             boolean pivot_up;
             boolean pivot_down;
-            boolean Goal_1;
-            boolean Goal_2;
+            boolean dpad_up_is_pressed;
+
 
             //static final double MAX_POS     =  1.0;     // Maximum rotational position
             //static final double MIN_POS     =  0.0;     // Minimum rotational position
@@ -135,7 +138,6 @@ public class DriveCode extends LinearOpMode {
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
-
             // Send calculated power to wheels
             FrontLeftDrive.setPower(leftPower);
             FrontRightDrive.setPower(rightPower);
@@ -145,28 +147,42 @@ public class DriveCode extends LinearOpMode {
             forward_reverse = gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
-            button_a_pressed = gamepad1.a;
-            pivot_up = gamepad1.right_trigger == 1;
-            pivot_down = gamepad1.left_trigger == 1;
+            button_a_is_pressed = gamepad1.a;
+            pivot_up = gamepad1.left_bumper;
+            pivot_down = gamepad1.right_bumper;
+            dpad_up_is_pressed = gamepad1.dpad_up;
 
             BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
             FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
             FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
             BackRightDrive.setPower((+forward_reverse - rotate - strafe));
 
-            if (button_a_pressed && !button_a_was_pressed) {
-                toggleFlag();
+            if (button_a_is_pressed && !button_a_was_pressed) {
+
                 button_a_was_pressed = true;
-            } else if (!button_a_pressed && button_a_was_pressed) {
+            } else if (!button_a_is_pressed && button_a_was_pressed) {
                 button_a_was_pressed = false;
             }
-            if (pivot_up){
+            if (dpad_up_is_pressed && !dpad_up_was_pressed) {
+                i++;
+                dpad_up_was_pressed = true;
+            } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
+                dpad_up_was_pressed = false;
+            }
+            if (i % 4 == 0) {
+
+            } else if (i % 4 == 1) {
+
+            } else if (i % 4 == 2) {
+
+            } else if (i % 4 == 3) {
+
+            }
+            if (pivot_up) {
                 PivotMotor.setPower(1);
-            }
-            else if (pivot_down){
+            } else if (pivot_down) {
                 PivotMotor.setPower(-1);
-            }
-            else{
+            } else {
                 PivotMotor.setPower(0);
             }
             // Show the elapsed game time and wheel power.
@@ -175,28 +191,8 @@ public class DriveCode extends LinearOpMode {
             telemetry.update();
         }
     }
-    final double Hold = 1.0; //
-    final double Score = 0.5; //
-    final double Release = 0.0; //
 
-    public void toggleFlag() {
-        if (flag_1 && flag_2) {
-            servo.setPosition(Hold);
-            if (servo.getPosition() == 1.0) {
-                flag_1 = false;
-            }
-        } else if (flag_2) {
-            servo.setPosition(Score);
-            if (servo.getPosition() == 0.5) {
-                flag_2 = false;
-            }
-        }
-        else {
-            servo.setPosition(Release);
-            if (servo.getPosition() == 0.0) {
-                flag_1 = true;
-                flag_2 = true;
-            }
+
    /* public void toggleFlag(servo) {
         if (flag_raised) {
             servo.setPosition(Hold);
@@ -208,6 +204,4 @@ public class DriveCode extends LinearOpMode {
             if (servo.getPosition() == 0.0) {
                 flag_raised = true;
             }*/
-        }
-    }
 }
