@@ -60,6 +60,8 @@ public class DriveCode extends LinearOpMode {
     private DcMotor FrontRightDrive = null;
     private DcMotor BackRightDrive = null;
     private DcMotor PivotMotor;
+    private Servo HighGoal;
+    private Servo LowGoal;
     Servo servo;
 
     boolean flag_raised = false;
@@ -70,6 +72,8 @@ public class DriveCode extends LinearOpMode {
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
+        // TODO: 10/3/2021 Get this working
+        telemetry.addData("Mode")
         telemetry.update();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -81,8 +85,9 @@ public class DriveCode extends LinearOpMode {
         BackRightDrive = hardwareMap.get(DcMotor.class, "br");
         PivotMotor = hardwareMap.get(DcMotor.class, "pm");
 
-
         servo = hardwareMap.get(Servo.class, "servo");
+        HighGoal = hardwareMap.get(Servo.class, "hg");
+        LowGoal = hardwareMap.get(Servo.class, "lg");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -107,8 +112,8 @@ public class DriveCode extends LinearOpMode {
             double rotate;
             double strafe;
             boolean button_a_pressed;
-            boolean pivot_up = false;
-            boolean pivot_down = false;
+            boolean pivot_up;
+            boolean pivot_down;
 
             //static final double MAX_POS     =  1.0;     // Maximum rotational position
             //static final double MIN_POS     =  0.0;     // Minimum rotational position
@@ -141,6 +146,7 @@ public class DriveCode extends LinearOpMode {
             button_a_pressed = gamepad1.a;
             pivot_up = gamepad1.right_trigger == 1;
             pivot_down = gamepad1.left_trigger == 1;
+            goal_toggle = gamepad1.dpad_up;
 
             BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
             FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
@@ -168,7 +174,10 @@ public class DriveCode extends LinearOpMode {
             telemetry.update();
         }
     }
-
+    final double Hold = 1.0; //
+    final double Score = 0.5; //
+    final double Release = 0.0; //
+    
     public void toggleFlag() {
         if (flag_raised) {
             servo.setPosition(RAISED);
