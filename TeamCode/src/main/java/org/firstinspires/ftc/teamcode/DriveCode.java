@@ -66,14 +66,14 @@ public class DriveCode extends LinearOpMode {
 
     boolean flag_raised = false;
 
-    final double RAISED = 1.0;     // Maximum rotational position
+    final double hold = 1.0;     // Maximum rotational position
     final double LOWERED = 0.0;     // Minimum rotational position
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         // TODO: 10/3/2021 Get this working
-        telemetry.addData("Mode")
+        //telemetry.addData("Mode");
         telemetry.update();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -114,6 +114,8 @@ public class DriveCode extends LinearOpMode {
             boolean button_a_pressed;
             boolean pivot_up;
             boolean pivot_down;
+            boolean Goal_1;
+            boolean Goal_2;
 
             //static final double MAX_POS     =  1.0;     // Maximum rotational position
             //static final double MIN_POS     =  0.0;     // Minimum rotational position
@@ -146,7 +148,6 @@ public class DriveCode extends LinearOpMode {
             button_a_pressed = gamepad1.a;
             pivot_up = gamepad1.right_trigger == 1;
             pivot_down = gamepad1.left_trigger == 1;
-            goal_toggle = gamepad1.dpad_up;
 
             BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
             FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
@@ -177,18 +178,36 @@ public class DriveCode extends LinearOpMode {
     final double Hold = 1.0; //
     final double Score = 0.5; //
     final double Release = 0.0; //
-    
+
     public void toggleFlag() {
+        if (flag_1 && flag_2) {
+            servo.setPosition(Hold);
+            if (servo.getPosition() == 1.0) {
+                flag_1 = false;
+            }
+        } else if (flag_2) {
+            servo.setPosition(Score);
+            if (servo.getPosition() == 0.5) {
+                flag_2 = false;
+            }
+        }
+        else {
+            servo.setPosition(Release);
+            if (servo.getPosition() == 0.0) {
+                flag_1 = true;
+                flag_2 = true;
+            }
+   /* public void toggleFlag(servo) {
         if (flag_raised) {
-            servo.setPosition(RAISED);
+            servo.setPosition(Hold);
             if (servo.getPosition() == 1.0) {
                 flag_raised = false;
             }
         } else {
-            servo.setPosition(LOWERED);
+            servo.setPosition(Release);
             if (servo.getPosition() == 0.0) {
                 flag_raised = true;
-            }
+            }*/
         }
     }
 }
