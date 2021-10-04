@@ -169,14 +169,19 @@ public class DriveCode extends LinearOpMode {
             } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
                 dpad_up_was_pressed = false;
             }
+            //todo (Friday) Get Servos Pos Working
             if (i % 4 == 0) {
-
+                HighGoal.setPosition(Hold);
+                LowGoal.setPosition(Hold);
             } else if (i % 4 == 1) {
-
+                HighGoal.setPosition(Score);
+                LowGoal.setPosition(Hold);
             } else if (i % 4 == 2) {
-
+                HighGoal.setPosition(Release);
+                LowGoal.setPosition(Score);
             } else if (i % 4 == 3) {
-
+                HighGoal.setPosition(Release);
+                LowGoal.setPosition(Release);
             }
             if (pivot_up) {
                 PivotMotor.setPower(1);
