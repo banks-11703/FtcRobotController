@@ -62,20 +62,28 @@ public class DriveCode extends LinearOpMode {
     private DcMotor PivotMotor;
     private Servo HighGoal;
     private Servo LowGoal;
+    private DcMotor TestMotor;
     Servo servo;
-    int i = 0;
-    boolean flag_raised = false;
+    int ServoMode = 0;
 
-    final double hold = 1.0;     // Maximum rotational position
-    final double LOWERED = 0.0;     // Minimum rotational position
 
+    final double HHold = 1.0; //
+    final double HScore = 0.9; //
+    final double HRelease = 0.735; //
+    final double LHold = 1; //
+    final double LScore = 0.75; //
+    final double LRelease = 0.67; //
+
+// todo ARM POSITION IS 1816 arm is weird figure out how to get encoder working.
+
+    public void encoderTest(int x) {
+
+    }
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         // TODO: 10/3/2021 Get this working
-        telemetry.addData("i=", i);
-        telemetry.update();
-
+        telemetry.addData("Mode:", ServoMode);
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -84,13 +92,10 @@ public class DriveCode extends LinearOpMode {
         BackLeftDrive = hardwareMap.get(DcMotor.class, "bl");
         BackRightDrive = hardwareMap.get(DcMotor.class, "br");
         PivotMotor = hardwareMap.get(DcMotor.class, "pm");
-
+        TestMotor = hardwareMap.get(DcMotor.class, "tm");
         servo = hardwareMap.get(Servo.class, "servo");
         HighGoal = hardwareMap.get(Servo.class, "hg");
         LowGoal = hardwareMap.get(Servo.class, "lg");
-        final double Hold = 1.0; //
-        final double Score = 0.5; //
-        final double Release = 0.0; //
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         FrontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -98,6 +103,7 @@ public class DriveCode extends LinearOpMode {
         BackLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         BackRightDrive.setDirection(DcMotor.Direction.REVERSE);
 
+        // todo Get better POS for this
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -107,7 +113,7 @@ public class DriveCode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.update();
-            telemetry.addData("i=", i%4);
+            telemetry.addData("Mode:", ServoMode % 4);
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
@@ -164,24 +170,25 @@ public class DriveCode extends LinearOpMode {
                 button_a_was_pressed = false;
             }
             if (dpad_up_is_pressed && !dpad_up_was_pressed) {
-                i++;
+                ServoMode++;
                 dpad_up_was_pressed = true;
             } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
                 dpad_up_was_pressed = false;
             }
-            //todo (Friday) Get Servos Pos Working
-            if (i % 4 == 0) {
-                HighGoal.setPosition(Hold);
-                LowGoal.setPosition(Hold);
-            } else if (i % 4 == 1) {
-                HighGoal.setPosition(Score);
-                LowGoal.setPosition(Hold);
-            } else if (i % 4 == 2) {
-                HighGoal.setPosition(Release);
-                LowGoal.setPosition(Score);
-            } else if (i % 4 == 3) {
-                HighGoal.setPosition(Release);
-                LowGoal.setPosition(Release);
+            //todo (Friday) Get Motor Encoder working
+            if (ServoMode % 4 == 0) {
+                HighGoal.setPosition(HHold);
+                LowGoal.setPosition(LHold);
+            } else if (ServoMode % 4 == 1) {
+                HighGoal.setPosition(HScore);
+                LowGoal.setPosition(LHold);
+            } else if (ServoMode % 4 == 2) {
+                HighGoal.setPosition(HRelease);
+                LowGoal.setPosition(LScore);
+
+            } else if (ServoMode % 4 == 3) {
+                HighGoal.setPosition(HRelease);
+                LowGoal.setPosition(LRelease);
             }
             if (pivot_up) {
                 PivotMotor.setPower(1);
@@ -193,6 +200,7 @@ public class DriveCode extends LinearOpMode {
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("Arm Pos", PivotMotor.getCurrentPosition());
             telemetry.update();
         }
     }
@@ -209,4 +217,5 @@ public class DriveCode extends LinearOpMode {
             if (servo.getPosition() == 0.0) {
                 flag_raised = true;
             }*/
+
 }
