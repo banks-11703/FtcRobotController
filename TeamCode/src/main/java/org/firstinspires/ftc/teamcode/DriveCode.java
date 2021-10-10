@@ -71,7 +71,7 @@ public class DriveCode extends LinearOpMode {
     final double HScore = 0.9; //
     final double HRelease = 0.735; //
     final double LHold = 1; //
-    final double LScore = 0.75; //
+    final double LScore = 0.78; //
     final double LRelease = 0.67; //
 
 // todo ARM POSITION IS 1816 arm is weird figure out how to get encoder working.
