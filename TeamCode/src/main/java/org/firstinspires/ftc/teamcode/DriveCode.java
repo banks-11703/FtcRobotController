@@ -63,7 +63,6 @@ public class DriveCode extends LinearOpMode {
     private Servo HighGoal;
     private Servo LowGoal;
     private DcMotor TestMotor;
-    Servo servo;
     int ServoMode = 0;
 
 
@@ -73,16 +72,9 @@ public class DriveCode extends LinearOpMode {
     final double LHold = 1; //
     final double LScore = 0.78; //
     final double LRelease = 0.67; //
-
-// todo ARM POSITION IS 1816 arm is weird figure out how to get encoder working.
-
-    public void encoderTest(int x) {
-
-    }
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
-        // TODO: 10/3/2021 Get this working
         telemetry.addData("Mode:", ServoMode);
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -93,7 +85,6 @@ public class DriveCode extends LinearOpMode {
         BackRightDrive = hardwareMap.get(DcMotor.class, "br");
         PivotMotor = hardwareMap.get(DcMotor.class, "pm");
         TestMotor = hardwareMap.get(DcMotor.class, "tm");
-        servo = hardwareMap.get(Servo.class, "servo");
         HighGoal = hardwareMap.get(Servo.class, "hg");
         LowGoal = hardwareMap.get(Servo.class, "lg");
         // Most robots need the motor on one side to be reversed to drive forward
@@ -103,7 +94,7 @@ public class DriveCode extends LinearOpMode {
         BackLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         BackRightDrive.setDirection(DcMotor.Direction.REVERSE);
 
-        // todo Get better POS for this
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -130,25 +121,6 @@ public class DriveCode extends LinearOpMode {
             //static final double MIN_POS     =  0.0;     // Minimum rotational position
             double position = 1.0;
 
-            // Choose to drive using either Tank Mode, or POV Mode
-            // Comment out the method that's not used.  The default below is POV.
-
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
-           /* double drive = -gamepad1.left_stick_y;
-            double turn = gamepad1.right_stick_x;
-            leftPower = Range.clip(drive + turn, -1.0, 1.0);
-            rightPower = Range.clip(drive - turn, -1.0, 1.0);
-
-            // Tank Mode uses one stick to control each wheel.
-            // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            // leftPower  = -gamepad1.left_stick_y ;
-            // rightPower = -gamepad1.right_stick_y ;
-            // Send calculated power to wheels
-            FrontLeftDrive.setPower(leftPower);
-            FrontRightDrive.setPower(rightPower);
-            BackLeftDrive.setPower(leftPower);
-            BackRightDrive.setPower(rightPower);*/
 
             forward_reverse = gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
@@ -176,19 +148,15 @@ public class DriveCode extends LinearOpMode {
                 dpad_up_was_pressed = false;
             }
             //todo (Friday) Get Motor Encoder working
-            if (ServoMode % 4 == 0) {
-                HighGoal.setPosition(HHold);
-                LowGoal.setPosition(LHold);
-            } else if (ServoMode % 4 == 1) {
-                HighGoal.setPosition(HScore);
-                LowGoal.setPosition(LHold);
-            } else if (ServoMode % 4 == 2) {
-                HighGoal.setPosition(HRelease);
-                LowGoal.setPosition(LScore);
+            if (ServoMode % 4 == 0 && button_a_is_pressed) {
+                HighHold();
+            }  if (ServoMode % 4 == 1 && button_a_is_pressed) {
+              ScoreTop();
+            }  if (ServoMode % 4 == 2 && button_a_is_pressed) {
+                ScoreMid();
 
-            } else if (ServoMode % 4 == 3) {
-                HighGoal.setPosition(HRelease);
-                LowGoal.setPosition(LRelease);
+            }  if (ServoMode % 4 == 3 && button_a_is_pressed) {
+                ScoreLow();
             }
             if (pivot_up) {
                 PivotMotor.setPower(1);
@@ -203,9 +171,24 @@ public class DriveCode extends LinearOpMode {
             telemetry.addData("Arm Pos", PivotMotor.getCurrentPosition());
             telemetry.update();
         }
+
     }
-
-
+    public void HighHold(){
+        HighGoal.setPosition(HHold);
+        LowGoal.setPosition(LHold);
+    }
+    public void ScoreTop(){
+        HighGoal.setPosition(HScore);
+        LowGoal.setPosition(LHold);
+    }
+    public void ScoreMid(){
+        HighGoal.setPosition(HRelease);
+        LowGoal.setPosition(LScore);
+    }
+    public void ScoreLow(){
+        HighGoal.setPosition(HRelease);
+        LowGoal.setPosition(LRelease);
+    }
    /* public void toggleFlag(servo) {
         if (flag_raised) {
             servo.setPosition(Hold);
