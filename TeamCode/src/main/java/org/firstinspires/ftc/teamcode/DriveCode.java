@@ -70,6 +70,7 @@ public class DriveCode extends LinearOpMode {
     final double LHold = 1; //
     final double LScore = 0.78; //
     final double LRelease = 0.67; //
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -97,27 +98,18 @@ public class DriveCode extends LinearOpMode {
         runtime.reset();
         boolean dpad_up_was_pressed = false;
         boolean button_a_was_pressed = false;
-
+        boolean button_a_is_pressed;
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.update();
             telemetry.addData("Mode:", ServoMode % 3);
             // Setup a variable for each drive wheel to save power level for telemetry
-            double leftPower;
-            double rightPower;
             double forward_reverse;
             double rotate;
             double strafe;
-            boolean button_a_is_pressed;
             boolean pivot_up;
             boolean pivot_down;
             boolean dpad_up_is_pressed;
-
-
-            //static final double MAX_POS     =  1.0;     // Maximum rotational position
-            //static final double MIN_POS     =  0.0;     // Minimum rotational position
-            double position = 1.0;
-
 
             forward_reverse = gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
@@ -132,6 +124,7 @@ public class DriveCode extends LinearOpMode {
             FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
             BackRightDrive.setPower((+forward_reverse - rotate - strafe));
 
+            SetServoPosition();
             if (button_a_is_pressed && !button_a_was_pressed) {
 
                 button_a_was_pressed = true;
@@ -145,23 +138,7 @@ public class DriveCode extends LinearOpMode {
                 dpad_up_was_pressed = false;
             }
             //todo (Friday) Get Motor Encoder working
-            if (ServoMode % 3 == 0) {
-                HighHold();
-            } else if (ServoMode % 3 == 0 && button_a_is_pressed) {
-                ScoreTop();
 
-            }
-            if (ServoMode % 3 == 1) {
-                HoldMid();
-            } else if (ServoMode % 3 == 1 && button_a_is_pressed) {
-                ScoreMid();
-            }
-            if (ServoMode % 3 == 2) {
-                HoldMid();
-            }
-            else if (ServoMode % 3 == 2 && button_a_is_pressed){
-                ScoreLow();
-            }
             if (pivot_up) {
                 PivotMotor.setPower(1);
             } else if (pivot_down) {
@@ -177,36 +154,87 @@ public class DriveCode extends LinearOpMode {
         }
 
     }
-    public void HighHold(){
+
+    public void HighHold() {
         HighGoal.setPosition(HHold);
         LowGoal.setPosition(LHold);
     }
-    public void ScoreTop(){
+
+    public void ScoreTop() {
         HighGoal.setPosition(HScore);
         LowGoal.setPosition(LHold);
     }
-    public void HoldMid(){
+
+    public void HoldMid() {
         HighGoal.setPosition(HRelease);
         LowGoal.setPosition(LHold);
     }
-    public void ScoreMid(){
+
+    public void ScoreMid() {
         HighGoal.setPosition(HRelease);
         LowGoal.setPosition(LScore);
     }
-    public void ScoreLow(){
+
+    public void ScoreLow() {
         HighGoal.setPosition(HRelease);
         LowGoal.setPosition(LRelease);
     }
-   /* public void toggleFlag(servo) {
-        if (flag_raised) {
-            servo.setPosition(Hold);
-            if (servo.getPosition() == 1.0) {
-                flag_raised = false;
+    public int ServoMode(){
+        return ServoMode % 3;
+    }
+    public void SetServoPosition() {
+        if(gamepad1.a) {
+            if(ServoMode() == 0){
+                ScoreTop();
             }
-        } else {
-            servo.setPosition(Release);
-            if (servo.getPosition() == 0.0) {
-                flag_raised = true;
-            }*/
+            else if(ServoMode() == 1){
+                ScoreMid();
+            }
+            else {
+                ScoreLow();
+            }
+        }
+        else {
+            if(ServoMode() == 0){
+                HighHold();
+            }
+            else {
+                HoldMid();
+            }
+        }
+    }
+/*
+    public void SetServoPosition() {
+        if (ServoMode % 3 == 0 && !gamepad1.a) {
+            HighHold();
+        } else if (ServoMode % 3 == 0 && gamepad1.a) {
+            ScoreTop();
+
+        }
+        if (ServoMode % 3 == 1 && !gamepad1.a) {
+            HoldMid();
+        } else if (ServoMode % 3 == 1 && gamepad1.a) {
+            ScoreMid();
+        }
+        if (ServoMode % 3 == 2 && !gamepad1.a) {
+            HoldMid();
+        } else if (ServoMode % 3 == 2 && gamepad1.a) {
+            ScoreLow();
+        }
+    }
+
+ */
+    /* public void toggleFlag(servo) {
+         if (flag_raised) {
+             servo.setPosition(Hold);
+             if (servo.getPosition() == 1.0) {
+                 flag_raised = false;
+             }
+         } else {
+             servo.setPosition(Release);
+             if (servo.getPosition() == 0.0) {
+                 flag_raised = true;
+             }*/
+
 
 }
