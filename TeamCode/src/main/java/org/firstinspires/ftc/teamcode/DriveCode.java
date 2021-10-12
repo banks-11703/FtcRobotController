@@ -62,9 +62,7 @@ public class DriveCode extends LinearOpMode {
     private DcMotor PivotMotor;
     private Servo HighGoal;
     private Servo LowGoal;
-    private DcMotor TestMotor;
     int ServoMode = 0;
-
 
     final double HHold = 1.0; //
     final double HScore = 0.9; //
@@ -84,7 +82,6 @@ public class DriveCode extends LinearOpMode {
         BackLeftDrive = hardwareMap.get(DcMotor.class, "bl");
         BackRightDrive = hardwareMap.get(DcMotor.class, "br");
         PivotMotor = hardwareMap.get(DcMotor.class, "pm");
-        TestMotor = hardwareMap.get(DcMotor.class, "tm");
         HighGoal = hardwareMap.get(Servo.class, "hg");
         LowGoal = hardwareMap.get(Servo.class, "lg");
         // Most robots need the motor on one side to be reversed to drive forward
@@ -104,7 +101,7 @@ public class DriveCode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.update();
-            telemetry.addData("Mode:", ServoMode % 4);
+            telemetry.addData("Mode:", ServoMode % 3);
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
@@ -148,14 +145,21 @@ public class DriveCode extends LinearOpMode {
                 dpad_up_was_pressed = false;
             }
             //todo (Friday) Get Motor Encoder working
-            if (ServoMode % 4 == 0 && button_a_is_pressed) {
+            if (ServoMode % 3 == 0) {
                 HighHold();
-            }  if (ServoMode % 4 == 1 && button_a_is_pressed) {
-              ScoreTop();
-            }  if (ServoMode % 4 == 2 && button_a_is_pressed) {
-                ScoreMid();
+            } else if (ServoMode % 3 == 0 && button_a_is_pressed) {
+                ScoreTop();
 
-            }  if (ServoMode % 4 == 3 && button_a_is_pressed) {
+            }
+            if (ServoMode % 3 == 1) {
+                HoldMid();
+            } else if (ServoMode % 3 == 1 && button_a_is_pressed) {
+                ScoreMid();
+            }
+            if (ServoMode % 3 == 2) {
+                HoldMid();
+            }
+            else if (ServoMode % 3 == 2 && button_a_is_pressed){
                 ScoreLow();
             }
             if (pivot_up) {
@@ -179,6 +183,10 @@ public class DriveCode extends LinearOpMode {
     }
     public void ScoreTop(){
         HighGoal.setPosition(HScore);
+        LowGoal.setPosition(LHold);
+    }
+    public void HoldMid(){
+        HighGoal.setPosition(HRelease);
         LowGoal.setPosition(LHold);
     }
     public void ScoreMid(){
