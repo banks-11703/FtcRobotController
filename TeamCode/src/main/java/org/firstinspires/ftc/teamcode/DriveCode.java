@@ -62,8 +62,9 @@ public class DriveCode extends LinearOpMode {
     private DcMotor PivotMotor;
     private Servo HighGoal;
     private Servo LowGoal;
+    
     int ServoMode = 0;
-
+    int ArmPosMode = 0;
     final double HHold = 1.0; //
     final double HScore = 0.9; //
     final double HRelease = 0.735; //
@@ -74,7 +75,7 @@ public class DriveCode extends LinearOpMode {
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
-        telemetry.addData("Mode:", ServoMode);
+        ScoringModeTelemetry();
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -95,14 +96,19 @@ public class DriveCode extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        PivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //PivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         runtime.reset();
         boolean dpad_up_was_pressed = false;
         boolean button_a_was_pressed = false;
+        boolean left_stick_was_pressed = false;
+        boolean right_stick_was_pressed = false;
+
         boolean button_a_is_pressed;
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.update();
-            telemetry.addData("Mode:", ServoMode % 3);
+            ScoringModeTelemetry();
             // Setup a variable for each drive wheel to save power level for telemetry
             double forward_reverse;
             double rotate;
@@ -110,6 +116,9 @@ public class DriveCode extends LinearOpMode {
             boolean pivot_up;
             boolean pivot_down;
             boolean dpad_up_is_pressed;
+            boolean left_stick_pressed;
+            boolean right_stick_pressed;
+
 
             forward_reverse = gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
@@ -118,13 +127,26 @@ public class DriveCode extends LinearOpMode {
             pivot_up = gamepad1.left_bumper;
             pivot_down = gamepad1.right_bumper;
             dpad_up_is_pressed = gamepad1.dpad_up;
-
+            left_stick_pressed = gamepad1.left_stick_button;
+            right_stick_pressed = gamepad1.right_stick_button;
             BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
             FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
             FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
             BackRightDrive.setPower((+forward_reverse - rotate - strafe));
 
             SetServoPosition();
+            if (left_stick_pressed && !left_stick_was_pressed) {
+                ArmPosMode--;
+                left_stick_was_pressed = true;
+            } else if (!left_stick_pressed && left_stick_was_pressed) {
+                left_stick_was_pressed = false;
+            }
+            if (right_stick_pressed && !right_stick_was_pressed) {
+                ArmPosMode++;
+                right_stick_was_pressed = true;
+            } else if (!right_stick_pressed && right_stick_was_pressed) {
+                right_stick_was_pressed = false;
+            }
             if (button_a_is_pressed && !button_a_was_pressed) {
 
                 button_a_was_pressed = true;
@@ -138,7 +160,14 @@ public class DriveCode extends LinearOpMode {
                 dpad_up_was_pressed = false;
             }
             //todo (Friday) Get Motor Encoder working
+            if (ArmPosMode() == 0){
+                PivotMotor.setTargetPosition(0);
 
+
+
+            //if (ArmPosMode() == 0 && left_stick_pressed || ArmPosMode() == 0 && right_stick_pressed){
+            //    PivotMotor.setTargetPosition(0);
+            }
             if (pivot_up) {
                 PivotMotor.setPower(1);
             } else if (pivot_down) {
@@ -150,11 +179,15 @@ public class DriveCode extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.addData("Arm Pos", PivotMotor.getCurrentPosition());
+            telemetry.addData("PosMode",ArmPosMode());
             telemetry.update();
+
         }
 
     }
-
+    public int ArmPosMode() {
+        return ArmPosMode % 3;
+    }
     public void HighHold() {
         HighGoal.setPosition(HHold);
         LowGoal.setPosition(LHold);
@@ -202,6 +235,18 @@ public class DriveCode extends LinearOpMode {
                 HoldMid();
             }
         }
+    }
+    public void ScoringModeTelemetry() {
+        if (ServoMode() == 0) {
+            telemetry.addData("Mode:", "High");
+        }
+        else if (ServoMode() == 1){
+            telemetry.addData("Mode:", "Mid");
+        }
+        else{
+            telemetry.addData("Mode:", "Low");
+        }
+
     }
 /*
     public void SetServoPosition() {
