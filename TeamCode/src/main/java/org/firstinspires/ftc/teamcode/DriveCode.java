@@ -160,14 +160,23 @@ public class DriveCode extends LinearOpMode {
                 dpad_up_was_pressed = false;
             }
             //todo (Friday) Get Motor Encoder working
-            if (ArmPosMode() == 0){
+            if (ArmPosMode() == 0) {
                 PivotMotor.setTargetPosition(0);
-
+                PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            if (ArmPosMode() == 1){
+                PivotMotor.setTargetPosition(1117);
+                PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            if (ArmPosMode() == 2){
+                PivotMotor.setTargetPosition(2217);
+                PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
 
 
             //if (ArmPosMode() == 0 && left_stick_pressed || ArmPosMode() == 0 && right_stick_pressed){
             //    PivotMotor.setTargetPosition(0);
-            }
+
             if (pivot_up) {
                 PivotMotor.setPower(1);
             } else if (pivot_down) {
@@ -181,7 +190,6 @@ public class DriveCode extends LinearOpMode {
             telemetry.addData("Arm Pos", PivotMotor.getCurrentPosition());
             telemetry.addData("PosMode",ArmPosMode());
             telemetry.update();
-
         }
 
     }
