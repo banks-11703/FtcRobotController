@@ -33,8 +33,10 @@ import android.widget.Spinner;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.configuration.annotations.ServoType;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -66,6 +68,7 @@ public class DriveCode_Player1 extends LinearOpMode {
     private Servo LowGoal;
     private Servo Grabber;
     private DcMotor SpinnerMotor;
+    private CRServo Intake_Servo;
 
     int ServoMode = 0;
     int ArmPosMode = 0;
@@ -95,6 +98,7 @@ public class DriveCode_Player1 extends LinearOpMode {
         LowGoal = hardwareMap.get(Servo.class, "lg");
         Grabber = hardwareMap.get(Servo.class, "grabber");
         SpinnerMotor = hardwareMap.get(DcMotor.class, "sp");
+        Intake_Servo = hardwareMap.get(CRServo.class,"is");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         FrontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -131,6 +135,7 @@ public class DriveCode_Player1 extends LinearOpMode {
             boolean button_y_pressed;
             boolean Grabber_toggle;
             boolean Spinner;
+            boolean intake_spin;
             forward_reverse = gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
@@ -143,6 +148,7 @@ public class DriveCode_Player1 extends LinearOpMode {
             button_y_pressed = gamepad1.y;
             Grabber_toggle = gamepad1.x;
             Spinner = gamepad1.b;
+            intake_spin = gamepad1.dpad_left;
             BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
             FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
             FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
@@ -179,6 +185,15 @@ public class DriveCode_Player1 extends LinearOpMode {
             else{
                 SpinnerMotor.setPower(0);
             }
+
+
+            if (intake_spin){
+                Intake_Servo.setPower(-1);
+            }
+            if (!intake_spin){
+                Intake_Servo.setPower(0);
+            }
+
 
             //todo (Friday) Get Motor Encoder working
             if (ArmPosMode() == 0) {

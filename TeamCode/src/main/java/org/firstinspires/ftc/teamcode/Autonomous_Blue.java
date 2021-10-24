@@ -61,8 +61,8 @@ public class Autonomous_Blue extends LinearOpMode {
     public DcMotor BackLeftDrive;
     public   DcMotor FrontRightDrive;
     public DcMotor BackRightDrive;
-
-
+    int distance_in = 0;
+    double distance;
     int FirstMove = 1000;
     int SecondMove = -500;
     @Override
@@ -151,5 +151,10 @@ public class Autonomous_Blue extends LinearOpMode {
 
 
         }
-
+    public void beforedrive(){
+        
+    }
+    public double distance() {
+        return distance_in * ((384.5/12.566));
+    }
 }
