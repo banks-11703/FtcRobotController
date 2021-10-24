@@ -174,7 +174,7 @@ public class DriveCode_Player1 extends LinearOpMode {
                 dpad_up_was_pressed = false;
             }
             if (Spinner){
-               SpinnerMotor.setPower(1);
+               SpinnerMotor.setPower(0.3);
             }
             else{
                 SpinnerMotor.setPower(0);
