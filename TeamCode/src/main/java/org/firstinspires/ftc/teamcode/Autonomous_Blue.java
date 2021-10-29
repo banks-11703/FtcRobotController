@@ -61,10 +61,13 @@ public class Autonomous_Blue extends LinearOpMode {
     public DcMotor BackLeftDrive;
     public   DcMotor FrontRightDrive;
     public DcMotor BackRightDrive;
-    int distance_in = 0;
+    private DcMotor SpinnerMotor;
     double distance;
     int FirstMove = 1000;
     int SecondMove = -500;
+    int wheel_dia = 4;// inches
+    double ticksperrotation = 384.5;
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -73,10 +76,11 @@ public class Autonomous_Blue extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        DcMotor FrontLeftDrive = hardwareMap.get(DcMotor.class, "fl");
-        DcMotor FrontRightDrive = hardwareMap.get(DcMotor.class, "fr");
-        DcMotor BackLeftDrive = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor BackRightDrive = hardwareMap.get(DcMotor.class, "br");
+        FrontLeftDrive = hardwareMap.get(DcMotor.class, "fl");
+        FrontRightDrive = hardwareMap.get(DcMotor.class, "fr");
+        BackLeftDrive = hardwareMap.get(DcMotor.class, "bl");
+        BackRightDrive = hardwareMap.get(DcMotor.class, "br");
+        SpinnerMotor = hardwareMap.get(DcMotor.class, "sp");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -108,36 +112,30 @@ public class Autonomous_Blue extends LinearOpMode {
         telemetry.addData("Path0", "Starting at %7d :%7d", FrontLeftDrive.getCurrentPosition(), FrontRightDrive.getCurrentPosition(), BackLeftDrive.getCurrentPosition(), BackRightDrive.getCurrentPosition());
         telemetry.update();
 
-        FrontLeftDrive.setTargetPosition(FirstMove);
-        FrontRightDrive.setTargetPosition(FirstMove);
-        BackLeftDrive.setTargetPosition(FirstMove);
-        BackRightDrive.setTargetPosition(FirstMove);
+        verticalDrive(10,0.5);
+        //while (FrontLeftDrive.isBusy() && opModeIsActive());
 
-        FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        FrontLeftDrive.setPower(0.5);
-        FrontRightDrive.setPower(0.5);
-        BackLeftDrive.setPower(0.5);
-        BackRightDrive.setPower(0.5);
-        while (FrontLeftDrive.isBusy() && opModeIsActive());
+        beforedrive();
+        //verticalDrive(0,0);
+        lefthorizontalDrive(1,0.5);
 
-        FrontLeftDrive.setTargetPosition(SecondMove);
-        FrontRightDrive.setTargetPosition(SecondMove);
-        BackLeftDrive.setTargetPosition(SecondMove);
-        BackRightDrive.setTargetPosition(SecondMove);
-        while (FrontLeftDrive.isBusy() && opModeIsActive());
+        beforedrive();
+        verticalDrive(-10,0.5);
+
+
+
+
+
         telemetry.addData("Status", "Run Time: " + runtime.toString());
 
         telemetry.update();
     }
 
-        public void verticalDrive(int ticks,double power){
-            FrontLeftDrive.setTargetPosition(ticks);
-            FrontRightDrive.setTargetPosition(ticks);
-            BackLeftDrive.setTargetPosition(ticks);
-            BackRightDrive.setTargetPosition(ticks);
+        public void verticalDrive(int inches,double power){
+            FrontLeftDrive.setTargetPosition(distancetoticks(inches));
+            FrontRightDrive.setTargetPosition(distancetoticks(inches));
+            BackLeftDrive.setTargetPosition(distancetoticks(inches));
+            BackRightDrive.setTargetPosition(distancetoticks(inches));
 
             FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -147,14 +145,66 @@ public class Autonomous_Blue extends LinearOpMode {
             FrontRightDrive.setPower(power);
             BackLeftDrive.setPower(power);
             BackRightDrive.setPower(power);
-            while (FrontLeftDrive.isBusy() && opModeIsActive());
+            while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
 
 
         }
-    public void beforedrive(){
-        
+
+        public void lefthorizontalDrive(int inches,double power){
+            FrontLeftDrive.setTargetPosition(distancetoticks(inches));
+            FrontRightDrive.setTargetPosition(-distancetoticks(inches));
+            BackLeftDrive.setTargetPosition(-distancetoticks(inches));
+            BackRightDrive.setTargetPosition(distancetoticks(inches));
+
+            FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            FrontLeftDrive.setPower(power);
+            FrontRightDrive.setPower(power);
+            BackLeftDrive.setPower(power);
+            BackRightDrive.setPower(power);
+            while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
+
+        }
+    public void righthorizontalDrive(int inches,double power){
+        FrontLeftDrive.setTargetPosition(-distancetoticks(inches));
+        FrontRightDrive.setTargetPosition(distancetoticks(inches));
+        BackLeftDrive.setTargetPosition(distancetoticks(inches));
+        BackRightDrive.setTargetPosition(-distancetoticks(inches));
+
+        FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FrontLeftDrive.setPower(power);
+        FrontRightDrive.setPower(power);
+        BackLeftDrive.setPower(power);
+        BackRightDrive.setPower(power);
+        while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
+
     }
-    public double distance() {
-        return distance_in * ((384.5/12.566));
+
+
+
+    public void beforedrive(){
+        FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    public int distancetoticks(int distance_in) {
+        double doubleticks = distance_in * (ticksperrotation/(wheel_dia * 3.14));
+        int ticksint = (int) Math.round(doubleticks);
+       return ticksint;
+
     }
 }
+//float ticksperrotation = 384.5F;
+//float wheeldiameter = 4;
