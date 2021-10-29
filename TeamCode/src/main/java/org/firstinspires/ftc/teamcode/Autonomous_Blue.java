@@ -124,8 +124,8 @@ public class Autonomous_Blue extends LinearOpMode {
 
 
 
-
-
+        SpinnerMotor.setPower(0.3);
+        //todo Get this to go for certain time
         telemetry.addData("Status", "Run Time: " + runtime.toString());
 
         telemetry.update();
