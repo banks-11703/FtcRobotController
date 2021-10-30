@@ -29,14 +29,11 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.widget.Spinner;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.configuration.annotations.ServoType;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -53,9 +50,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "DriveCode_Player1", group = "Linear Opmode")
+@TeleOp(name = "BlueDriveCode_Player1", group = "Linear Opmode")
 //@Disabled
-public class DriveCode_Player1 extends LinearOpMode {
+public class BlueDriveCode_Player1 extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -116,7 +113,7 @@ public class DriveCode_Player1 extends LinearOpMode {
         boolean button_a_was_pressed = false;
         boolean left_stick_was_pressed = false;
         boolean right_stick_was_pressed = false;
-
+        boolean dpad_left_was_pressed = false;
         boolean button_a_is_pressed;
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -135,7 +132,8 @@ public class DriveCode_Player1 extends LinearOpMode {
             boolean button_y_pressed;
             boolean Grabber_toggle;
             boolean Spinner;
-            boolean intake_spin;
+            boolean dpad_left_is_pressed;
+            boolean dpad_right_is_pressed;
             forward_reverse = gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
@@ -148,7 +146,8 @@ public class DriveCode_Player1 extends LinearOpMode {
             button_y_pressed = gamepad1.y;
             Grabber_toggle = gamepad1.x;
             Spinner = gamepad1.b;
-            intake_spin = gamepad1.dpad_left;
+            dpad_left_is_pressed = gamepad1.dpad_left;
+            dpad_right_is_pressed = gamepad1.dpad_right;
             BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
             FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
             FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
@@ -173,26 +172,24 @@ public class DriveCode_Player1 extends LinearOpMode {
             } else if (!button_a_is_pressed && button_a_was_pressed) {
                 button_a_was_pressed = false;
             }
+            if (dpad_left_is_pressed && !dpad_left_was_pressed) {
+                dpad_left_was_pressed = true;
+            } else if (dpad_left_is_pressed && dpad_left_was_pressed) {
+                dpad_left_was_pressed = false;
+            }
             if (dpad_up_is_pressed && !dpad_up_was_pressed) {
                 ServoMode++;
                 dpad_up_was_pressed = true;
-            } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
+            } else if (dpad_up_is_pressed && dpad_up_was_pressed) {
                 dpad_up_was_pressed = false;
             }
-            if (Spinner){
-               SpinnerMotor.setPower(0.3);
-            }
-            else{
-                SpinnerMotor.setPower(0);
-            }
+            if (Spinner){SpinnerMotor.setPower(0.3);}
+            else{SpinnerMotor.setPower(0);}
 
 
-            if (intake_spin){
-                Intake_Servo.setPower(-1);
-            }
-            if (!intake_spin){
-                Intake_Servo.setPower(0);
-            }
+            if (dpad_left_was_pressed){Intake_Servo.setPower(-1);}
+            else if (dpad_right_is_pressed){Intake_Servo.setPower(1);}
+            else{ Intake_Servo.setPower(0);}
 
 
             //todo (Friday) Get Motor Encoder working

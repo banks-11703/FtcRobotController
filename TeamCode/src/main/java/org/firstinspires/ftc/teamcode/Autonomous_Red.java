@@ -30,12 +30,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -51,9 +48,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name = "Autonomous_Blue", group = "Linear Opmode")
+@Autonomous(name = "autonomous_Red", group = "Linear Opmode")
 //@Disabled
-public class Autonomous_Blue extends LinearOpMode {
+public class Autonomous_Red extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -67,7 +64,7 @@ public class Autonomous_Blue extends LinearOpMode {
     int SecondMove = -500;
     int wheel_dia = 4;// inches
     double ticksperrotation = 384.5;
-
+    double rotations = 1.875;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -116,13 +113,7 @@ public class Autonomous_Blue extends LinearOpMode {
         //while (FrontLeftDrive.isBusy() && opModeIsActive());
 
         beforedrive();
-        //verticalDrive(0,0);
-        lefthorizontalDrive(1,0.5);
-
-        beforedrive();
-        verticalDrive(1,0.5);
-
-
+        Turn(360,0.5);
 
         SpinnerMotor.setPower(0.3);
         sleep(1000);
@@ -185,6 +176,23 @@ public class Autonomous_Blue extends LinearOpMode {
         while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
 
     }
+    public void Turn(int degrees,double power){
+        FrontLeftDrive.setTargetPosition(-degreestoticks(degrees));
+        FrontRightDrive.setTargetPosition(degreestoticks(degrees));
+        BackLeftDrive.setTargetPosition(-degreestoticks(degrees));
+        BackRightDrive.setTargetPosition(degreestoticks(degrees));
+
+        FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FrontLeftDrive.setPower(power);
+        FrontRightDrive.setPower(power);
+        BackLeftDrive.setPower(power);
+        BackRightDrive.setPower(power);
+        while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
+
+    }
 
 
 
@@ -206,6 +214,10 @@ public class Autonomous_Blue extends LinearOpMode {
        return ticksint;
 
     }
+    public int degreestoticks(int degrees) {
+        double Ddoubleticks = (degrees/360 *(10000/rotations));
+        int Dticksint = (int) Math.round(Ddoubleticks);
+        return Dticksint;
+
+    }
 }
-//float ticksperrotation = 384.5F;
-//float wheeldiameter = 4;
