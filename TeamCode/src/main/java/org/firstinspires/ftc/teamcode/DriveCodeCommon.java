@@ -238,6 +238,10 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setPower(0);
         robot.BackLeftDrive.setPower(0);
         robot.BackRightDrive.setPower(0);
+        robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
 
@@ -260,6 +264,10 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setPower(0);
         robot.BackLeftDrive.setPower(0);
         robot.BackRightDrive.setPower(0);
+        robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 
@@ -283,20 +291,10 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setPower(0);
         robot.BackLeftDrive.setPower(0);
         robot.BackRightDrive.setPower(0);
-    }
-
-
-    public void beforedrive() {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public int distancetoticks(int distance_in) {
