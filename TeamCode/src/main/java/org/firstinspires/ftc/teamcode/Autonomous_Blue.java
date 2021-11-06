@@ -30,12 +30,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -51,7 +48,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name = "Autonomous_Blue", group = "Linear Opmode")
+@Autonomous(name = "autonomous_Blue", group = "Linear Opmode")
 //@Disabled
 public class Autonomous_Blue extends LinearOpMode {
 
@@ -63,15 +60,11 @@ public class Autonomous_Blue extends LinearOpMode {
     public DcMotor BackRightDrive;
     private DcMotor SpinnerMotor;
     double distance;
-    int FirstMove = 1000;
-    int SecondMove = -500;
     int wheel_dia = 4;// inches
     double ticksperrotation = 384.5;
-
+    double rotations = 1.875;
     @Override
     public void runOpMode() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -107,72 +100,20 @@ public class Autonomous_Blue extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
 
-        telemetry.addData("Status", "Resetting Encoders");    //
-        telemetry.update();
-        telemetry.addData("Path0", "Starting at %7d :%7d", FrontLeftDrive.getCurrentPosition(), FrontRightDrive.getCurrentPosition(), BackLeftDrive.getCurrentPosition(), BackRightDrive.getCurrentPosition());
-        telemetry.update();
+        horizontalDrive(10,0.5);
 
-        verticalDrive(10,0.5);
-        //while (FrontLeftDrive.isBusy() && opModeIsActive());
+
 
         beforedrive();
-        //verticalDrive(0,0);
-        lefthorizontalDrive(1,0.5);
-
-        beforedrive();
-        verticalDrive(1,0.5);
-
-
-
         SpinnerMotor.setPower(0.3);
         sleep(1000);
-        //todo Get this to go for certain time
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-
-        telemetry.update();
     }
 
-        public void verticalDrive(int inches,double power){
-            FrontLeftDrive.setTargetPosition(distancetoticks(inches));
-            FrontRightDrive.setTargetPosition(distancetoticks(inches));
-            BackLeftDrive.setTargetPosition(distancetoticks(inches));
-            BackRightDrive.setTargetPosition(distancetoticks(inches));
-
-            FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            FrontLeftDrive.setPower(power);
-            FrontRightDrive.setPower(power);
-            BackLeftDrive.setPower(power);
-            BackRightDrive.setPower(power);
-            while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
-
-
-        }
-
-        public void lefthorizontalDrive(int inches,double power){
-            FrontLeftDrive.setTargetPosition(distancetoticks(inches));
-            FrontRightDrive.setTargetPosition(-distancetoticks(inches));
-            BackLeftDrive.setTargetPosition(-distancetoticks(inches));
-            BackRightDrive.setTargetPosition(distancetoticks(inches));
-
-            FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            FrontLeftDrive.setPower(power);
-            FrontRightDrive.setPower(power);
-            BackLeftDrive.setPower(power);
-            BackRightDrive.setPower(power);
-            while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
-
-        }
-    public void righthorizontalDrive(int inches,double power){
-        FrontLeftDrive.setTargetPosition(-distancetoticks(inches));
+    public void verticalDrive(int inches,double power){
+        FrontLeftDrive.setTargetPosition(distancetoticks(inches));
         FrontRightDrive.setTargetPosition(distancetoticks(inches));
         BackLeftDrive.setTargetPosition(distancetoticks(inches));
-        BackRightDrive.setTargetPosition(-distancetoticks(inches));
+        BackRightDrive.setTargetPosition(distancetoticks(inches));
 
         FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -183,7 +124,54 @@ public class Autonomous_Blue extends LinearOpMode {
         BackLeftDrive.setPower(power);
         BackRightDrive.setPower(power);
         while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
+        FrontLeftDrive.setPower(0);
+        FrontRightDrive.setPower(0);
+        BackLeftDrive.setPower(0);
+        BackRightDrive.setPower(0);
 
+    }
+
+    public void horizontalDrive(int inches,double power){
+        FrontLeftDrive.setTargetPosition(distancetoticks(inches));
+        FrontRightDrive.setTargetPosition(-distancetoticks(inches));
+        BackLeftDrive.setTargetPosition(-distancetoticks(inches));
+        BackRightDrive.setTargetPosition(distancetoticks(inches));
+
+        FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FrontLeftDrive.setPower(power);
+        FrontRightDrive.setPower(power);
+        BackLeftDrive.setPower(power);
+        BackRightDrive.setPower(power);
+        while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
+        FrontLeftDrive.setPower(0);
+        FrontRightDrive.setPower(0);
+        BackLeftDrive.setPower(0);
+        BackRightDrive.setPower(0);
+    }
+
+
+    public void turn(int degrees,double power){
+        FrontLeftDrive.setTargetPosition(-degreestoticks(degrees));
+        FrontRightDrive.setTargetPosition(degreestoticks(degrees));
+        BackLeftDrive.setTargetPosition(-degreestoticks(degrees));
+        BackRightDrive.setTargetPosition(degreestoticks(degrees));
+
+        FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FrontLeftDrive.setPower(power);
+        FrontRightDrive.setPower(power);
+        BackLeftDrive.setPower(power);
+        BackRightDrive.setPower(power);
+        while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
+        FrontLeftDrive.setPower(0);
+        FrontRightDrive.setPower(0);
+        BackLeftDrive.setPower(0);
+        BackRightDrive.setPower(0);
     }
 
 
@@ -203,9 +191,13 @@ public class Autonomous_Blue extends LinearOpMode {
     public int distancetoticks(int distance_in) {
         double doubleticks = distance_in * ((ticksperrotation * 2)/(wheel_dia * 3.14)); // 2x is for gear
         int ticksint = (int) Math.round(doubleticks);
-       return ticksint;
+        return ticksint;
+
+    }
+    public int degreestoticks(int degrees) {
+        double Ddoubleticks = (degrees/360 *(10000/rotations));
+        int Dticksint = (int) Math.round(Ddoubleticks);
+        return Dticksint;
 
     }
 }
-//float ticksperrotation = 384.5F;
-//float wheeldiameter = 4;

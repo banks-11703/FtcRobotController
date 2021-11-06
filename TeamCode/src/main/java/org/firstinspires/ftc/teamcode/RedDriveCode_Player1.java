@@ -121,8 +121,10 @@ public class RedDriveCode_Player1 extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.update();
+            ArmPosMode();
             ScoringModeTelemetry();
             ArmPosModeTelemetry();
+
             // Setup a variable for each drive wheel to save power level for telemetry
             double forward_reverse;
             double rotate;
@@ -165,10 +167,12 @@ public class RedDriveCode_Player1 extends LinearOpMode {
             }
             if (right_stick_pressed && !right_stick_was_pressed) {
                 ArmPosMode++;
+
                 right_stick_was_pressed = true;
             } else if (!right_stick_pressed && right_stick_was_pressed) {
                 right_stick_was_pressed = false;
             }
+
             if (button_a_is_pressed && !button_a_was_pressed) {
 
                 button_a_was_pressed = true;
@@ -183,7 +187,7 @@ public class RedDriveCode_Player1 extends LinearOpMode {
             if (dpad_up_is_pressed && !dpad_up_was_pressed) {
                 ServoMode++;
                 dpad_up_was_pressed = true;
-            } else if (dpad_up_is_pressed && dpad_up_was_pressed) {
+            } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
                 dpad_up_was_pressed = false;
             }
             if (Spinner){
@@ -199,13 +203,13 @@ public class RedDriveCode_Player1 extends LinearOpMode {
 
 
             //todo (Friday) Get Motor Encoder working
-            if (ArmPosMode() == 0) {
+            if (ArmPosMode == 0) {
                 PivotMotor.setTargetPosition(Intake);
             }
-            if (ArmPosMode() == 1) {
+            if (ArmPosMode == 1) {
                 PivotMotor.setTargetPosition(Raised);
             }
-            if (ArmPosMode() == 2) {
+            if (ArmPosMode == 2) {
                 PivotMotor.setTargetPosition(Scoring);
             }
             if (button_y_pressed) {
@@ -233,13 +237,13 @@ public class RedDriveCode_Player1 extends LinearOpMode {
             //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.addData("Arm Pos", PivotMotor.getCurrentPosition());
             telemetry.addData("Arm Target Pos", PivotMotor.getTargetPosition());
-            telemetry.addData("PosMode",ArmPosMode());
+            telemetry.addData("PosMode",ArmPosMode);
             telemetry.update();
         }
 
     }
-    public int ArmPosMode() {
-        return ArmPosMode % 3;
+    public void ArmPosMode() {
+        ArmPosMode = ((ArmPosMode+3) % 3);
     }
     public void HighHold() {
         HighGoal.setPosition(HHold);
@@ -266,6 +270,7 @@ public class RedDriveCode_Player1 extends LinearOpMode {
     }
     public void SetServoPosition() {
         if(gamepad1.a) {
+
             if(ServoMode() == 0){
                 ScoreTop();
             }
@@ -298,10 +303,10 @@ public class RedDriveCode_Player1 extends LinearOpMode {
 
     }
     public void ArmPosModeTelemetry() {
-        if (ArmPosMode() == 0) {
+        if (ArmPosMode == 0) {
             telemetry.addData("ArmMode:", "Intake");
         }
-        else if (ArmPosMode() == 1){
+        else if (ArmPosMode == 1){
             telemetry.addData("ArmMode:", "Raised");
         }
         else{

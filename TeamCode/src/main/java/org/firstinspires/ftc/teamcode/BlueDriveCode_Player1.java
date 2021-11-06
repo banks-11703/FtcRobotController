@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -66,6 +67,8 @@ public class BlueDriveCode_Player1 extends LinearOpMode {
     private Servo Grabber;
     private DcMotor SpinnerMotor;
     private CRServo Intake_Servo;
+    private DigitalChannel redLED;
+    private DigitalChannel greenLED;
 
     int ServoMode = 0;
     int ArmPosMode = 0;
@@ -96,6 +99,9 @@ public class BlueDriveCode_Player1 extends LinearOpMode {
         Grabber = hardwareMap.get(Servo.class, "grabber");
         SpinnerMotor = hardwareMap.get(DcMotor.class, "sp");
         Intake_Servo = hardwareMap.get(CRServo.class,"is");
+        redLED = hardwareMap.get(DigitalChannel.class,"red");
+        greenLED = hardwareMap.get(DigitalChannel.class,"green");
+
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         FrontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -115,6 +121,8 @@ public class BlueDriveCode_Player1 extends LinearOpMode {
         boolean right_stick_was_pressed = false;
         boolean dpad_left_was_pressed = false;
         boolean button_a_is_pressed;
+        redLED.setMode(DigitalChannel.Mode.OUTPUT);
+        greenLED.setMode(DigitalChannel.Mode.OUTPUT);
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.update();
@@ -180,7 +188,7 @@ public class BlueDriveCode_Player1 extends LinearOpMode {
             if (dpad_up_is_pressed && !dpad_up_was_pressed) {
                 ServoMode++;
                 dpad_up_was_pressed = true;
-            } else if (dpad_up_is_pressed && dpad_up_was_pressed) {
+            } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
                 dpad_up_was_pressed = false;
             }
             if (Spinner){SpinnerMotor.setPower(0.3);}
@@ -271,11 +279,19 @@ public class BlueDriveCode_Player1 extends LinearOpMode {
             }
         }
         else {
+            HighHold();
             if(ServoMode() == 0){
-                HighHold();
+                greenLED.setState(false);
+                redLED.setState(true);
+            }
+            else if(ServoMode() == 1){
+                HoldMid();
+                greenLED.setState(false);
+                redLED.setState(false);
             }
             else {
-                HoldMid();
+                redLED.setState(false);
+                greenLED.setState(true);
             }
         }
     }

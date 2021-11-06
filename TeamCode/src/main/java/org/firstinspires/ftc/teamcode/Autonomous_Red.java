@@ -60,15 +60,11 @@ public class Autonomous_Red extends LinearOpMode {
     public DcMotor BackRightDrive;
     private DcMotor SpinnerMotor;
     double distance;
-    int FirstMove = 1000;
-    int SecondMove = -500;
     int wheel_dia = 4;// inches
     double ticksperrotation = 384.5;
     double rotations = 1.875;
     @Override
     public void runOpMode() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -104,23 +100,13 @@ public class Autonomous_Red extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
 
-        telemetry.addData("Status", "Resetting Encoders");    //
-        telemetry.update();
-        telemetry.addData("Path0", "Starting at %7d :%7d", FrontLeftDrive.getCurrentPosition(), FrontRightDrive.getCurrentPosition(), BackLeftDrive.getCurrentPosition(), BackRightDrive.getCurrentPosition());
-        telemetry.update();
+        horizontalDrive(10,0.5);
 
-        verticalDrive(10,0.5);
-        //while (FrontLeftDrive.isBusy() && opModeIsActive());
+
 
         beforedrive();
-        Turn(360,0.5);
-
         SpinnerMotor.setPower(0.3);
         sleep(1000);
-        //todo Get this to go for certain time
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-
-        telemetry.update();
     }
 
         public void verticalDrive(int inches,double power){
@@ -138,11 +124,14 @@ public class Autonomous_Red extends LinearOpMode {
             BackLeftDrive.setPower(power);
             BackRightDrive.setPower(power);
             while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
-
+            FrontLeftDrive.setPower(0);
+            FrontRightDrive.setPower(0);
+            BackLeftDrive.setPower(0);
+            BackRightDrive.setPower(0);
 
         }
 
-        public void lefthorizontalDrive(int inches,double power){
+        public void horizontalDrive(int inches,double power){
             FrontLeftDrive.setTargetPosition(distancetoticks(inches));
             FrontRightDrive.setTargetPosition(-distancetoticks(inches));
             BackLeftDrive.setTargetPosition(-distancetoticks(inches));
@@ -157,26 +146,14 @@ public class Autonomous_Red extends LinearOpMode {
             BackLeftDrive.setPower(power);
             BackRightDrive.setPower(power);
             while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
-
+            FrontLeftDrive.setPower(0);
+            FrontRightDrive.setPower(0);
+            BackLeftDrive.setPower(0);
+            BackRightDrive.setPower(0);
         }
-    public void righthorizontalDrive(int inches,double power){
-        FrontLeftDrive.setTargetPosition(-distancetoticks(inches));
-        FrontRightDrive.setTargetPosition(distancetoticks(inches));
-        BackLeftDrive.setTargetPosition(distancetoticks(inches));
-        BackRightDrive.setTargetPosition(-distancetoticks(inches));
 
-        FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        FrontLeftDrive.setPower(power);
-        FrontRightDrive.setPower(power);
-        BackLeftDrive.setPower(power);
-        BackRightDrive.setPower(power);
-        while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
 
-    }
-    public void Turn(int degrees,double power){
+    public void turn(int degrees,double power){
         FrontLeftDrive.setTargetPosition(-degreestoticks(degrees));
         FrontRightDrive.setTargetPosition(degreestoticks(degrees));
         BackLeftDrive.setTargetPosition(-degreestoticks(degrees));
@@ -191,7 +168,10 @@ public class Autonomous_Red extends LinearOpMode {
         BackLeftDrive.setPower(power);
         BackRightDrive.setPower(power);
         while (FrontLeftDrive.isBusy() && FrontRightDrive.isBusy() && BackLeftDrive.isBusy() && BackRightDrive.isBusy() && opModeIsActive());
-
+        FrontLeftDrive.setPower(0);
+        FrontRightDrive.setPower(0);
+        BackLeftDrive.setPower(0);
+        BackRightDrive.setPower(0);
     }
 
 
