@@ -29,13 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 /**
@@ -51,9 +47,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "BlueDriveCode_Player1_test", group = "Linear Opmode")
+@TeleOp(name = "RedDriveCode_Player1_test", group = "Linear Opmode")
 //@Disabled
-public class BlueDriveCode_Player1_test extends DriveCodeCommon {
+public class RedDriveCode_Player1_test extends DriveCodeCommon {
 
     @Override
     public void runOpMode() {
@@ -95,7 +91,7 @@ public class BlueDriveCode_Player1_test extends DriveCodeCommon {
             SetServoPosition();
 
             if (Spinner) {
-                robot.SpinnerMotor.setPower(0.3);
+                robot.SpinnerMotor.setPower(-0.3);
             } else {
                 robot.SpinnerMotor.setPower(0);
             }

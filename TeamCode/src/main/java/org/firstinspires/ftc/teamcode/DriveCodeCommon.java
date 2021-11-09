@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -180,8 +181,43 @@ public class DriveCodeCommon extends LinearOpMode {
         }
 
     }
+    public void Toggles_2P() {
+        dpad_left_is_pressed = gamepad1.dpad_left;
+        button_a_is_pressed = gamepad1.a;
+        dpad_up_is_pressed = gamepad1.dpad_up;
+        left_stick_pressed = gamepad1.left_stick_button;
+        right_stick_pressed = gamepad1.right_stick_button;
+        if (left_stick_pressed && !left_stick_was_pressed) {
+            ArmPosMode--;
+            left_stick_was_pressed = true;
+        } else if (!left_stick_pressed && left_stick_was_pressed) {
+            left_stick_was_pressed = false;
+        }
+        if (right_stick_pressed && !right_stick_was_pressed) {
+            ArmPosMode++;
+            right_stick_was_pressed = true;
+        } else if (!right_stick_pressed && right_stick_was_pressed) {
+            right_stick_was_pressed = false;
+        }
+        if (button_a_is_pressed && !button_a_was_pressed) {
 
-    public void Toggles() {
+            button_a_was_pressed = true;
+        } else if (!button_a_is_pressed && button_a_was_pressed) {
+            button_a_was_pressed = false;
+        }
+        if (dpad_left_is_pressed && !dpad_left_was_pressed) {
+            dpad_left_was_pressed = true;
+        } else if (!dpad_left_is_pressed && dpad_left_was_pressed) {
+            dpad_left_was_pressed = false;
+        }
+        if (dpad_up_is_pressed && !dpad_up_was_pressed) {
+            ServoMode++;
+            dpad_up_was_pressed = true;
+        } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
+            dpad_up_was_pressed = false;
+        }
+    }
+    public void Toggles_1P() {
         dpad_left_is_pressed = gamepad1.dpad_left;
         button_a_is_pressed = gamepad1.a;
         dpad_up_is_pressed = gamepad1.dpad_up;
@@ -223,7 +259,6 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
         robot.BackLeftDrive.setTargetPosition(distancetoticks(inches));
         robot.BackRightDrive.setTargetPosition(distancetoticks(inches));
-
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -232,8 +267,13 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setPower(power);
         robot.BackLeftDrive.setPower(power);
         robot.BackRightDrive.setPower(power);
-        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive())
-            ;
+        telemetry.addData("here ", 1);
+        telemetry.update();
+        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy()
+               && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy()
+               && opModeIsActive());
+        telemetry.addData("here ", 2);
+        telemetry.update();
         robot.FrontLeftDrive.setPower(0);
         robot.FrontRightDrive.setPower(0);
         robot.BackLeftDrive.setPower(0);
@@ -242,14 +282,17 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void horizontalDrive(int inches, double power) {
-        robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
+        robot.FrontLeftDrive.setTargetPosition(+distancetoticks(inches));
         robot.FrontRightDrive.setTargetPosition(-distancetoticks(inches));
         robot.BackLeftDrive.setTargetPosition(-distancetoticks(inches));
-        robot.BackRightDrive.setTargetPosition(distancetoticks(inches));
+        robot.BackRightDrive.setTargetPosition(+distancetoticks(inches));
 
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -268,6 +311,10 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
 
@@ -276,7 +323,6 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setTargetPosition(degreestoticks(degrees));
         robot.BackLeftDrive.setTargetPosition(-degreestoticks(degrees));
         robot.BackRightDrive.setTargetPosition(degreestoticks(degrees));
-
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -285,8 +331,7 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setPower(power);
         robot.BackLeftDrive.setPower(power);
         robot.BackRightDrive.setPower(power);
-        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive())
-            ;
+        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()) ;
         robot.FrontLeftDrive.setPower(0);
         robot.FrontRightDrive.setPower(0);
         robot.BackLeftDrive.setPower(0);
@@ -295,20 +340,24 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public int distancetoticks(int distance_in) {
         double doubleticks = distance_in * ((ticksperrotation * 2) / (wheel_dia * 3.14)); // 2x is for gear
         int ticksint = (int) Math.round(doubleticks);
         return ticksint;
-
     }
 
     public int degreestoticks(int degrees) {
-        double Ddoubleticks = (degrees / 360 * (10000 / rotations));
-        int Dticksint = (int) Math.round(Ddoubleticks);
-        return Dticksint;
-
+        double Ddoubleticks = (degrees / 360.0 * (10000 / rotations));
+        int ticksint = (int) Math.round(Ddoubleticks);
+        telemetry.addData("here ticksint", ticksint);
+        telemetry.update();
+        return ticksint;
     }
 }
 

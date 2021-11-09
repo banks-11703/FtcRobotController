@@ -8,7 +8,6 @@ public class Autonomous_Red extends DriveCodeCommon {
         robot.init(hardwareMap);
         waitForStart();
         robot.runtime.reset();
-        robot.SpinnerMotor.setPower(0.3);
-        sleep(1000);
+        horizontalDrive(20,0.5);
     }
 }

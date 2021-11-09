@@ -9,9 +9,15 @@ public class Autonomous_Blue extends DriveCodeCommon {
     public void runOpMode() {
         robot.init(hardwareMap);
         waitForStart();
-        verticalDrive(10,0.5);
-        turn(360,0.5);
-        robot.SpinnerMotor.setPower(0.3);
-        sleep(1000);
+
+        horizontalDrive(-33,0.5);
+
+        turn(-41,0.5);
+
+        robot.SpinnerMotor.setPower(0.33);
+        sleep(3000);
+
+        turn(100,0.5);
+
     }
 }
