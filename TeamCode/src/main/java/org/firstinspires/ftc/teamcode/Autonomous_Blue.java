@@ -9,7 +9,12 @@ public class Autonomous_Blue extends DriveCodeCommon {
     public void runOpMode() {
         robot.init(hardwareMap);
         waitForStart();
-
+        verticalDrive(-3,0.3);
+        robot.PivotMotor.setTargetPosition(144);
+        robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.PivotMotor.setPower(0.3);
+        while (robot.PivotMotor.isBusy()){}
+        robot.PivotMotor.setPower(0);
         horizontalDrive(-33,0.5);
 
         turn(-41,0.5);
