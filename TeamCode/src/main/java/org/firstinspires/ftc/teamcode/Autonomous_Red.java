@@ -12,12 +12,17 @@ public class Autonomous_Red extends DriveCodeCommon {
         waitForStart();
         robot.runtime.reset();
         verticalDrive(-3,0.3);
-        robot.PivotMotor.setTargetPosition(144);
+        robot.PivotMotor.setTargetPosition(Raised);
         robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.PivotMotor.setPower(0.3);
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
         horizontalDrive(20,0.5);
+        robot.PivotMotor.setTargetPosition(Intake);
+        robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.PivotMotor.setPower(0.3);
+        while (robot.PivotMotor.isBusy()){}
+        robot.PivotMotor.setPower(0);
         //FIX
     }
 }
