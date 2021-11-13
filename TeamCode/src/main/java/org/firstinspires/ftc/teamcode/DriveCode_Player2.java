@@ -106,13 +106,13 @@ public class DriveCode_Player2 extends DriveCodeCommon {
             }
 
 
-            if (ArmPosMode() == 0) {
+            if (ArmPosMode == 0) {
                 robot.PivotMotor.setTargetPosition(Intake);
             }
-            if (ArmPosMode() == 1) {
+            if (ArmPosMode == 1) {
                 robot.PivotMotor.setTargetPosition(Raised);
             }
-            if (ArmPosMode() == 2) {
+            if (ArmPosMode == 2) {
                 robot.PivotMotor.setTargetPosition(Scoring);
             }
             if (button_y_pressed) {
@@ -138,7 +138,7 @@ public class DriveCode_Player2 extends DriveCodeCommon {
             //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.addData("Arm Pos", robot.PivotMotor.getCurrentPosition());
             telemetry.addData("Arm Target Pos", robot.PivotMotor.getTargetPosition());
-            telemetry.addData("PosMode", ArmPosMode());
+            telemetry.addData("PosMode", ArmPosMode);
             telemetry.update();
         }
 
