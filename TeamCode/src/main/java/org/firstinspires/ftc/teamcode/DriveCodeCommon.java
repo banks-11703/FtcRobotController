@@ -102,8 +102,8 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe));
 
     }
-    public void IntakeToggle(){
-        intaketoggle = ((intaketoggle+2) % 2);
+    public int IntakeToggle(){
+       return intaketoggle % 2;
     }
     public void ArmPosMode() {
         ArmPosMode = ((ArmPosMode+3) % 3);
