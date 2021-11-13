@@ -16,14 +16,16 @@ public class Autonomous_Blue extends DriveCodeCommon {
         robot.PivotMotor.setPower(0.3);
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
-        horizontalDrive(-33,0.5);
-
-        turn(-41,0.5);
-
+        horizontalDrive(-25,0.5);
+        turn(-50,0.5);
         robot.SpinnerMotor.setPower(0.33);
         sleep(3000);
-
         turn(100,0.5);
-
+        robot.PivotMotor.setTargetPosition(Intake);
+        robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.PivotMotor.setPower(0.3);
+        while (robot.PivotMotor.isBusy()){}
+        robot.PivotMotor.setPower(0);
+        //FIX
     }
 }

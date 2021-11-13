@@ -18,5 +18,6 @@ public class Autonomous_Red extends DriveCodeCommon {
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
         horizontalDrive(20,0.5);
+        //FIX
     }
 }

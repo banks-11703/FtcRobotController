@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "Autonomous_Red_v2", group = "Linear Opmode")
+@Autonomous(name = "Autonomous_Red_No_Strafe", group = "Linear Opmode")
 //@Disabled
 public class Autonomous_Red_No_Strafe extends DriveCodeCommon {
     @Override
