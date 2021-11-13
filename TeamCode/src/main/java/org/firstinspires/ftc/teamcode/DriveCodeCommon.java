@@ -103,7 +103,7 @@ public class DriveCodeCommon extends LinearOpMode {
 
     }
     public void IntakeToggle(){
-        intaketoggle = (intaketoggle+2) % 2;
+        intaketoggle = ((intaketoggle+2) % 2);
     }
     public void ArmPosMode() {
         ArmPosMode = ((ArmPosMode+3) % 3);
