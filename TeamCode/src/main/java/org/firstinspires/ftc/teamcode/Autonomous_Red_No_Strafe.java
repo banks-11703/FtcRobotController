@@ -10,19 +10,19 @@ public class Autonomous_Red_No_Strafe extends DriveCodeCommon {
         robot.init(hardwareMap);
         ResetWheelEncoders();
         waitForStart();
-        verticalDrive(-5,0.3);
+        verticalDrive(-5,0.5);
         robot.PivotMotor.setTargetPosition(Raised);
         robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.PivotMotor.setPower(0.3);
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
-        horizontalDrive(23,0.5);
+        horizontalDrive(23,0.3);
         robot.PivotMotor.setTargetPosition(Scoring);
         robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.PivotMotor.setPower(0.3);
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
-        verticalDrive(-3,0.5);
+        verticalDrive(-3,0.3);
         ScoreMid();
         sleep(2000);
         robot.PivotMotor.setTargetPosition(Intake);
@@ -32,6 +32,5 @@ public class Autonomous_Red_No_Strafe extends DriveCodeCommon {
         robot.PivotMotor.setPower(0);
         HoldMid();
         HighHold();
-
     }
 }
