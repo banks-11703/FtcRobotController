@@ -359,5 +359,15 @@ public class DriveCodeCommon extends LinearOpMode {
         telemetry.update();
         return ticksint;
     }
+    public void ResetWheelEncoders(){
+        robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
 }
 

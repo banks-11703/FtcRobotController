@@ -29,9 +29,13 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 /**
@@ -59,18 +63,14 @@ public class RedDriveCode_Player1_test extends DriveCodeCommon {
 
         waitForStart();
 
-        //PivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.runtime.reset();
 
         robot.redLED.setMode(DigitalChannel.Mode.OUTPUT);
         robot.greenLED.setMode(DigitalChannel.Mode.OUTPUT);
-        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.update();
             ScoringModeTelemetry();
             ArmPosModeTelemetry();
-            // Setup a variable for each drive wheel to save power level for telemetry
-
             boolean pivot_up;
             boolean pivot_down;
 
@@ -132,10 +132,7 @@ public class RedDriveCode_Player1_test extends DriveCodeCommon {
                 robot.Grabber.setPosition(0);
             }
 
-
-            // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + robot.runtime.toString());
-            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.addData("Arm Pos", robot.PivotMotor.getCurrentPosition());
             telemetry.addData("Arm Target Pos", robot.PivotMotor.getTargetPosition());
             telemetry.addData("PosMode", ArmPosMode());

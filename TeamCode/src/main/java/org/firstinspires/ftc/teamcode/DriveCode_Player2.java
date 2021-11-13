@@ -87,7 +87,7 @@ public class DriveCode_Player2 extends DriveCodeCommon {
             Spinner = gamepad1.b;
             dpad_right_is_pressed = gamepad1.dpad_right;
             Player_1_Drive();
-            Toggles_1P();
+            Toggles_2P();
             SetServoPosition();
 
             if (Spinner) {

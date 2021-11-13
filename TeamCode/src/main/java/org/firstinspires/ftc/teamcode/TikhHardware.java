@@ -88,16 +88,7 @@ public class TikhHardware
         FrontRightDrive.setDirection(DcMotor.Direction.REVERSE);
         BackLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         BackRightDrive.setDirection(DcMotor.Direction.REVERSE);
-
-        FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         PivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
  }
