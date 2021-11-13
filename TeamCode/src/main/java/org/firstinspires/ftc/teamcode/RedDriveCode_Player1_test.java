@@ -97,7 +97,7 @@ public class RedDriveCode_Player1_test extends DriveCodeCommon {
             }
 
 
-            if (intaketoggle == 1) {
+            if (IntakeToggle() == 1) {
                 robot.Intake_Servo.setPower(-1);
             } else if (dpad_right_is_pressed) {
                 robot.Intake_Servo.setPower(1);
