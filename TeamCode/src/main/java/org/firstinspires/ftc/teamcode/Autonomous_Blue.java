@@ -8,6 +8,7 @@ public class Autonomous_Blue extends DriveCodeCommon {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
+        ResetWheelEncoders();
         waitForStart();
         verticalDrive(-3,0.3);
         robot.PivotMotor.setTargetPosition(144);

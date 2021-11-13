@@ -8,6 +8,7 @@ public class Autonomous_Red extends DriveCodeCommon {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
+        ResetWheelEncoders();
         waitForStart();
         robot.runtime.reset();
         verticalDrive(-3,0.3);
