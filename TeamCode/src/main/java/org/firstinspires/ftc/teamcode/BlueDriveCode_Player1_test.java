@@ -98,7 +98,7 @@ public class BlueDriveCode_Player1_test extends DriveCodeCommon {
             }
 
 
-            if (dpad_left_was_pressed) {
+            if (intaketoggle == 1) {
                 robot.Intake_Servo.setPower(-1);
             } else if (dpad_right_is_pressed) {
                 robot.Intake_Servo.setPower(1);
@@ -107,13 +107,13 @@ public class BlueDriveCode_Player1_test extends DriveCodeCommon {
             }
 
 
-            if (ArmPosMode() == 0) {
+            if (ArmPosMode == 0) {
                 robot.PivotMotor.setTargetPosition(Intake);
             }
-            if (ArmPosMode() == 1) {
+            if (ArmPosMode == 1) {
                 robot.PivotMotor.setTargetPosition(Raised);
             }
-            if (ArmPosMode() == 2) {
+            if (ArmPosMode == 2) {
                 robot.PivotMotor.setTargetPosition(Scoring);
             }
             if (button_y_pressed) {
@@ -137,7 +137,7 @@ public class BlueDriveCode_Player1_test extends DriveCodeCommon {
             telemetry.addData("Status", "Run Time: " + robot.runtime.toString());
             telemetry.addData("Arm Pos", robot.PivotMotor.getCurrentPosition());
             telemetry.addData("Arm Target Pos", robot.PivotMotor.getTargetPosition());
-            telemetry.addData("PosMode", ArmPosMode());
+            telemetry.addData("PosMode", ArmPosMode);
             telemetry.update();
         }
 

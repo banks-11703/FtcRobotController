@@ -60,6 +60,7 @@ public class DriveCodeCommon extends LinearOpMode {
     double forward_reverse;
     double rotate;
     double strafe;
+    int intaketoggle = 0;
     int ServoMode = 0;
     int ArmPosMode = 0;
     final double HHold = 1.0; //
@@ -101,11 +102,12 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe));
 
     }
-
-    public int ArmPosMode() {
-        return ArmPosMode % 3;
+    public void IntakeToggle(){
+        intaketoggle = (intaketoggle+2) % 2;
     }
-
+    public void ArmPosMode() {
+        ArmPosMode = ((ArmPosMode+3) % 3);
+    }
     public void HighHold() {
         robot.HighGoal.setPosition(HHold);
         robot.LowGoal.setPosition(LHold);
@@ -172,9 +174,9 @@ public class DriveCodeCommon extends LinearOpMode {
     }
 
     public void ArmPosModeTelemetry() {
-        if (ArmPosMode() == 0) {
+        if (ArmPosMode == 0) {
             telemetry.addData("ArmMode:", "Intake");
-        } else if (ArmPosMode() == 1) {
+        } else if (ArmPosMode == 1) {
             telemetry.addData("ArmMode:", "Raised");
         } else {
             telemetry.addData("ArmMode:", "Score");
@@ -243,6 +245,7 @@ public class DriveCodeCommon extends LinearOpMode {
         }
         if (dpad_left_is_pressed && !dpad_left_was_pressed) {
             dpad_left_was_pressed = true;
+            intaketoggle++;
         } else if (!dpad_left_is_pressed && dpad_left_was_pressed) {
             dpad_left_was_pressed = false;
         }
