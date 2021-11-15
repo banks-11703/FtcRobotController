@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "Autonomous_Blue_v2", group = "Linear Opmode")
+@Autonomous(name = "Auto_Blue_No_Strafe", group = "Linear Opmode")
 //@Disabled
-public class Autonomous_Blue_v2 extends DriveCodeCommon {
+public class Auto_Blue_No_Strafe extends DriveCodeCommon {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -25,15 +25,13 @@ public class Autonomous_Blue_v2 extends DriveCodeCommon {
         verticalDrive(-4,0.5);
         ScoreMid();
         sleep(2000);
-        HoldMid();
-        HighHold();
-        horizontalDrive(-51, 0.5);
-        verticalDrive(-19,0.5);
         robot.PivotMotor.setTargetPosition(Intake);
         robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.PivotMotor.setPower(0.3);
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
+        HoldMid();
+        HighHold();
 
     }
 }   
