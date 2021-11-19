@@ -25,8 +25,7 @@ public class Auto_Blue_Left extends DriveCodeCommon {
         verticalDrive(-12,0.5);
         ScoreMid();
         sleep(2000);
-        horizontalDrive(-51, 0.5);
-        verticalDrive(-5,0.5);
+        verticalDrive(5,0.5);
         robot.PivotMotor.setTargetPosition(Intake);
         robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.PivotMotor.setPower(0.3);

@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "Auto_Red_Left", group = "Linear Opmode")
+@Autonomous(name = "Auto_Red_Left_Park", group = "Linear Opmode")
 //@Disabled
-public class Auto_Red_Left extends DriveCodeCommon {
+public class Auto_Red_Left_Park extends DriveCodeCommon {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -25,7 +25,8 @@ public class Auto_Red_Left extends DriveCodeCommon {
         verticalDrive(-5,0.5);
         ScoreMid();
         sleep(2000);
-        verticalDrive(5,0.5);
+        horizontalDrive(-51, 0.5);
+        verticalDrive(-19,0.5);
         robot.PivotMotor.setTargetPosition(Intake);
         robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.PivotMotor.setPower(0.3);
