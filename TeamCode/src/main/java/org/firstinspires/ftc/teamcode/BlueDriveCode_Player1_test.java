@@ -92,7 +92,7 @@ public class BlueDriveCode_Player1_test extends DriveCodeCommon {
             SetServoPosition();
 
             if (Spinner) {
-                robot.SpinnerMotor.setPower(0.2);
+                robot.SpinnerMotor.setPower(1);
             } else {
                 robot.SpinnerMotor.setPower(0);
             }
