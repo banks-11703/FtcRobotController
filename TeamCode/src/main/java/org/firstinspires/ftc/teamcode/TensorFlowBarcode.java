@@ -106,7 +106,7 @@ public class TensorFlowBarcode extends LinearOpMode {
         // first.
         initVuforia();
         initTfod();
-    int mark = 0;
+        int barcode = 1;
         /**
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
@@ -135,7 +135,7 @@ public class TensorFlowBarcode extends LinearOpMode {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
+                    if (updatedRecognitions != null && updatedRecognitions.size() > 0) {
                         Recognition gameElement = updatedRecognitions.get(0);
 
 
@@ -143,26 +143,24 @@ public class TensorFlowBarcode extends LinearOpMode {
 
 
                           if (gameElement.getLeft() < 984 && gameElement.getRight() > 984) {
-                               mark = 3;
+                               barcode = 3;
                           }
                           else if (gameElement.getLeft() < 351 && gameElement.getRight() > 351){
-                              mark = 2;
+                              barcode = 2;
                           }
 
-                        telemetry.addData("# Object Detected %d", mark);
-                        telemetry.addData(String.format("label (%d)"), gameElement.getLabel());
-                        telemetry.addData(String.format("  left,top (%d)"), "%.03f , %.03f",
+                        telemetry.addData("# Object Detected ", barcode);
+                        telemetry.addData("label", gameElement.getLabel());
+                        telemetry.addData("  left,top ", "%.03f , %.03f",
                                 gameElement.getLeft(), gameElement.getTop());
-                        telemetry.addData(String.format("  right,bottom (%d)"), "%.03f , %.03f",
+                        telemetry.addData("right,bottom", "%.03f , %.03f",
                                 gameElement.getRight(), gameElement.getBottom());
 
 
                     } else  {
-                        mark = 1;
-                        telemetry.addData("# Object Detected %d", mark);
+                        telemetry.addData("# Object Detected", barcode);
                     }
                     telemetry.update();
-
                 }
 
                 telemetry.update();
