@@ -17,9 +17,9 @@ public class Auto_Blue extends DriveCodeCommon {
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
         horizontalDrive(-24,0.5);
-        turn(-50,0.5);
-        robot.SpinnerMotor.setPower(0.25);
-        sleep(3000);
+        turn(-49,0.5);
+        robot.SpinnerMotor.setPower(0.3);
+        sleep(7000);
         turn(100,0.5);
         robot.PivotMotor.setTargetPosition(Intake);
         robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

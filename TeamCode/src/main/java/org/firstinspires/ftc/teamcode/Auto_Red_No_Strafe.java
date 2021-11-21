@@ -22,7 +22,7 @@ public class Auto_Red_No_Strafe extends DriveCodeCommon {
         robot.PivotMotor.setPower(0.3);
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
-        verticalDrive(-3,0.3);
+        verticalDrive(-11,0.3);
         ScoreMid();
         sleep(2000);
         robot.PivotMotor.setTargetPosition(Intake);

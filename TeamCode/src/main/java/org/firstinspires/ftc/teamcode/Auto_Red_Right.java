@@ -22,11 +22,11 @@ public class Auto_Red_Right extends DriveCodeCommon {
         robot.PivotMotor.setPower(0.3);
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
-        verticalDrive(-3,0.3);
+        verticalDrive(-11,0.3);
         ScoreMid();
         sleep(2000);
         horizontalDrive(51, 0.3);
-        verticalDrive(-19,0.3);
+        verticalDrive(-10,0.3);
         robot.PivotMotor.setTargetPosition(Intake);
         robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.PivotMotor.setPower(0.3);
