@@ -38,6 +38,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import java.util.List;
+
 
 
 /**
@@ -63,6 +70,7 @@ public class DriveCodeCommon extends LinearOpMode {
     int intaketoggle = 0;
     int ServoMode = 0;
     int ArmPosMode = 0;
+    int barcode = 0;
     final double HHold = 1.0; //
     final double HScore = 0.9; //
     final double HRelease = 0.735; //
@@ -362,6 +370,14 @@ public class DriveCodeCommon extends LinearOpMode {
         telemetry.update();
         return ticksint;
     }
+    // Intake Raised Scoring
+    public void moveArm(int p){
+        robot.PivotMotor.setTargetPosition(p);
+        robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.PivotMotor.setPower(0.3);
+        while (robot.PivotMotor.isBusy()){}
+        robot.PivotMotor.setPower(0);
+    }
     public void ResetWheelEncoders(){
         robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -371,6 +387,87 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    public static final String VUFORIA_KEY =
+            "AX+OlhD/////AAABmchQ+gluEkQLp3sQrhqiF3KHXxsnEsgLAJDu9DSV2wC7G6+9s0Uu9q6Z4aKcCBw6z78OwtprS93nTxJmhXG56BASKXvkqGnrvWtBboz4/IdpGMdfND1atvPm2D4TuE3PPw5nw2VSrHvUWu86aThoKYJIR0fAgqSIlzgcdZ9KLishl5n5KQLeBJpXCsW1tWvYV1Jkw3AAqxPoG5mR9ORbRTu/VXfvJKI6uQQBoAIziccUNtb7i2IoyjN/Dh4Juk9Y3r+GcXlTIBVygDyUgxyL2E+TL8IYzq2snIhTkZpCebeM5+ULPVZrI7xkAj2D/SwG0r23lsWLE105tDs3xjBOlhF/VfG7UOp+fXKt9xqIMnbu";
+    public VuforiaLocalizer vuforia;
+    public TFObjectDetector tfod;
+    public static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
+    public static final String[] LABELS = {
+            "Ball",
+            "Cube",
+            "Duck",
+            "Marker"
+    };
+    public void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+    }
+    public void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minResultConfidence = 0.8f;
+        tfodParameters.isModelTensorFlow2 = true;
+        tfodParameters.inputSize = 320;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
+    }
+
+    public void barcodeReader() {
+        initVuforia();
+        initTfod();
+        if (tfod != null) {
+            tfod.activate();
+
+            // The TensorFlow software will scale the input images from the camera to a lower resolution.
+            // This can result in lower detection accuracy at longer distances (> 55cm or 22").
+            // If your target is at distance greater than 50 cm (20") you can adjust the magnification value
+            // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
+            // should be set to the value of the images used to create the TensorFlow Object Detection model
+            // (typically 16/9).
+            tfod.setZoom(1, 16.0 / 9.0);
+        }
+        for (int i = 0; i <50000; i++) {
+            if (tfod != null) {
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null && updatedRecognitions.size() > 0) {
+                    Recognition gameElement = updatedRecognitions.get(0);
+
+                    if (gameElement.getLeft() < 984 && gameElement.getRight() > 984) {
+                        barcode = 2;
+                    } else if (gameElement.getLeft() < 351 && gameElement.getRight() > 351) {
+                        barcode = 1;
+                    }
+
+                    telemetry.addData("# Object Detected ", barcode);
+                    telemetry.addData("label", gameElement.getLabel());
+                    telemetry.addData("  left,top ", "%.03f , %.03f",
+                            gameElement.getLeft(), gameElement.getTop());
+                    telemetry.addData("right,bottom", "%.03f , %.03f",
+                            gameElement.getRight(), gameElement.getBottom());
+
+
+                } else {
+                    telemetry.addData("# Object Detected", barcode);
+                }
+                telemetry.update();
+                telemetry.addData("count", i);
+            }
+
+        }
     }
 }
 

@@ -165,6 +165,7 @@ public class TensorFlowBarcode extends LinearOpMode {
 
                 telemetry.update();
             }
+            telemetry.addData("hi", 1);
         }
     }
 
