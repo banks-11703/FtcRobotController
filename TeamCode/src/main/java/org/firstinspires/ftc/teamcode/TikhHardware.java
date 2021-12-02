@@ -52,20 +52,16 @@ public class TikhHardware
     public CRServo Intake_Servo;
     public DigitalChannel redLED;
     public DigitalChannel greenLED;
-
-
-    /* local OpMode members. */
+    public DcMotor Intake_Motor;
+    public DcMotor Screw_Motor;
     HardwareMap hwMap           =  null;
     public ElapsedTime period  = new ElapsedTime();
 
-    /* Constructor */
     public TikhHardware(){
 
     }
 
-    /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
-        // Save reference to Hardware map
         hwMap = ahwMap;
 
         // Define and Initialize Motors
@@ -79,6 +75,8 @@ public class TikhHardware
         Grabber = hwMap.get(Servo.class, "grabber");
         SpinnerMotor = hwMap.get(DcMotor.class, "sp");
         Intake_Servo = hwMap.get(CRServo.class,"is");
+        Intake_Motor = hwMap.get(DcMotor.class, "");
+        Screw_Motor = hwMap.get(DcMotor.class, "");
         redLED = hwMap.get(DigitalChannel.class,"red");
         greenLED = hwMap.get(DigitalChannel.class,"green");
 

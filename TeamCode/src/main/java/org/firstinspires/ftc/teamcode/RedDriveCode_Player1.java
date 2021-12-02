@@ -29,16 +29,14 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.widget.Spinner;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.configuration.annotations.ServoType;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -54,278 +52,95 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  */
 
 @TeleOp(name = "RedDriveCode_Player1", group = "Linear Opmode")
-@Disabled
-public class RedDriveCode_Player1 extends LinearOpMode {
-
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor FrontLeftDrive = null;
-    private DcMotor BackLeftDrive = null;
-    private DcMotor FrontRightDrive = null;
-    private DcMotor BackRightDrive = null;
-    private DcMotor PivotMotor;
-    private Servo HighGoal;
-    private Servo LowGoal;
-    private Servo Grabber;
-    private DcMotor SpinnerMotor;
-    private CRServo Intake_Servo;
-
-    int ServoMode = 0;
-    int ArmPosMode = 0;
-    final double HHold = 1.0; //
-    final double HScore = 0.9; //
-    final double HRelease = 0.735; //
-    final double LHold = 1; //
-    final double LScore = 0.78; //
-    final double LRelease = 0.67; //
-    final int Intake = 0;
-    final int Raised = 145;
-    final int Scoring = 2300;
+//@Disabled
+public class RedDriveCode_Player1 extends DriveCodeCommon {
 
     @Override
     public void runOpMode() {
+        robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         ScoringModeTelemetry();
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        FrontLeftDrive = hardwareMap.get(DcMotor.class, "fl");
-        FrontRightDrive = hardwareMap.get(DcMotor.class, "fr");
-        BackLeftDrive = hardwareMap.get(DcMotor.class, "bl");
-        BackRightDrive = hardwareMap.get(DcMotor.class, "br");
-        PivotMotor = hardwareMap.get(DcMotor.class, "pm");
-        HighGoal = hardwareMap.get(Servo.class, "hg");
-        LowGoal = hardwareMap.get(Servo.class, "lg");
-        Grabber = hardwareMap.get(Servo.class, "grabber");
-        SpinnerMotor = hardwareMap.get(DcMotor.class, "sp");
-        Intake_Servo = hardwareMap.get(CRServo.class,"is");
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        FrontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        FrontRightDrive.setDirection(DcMotor.Direction.REVERSE);
-        BackLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        BackRightDrive.setDirection(DcMotor.Direction.REVERSE);
 
-
-        // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        PivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //PivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        runtime.reset();
-        boolean dpad_up_was_pressed = false;
-        boolean button_a_was_pressed = false;
-        boolean left_stick_was_pressed = false;
-        boolean right_stick_was_pressed = false;
-        boolean dpad_left_was_pressed = false;
-        boolean button_a_is_pressed;
-        // run until the end of the match (driver presses STOP)
+
+        robot.runtime.reset();
+
+        robot.redLED.setMode(DigitalChannel.Mode.OUTPUT);
+        robot.greenLED.setMode(DigitalChannel.Mode.OUTPUT);
         while (opModeIsActive()) {
             telemetry.update();
-            ArmPosMode();
             ScoringModeTelemetry();
             ArmPosModeTelemetry();
-
-            // Setup a variable for each drive wheel to save power level for telemetry
-            double forward_reverse;
-            double rotate;
-            double strafe;
             boolean pivot_up;
             boolean pivot_down;
-            boolean dpad_up_is_pressed;
-            boolean left_stick_pressed;
-            boolean right_stick_pressed;
             boolean button_y_pressed;
             boolean Grabber_toggle;
             boolean Spinner;
-            boolean dpad_left_is_pressed;
             boolean dpad_right_is_pressed;
-            forward_reverse = gamepad1.left_stick_y;
-            rotate = gamepad1.right_stick_x;
-            strafe = gamepad1.left_stick_x;
-            button_a_is_pressed = gamepad1.a;
+
             pivot_up = gamepad1.left_bumper;
             pivot_down = gamepad1.right_bumper;
-            dpad_up_is_pressed = gamepad1.dpad_up;
-            left_stick_pressed = gamepad1.left_stick_button;
-            right_stick_pressed = gamepad1.right_stick_button;
             button_y_pressed = gamepad1.y;
             Grabber_toggle = gamepad1.x;
             Spinner = gamepad1.b;
-            dpad_left_is_pressed = gamepad1.dpad_left;
             dpad_right_is_pressed = gamepad1.dpad_right;
-            BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
-            FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
-            FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
-            BackRightDrive.setPower((+forward_reverse - rotate - strafe));
-
+            Player_1_Drive();
+            Toggles_1P();
             SetServoPosition();
-            if (left_stick_pressed && !left_stick_was_pressed) {
-                ArmPosMode--;
-                left_stick_was_pressed = true;
-            } else if (!left_stick_pressed && left_stick_was_pressed) {
-                left_stick_was_pressed = false;
-            }
-            if (right_stick_pressed && !right_stick_was_pressed) {
-                ArmPosMode++;
 
-                right_stick_was_pressed = true;
-            } else if (!right_stick_pressed && right_stick_was_pressed) {
-                right_stick_was_pressed = false;
+            if (Spinner) {
+                robot.SpinnerMotor.setPower(-0.2);
+            } else {
+                robot.SpinnerMotor.setPower(0);
             }
 
-            if (button_a_is_pressed && !button_a_was_pressed) {
 
-                button_a_was_pressed = true;
-            } else if (!button_a_is_pressed && button_a_was_pressed) {
-                button_a_was_pressed = false;
-            }
-            if (dpad_left_is_pressed && !dpad_left_was_pressed) {
-                dpad_left_was_pressed = true;
-            } else if (dpad_left_is_pressed && dpad_left_was_pressed) {
-                dpad_left_was_pressed = false;
-            }
-            if (dpad_up_is_pressed && !dpad_up_was_pressed) {
-                ServoMode++;
-                dpad_up_was_pressed = true;
-            } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
-                dpad_up_was_pressed = false;
-            }
-            if (Spinner){
-               SpinnerMotor.setPower(-0.3);
-            }
-            else{
-                SpinnerMotor.setPower(0);
+            if (IntakeToggle() == 1) {
+                robot.Intake_Servo.setPower(-1);
+            } else if (dpad_right_is_pressed) {
+                robot.Intake_Servo.setPower(1);
+            } else {
+                robot.Intake_Servo.setPower(0);
             }
 
-            if (dpad_left_was_pressed){Intake_Servo.setPower(-1);}
-            else if (dpad_right_is_pressed){Intake_Servo.setPower(1);}
-            else{ Intake_Servo.setPower(0);}
 
-
-            //todo (Friday) Get Motor Encoder working
             if (ArmPosMode == 0) {
-                PivotMotor.setTargetPosition(Intake);
+                robot.PivotMotor.setTargetPosition(Intake);
             }
             if (ArmPosMode == 1) {
-                PivotMotor.setTargetPosition(Raised);
+                robot.PivotMotor.setTargetPosition(Raised);
             }
             if (ArmPosMode == 2) {
-                PivotMotor.setTargetPosition(Scoring);
+                robot.PivotMotor.setTargetPosition(Scoring);
             }
             if (button_y_pressed) {
-                PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                PivotMotor.setPower(0.5);
+                robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.PivotMotor.setPower(0.5);
             } else if (pivot_up) {
-                PivotMotor.setPower(1);
+                robot.PivotMotor.setPower(1);
             } else if (pivot_down) {
-                PivotMotor.setPower(-1);
+                robot.PivotMotor.setPower(-1);
             } else {
-                PivotMotor.setPower(0);
+                robot.PivotMotor.setPower(0);
             }
 
-            if (Grabber_toggle){
-                Grabber.setPosition(0.8);
+            if (Grabber_toggle) {
+                robot.Grabber.setPosition(0.8);
+            } else {
+                robot.Grabber.setPosition(0);
             }
-            else{
-                Grabber.setPosition(0);
-            }
 
-
-
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.addData("Arm Pos", PivotMotor.getCurrentPosition());
-            telemetry.addData("Arm Target Pos", PivotMotor.getTargetPosition());
-            telemetry.addData("PosMode",ArmPosMode);
+            telemetry.addData("Status", "Run Time: " + robot.runtime.toString());
+            telemetry.addData("Arm Pos", robot.PivotMotor.getCurrentPosition());
+            telemetry.addData("Arm Target Pos", robot.PivotMotor.getTargetPosition());
+            telemetry.addData("PosMode", ArmPosMode);
             telemetry.update();
         }
 
     }
-    public void ArmPosMode() {
-        ArmPosMode = ((ArmPosMode+3) % 3);
-    }
-    public void HighHold() {
-        HighGoal.setPosition(HHold);
-        LowGoal.setPosition(LHold);
-    }
-    public void ScoreTop() {
-        HighGoal.setPosition(HScore);
-        LowGoal.setPosition(LHold);
-    }
-    public void HoldMid() {
-        HighGoal.setPosition(HRelease);
-        LowGoal.setPosition(LHold);
-    }
-    public void ScoreMid() {
-        HighGoal.setPosition(HRelease);
-        LowGoal.setPosition(LScore);
-    }
-    public void ScoreLow() {
-        HighGoal.setPosition(HRelease);
-        LowGoal.setPosition(LRelease);
-    }
-    public int ServoMode(){
-        return ServoMode % 3;
-    }
-    public void SetServoPosition() {
-        if(gamepad1.a) {
-
-            if(ServoMode() == 0){
-                ScoreTop();
-            }
-            else if(ServoMode() == 1){
-                ScoreMid();
-            }
-            else {
-                ScoreLow();
-            }
-        }
-        else {
-            if(ServoMode() == 0){
-                HighHold();
-            }
-            else {
-                HoldMid();
-            }
-        }
-    }
-    public void ScoringModeTelemetry() {
-        if (ServoMode() == 0) {
-            telemetry.addData("ScoringMode:", "High");
-        }
-        else if (ServoMode() == 1){
-            telemetry.addData("ScoringMode:", "Mid");
-        }
-        else{
-            telemetry.addData("ScoringMode:", "Low");
-        }
-
-    }
-    public void ArmPosModeTelemetry() {
-        if (ArmPosMode == 0) {
-            telemetry.addData("ArmMode:", "Intake");
-        }
-        else if (ArmPosMode == 1){
-            telemetry.addData("ArmMode:", "Raised");
-        }
-        else{
-            telemetry.addData("ArmMode:", "Score");
-        }
-
-    }
-
-    /* public void toggleFlag(servo) {
-         if (flag_raised) {
-             servo.setPosition(Hold);
-             if (servo.getPosition() == 1.0) {
-                 flag_raised = false;
-             }
-         } else {
-             servo.setPosition(Release);
-             if (servo.getPosition() == 0.0) {
-                 flag_raised = true;
-             }*/
-
 
 }
+
+
+
+
