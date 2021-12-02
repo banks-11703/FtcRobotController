@@ -16,15 +16,9 @@ public class Auto_Blue_Right extends DriveCodeCommon {
         horizontalDrive(-23,0.3);
         moveArm(Scoring);
         verticalDrive(-12,0.3);
-        if (barcode == 0){
-            ScoreLow();
-        }
-        if (barcode == 1){
-        ScoreMid();
-        }
-        if (barcode == 3){
-        ScoreTop();
-        }
+        if (barcode == 0){ ScoreLow();}
+        if (barcode == 1){ ScoreMid();}
+        if (barcode == 3){ ScoreTop();}
         sleep(2000);
         HoldMid();
         HighHold();

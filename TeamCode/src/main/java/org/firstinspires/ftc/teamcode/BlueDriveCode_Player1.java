@@ -29,13 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 /**
@@ -88,7 +84,7 @@ public class BlueDriveCode_Player1 extends DriveCodeCommon {
             Spinner = gamepad1.b;
             dpad_right_is_pressed = gamepad1.dpad_right;
             Player_1_Drive();
-            Toggles_1P();
+            Toggles_Robot_1_1P();
             SetServoPosition();
 
             if (Spinner) {
