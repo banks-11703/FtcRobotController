@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 
@@ -55,14 +54,11 @@ public class Robot_2_RedDriveCode_Player1 extends DriveCodeCommon {
             ScoringModeTelemetry();
             boolean screw_reverse;
             boolean screw_on;
-            boolean button_y_pressed;
-            boolean Grabber_toggle;
             boolean Spinner;
             boolean dpad_right_is_pressed;
 
             screw_reverse = gamepad1.left_bumper;
             screw_on = gamepad1.right_bumper;
-            button_y_pressed = gamepad1.y;
             Spinner = gamepad1.b;
             dpad_right_is_pressed = gamepad1.dpad_right;
             Player_1_Drive();
