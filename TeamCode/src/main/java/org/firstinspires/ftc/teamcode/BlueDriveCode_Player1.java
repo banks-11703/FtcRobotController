@@ -84,7 +84,7 @@ public class BlueDriveCode_Player1 extends DriveCodeCommon {
             Spinner = gamepad1.b;
             dpad_right_is_pressed = gamepad1.dpad_right;
             Player_1_Drive();
-            Toggles_Robot_1_1P();
+            Toggles1P();
             SetServoPosition();
 
             if (Spinner) {

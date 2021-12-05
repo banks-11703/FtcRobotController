@@ -47,7 +47,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "DriveCode_Player2", group = "Linear Opmode")
+@TeleOp(name = "old_DriveCode_Player2", group = "Linear Opmode")
 //@Disabled
 public class DriveCode_Player2 extends DriveCodeCommon {
 

@@ -29,16 +29,17 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import java.util.List;
 
+import java.util.List;
 
 
 /**
@@ -54,17 +55,17 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "DriveCodeCommon", group = "Linear Opmode")
+@TeleOp(name = "Robot_2_DriveCodeCommon", group = "Linear Opmode")
 @Disabled
-public class DriveCodeCommon extends LinearOpMode {
-    TikhHardware robot = new TikhHardware();
+public class Robot_2_DriveCodeCommon extends LinearOpMode {
+    Robot_2_TikhHardware robot = new Robot_2_TikhHardware();
     double forward_reverse;
     double rotate;
     double strafe;
+    int Override = 0;
     int intaketoggle = 0;
     int screwtoggle = 0;
     int ServoMode = 0;
-    int ArmPosMode = 0;
     int barcode = 0;
     final double HHold = 1.0; //
     final double HScore = 0.9; //
@@ -72,26 +73,30 @@ public class DriveCodeCommon extends LinearOpMode {
     final double LHold = 1; //
     final double LScore = 0.78; //
     final double LRelease = 0.67; //
-    final int Intake = 1;
+    final int Intake = 0;
     final int Raised = 145;
     final int Scoring = 2300;
-    int wheel_Dia_Robot_1 = 4;// inches
+    int wheel_Dia = 4;// inches
     double ticksPerRotation = 384.5;
-    double rotations_robot_1 = 1.875;
-
+    double rotations = 0;
     boolean dpad_up_was_pressed = false;
     boolean button_a_was_pressed = false;
     boolean left_stick_was_pressed = false;
     boolean right_stick_was_pressed = false;
     boolean dpad_left_was_pressed = false;
-
-
+    boolean button_x_was_pressed = false;
+    boolean button_x_is_pressed;
     boolean button_a_is_pressed;
     boolean dpad_up_is_pressed;
     boolean left_stick_pressed;
     boolean right_stick_pressed;
     boolean dpad_left_is_pressed;
-
+    boolean screw_reverse;
+    boolean screw_on;
+    boolean Spinner;
+    boolean SpinnerReverse;
+    boolean dpad_right_is_pressed;
+    boolean override;
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -101,6 +106,53 @@ public class DriveCodeCommon extends LinearOpMode {
         forward_reverse = gamepad1.left_stick_y;
         rotate = gamepad1.right_stick_x;
         strafe = gamepad1.left_stick_x;
+        screw_reverse = gamepad1.left_bumper;
+        screw_on = gamepad1.right_bumper;
+        Spinner = gamepad1.b;
+        dpad_right_is_pressed = gamepad1.dpad_right;
+        SpinnerReverse =gamepad1.dpad_left;
+        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
+        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
+        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
+        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe));
+    }
+    public void Player_2_Drive(){
+        forward_reverse = gamepad1.left_stick_y;
+        rotate = gamepad1.right_stick_x;
+        strafe = gamepad1.left_stick_x;
+        screw_reverse = gamepad1.left_bumper;
+        button_x_is_pressed = gamepad1.x;
+        Spinner = gamepad1.b;
+        dpad_right_is_pressed = gamepad1.dpad_right;
+        SpinnerReverse =gamepad1.dpad_left;
+        dpad_left_is_pressed = gamepad1.dpad_left;
+        button_a_is_pressed = gamepad1.a;
+        dpad_up_is_pressed = gamepad1.dpad_up;
+        left_stick_pressed = gamepad1.left_stick_button;
+        right_stick_pressed = gamepad1.right_stick_button;
+        override = gamepad2.back && gamepad2.start;
+        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
+        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
+        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
+        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe));
+        if(override){
+            Override++;
+        }
+    }
+    public void Player_2_Override(){
+        forward_reverse = gamepad2.left_stick_y;
+        rotate = gamepad2.right_stick_x;
+        strafe = gamepad2.left_stick_x;
+        screw_reverse = gamepad2.left_bumper;
+        screw_on = gamepad2.right_bumper;
+        Spinner = gamepad2.b;
+        dpad_right_is_pressed = gamepad2.dpad_right;
+        SpinnerReverse =gamepad2.dpad_left;
+        dpad_left_is_pressed = gamepad1.dpad_left;
+        button_a_is_pressed = gamepad1.a;
+        dpad_up_is_pressed = gamepad1.dpad_up;
+        left_stick_pressed = gamepad1.left_stick_button;
+        right_stick_pressed = gamepad1.right_stick_button;
         robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
         robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
         robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
@@ -112,9 +164,6 @@ public class DriveCodeCommon extends LinearOpMode {
     }
     public int ScrewToggle(){
         return screwtoggle % 2;
-    }
-    public void ArmPosMode() {
-        ArmPosMode = ((ArmPosMode+3) % 3);
     }
     public void HighHold() {
         robot.HighGoal.setPosition(HHold);
@@ -154,19 +203,6 @@ public class DriveCodeCommon extends LinearOpMode {
             } else {
                 ScoreLow();
             }
-        } else {
-            HighHold();
-            if (ServoMode() == 0) {
-                robot.greenLED.setState(false);
-                robot.redLED.setState(true);
-            } else if (ServoMode() == 1) {
-
-                robot.greenLED.setState(false);
-                robot.redLED.setState(false);
-            } else {
-                robot.redLED.setState(false);
-                robot.greenLED.setState(true);
-            }
         }
     }
 
@@ -181,30 +217,14 @@ public class DriveCodeCommon extends LinearOpMode {
 
     }
 
-    public void ArmPosModeTelemetry() {
-        if (ArmPosMode == 0) {
-            telemetry.addData("ArmMode:", "Intake");
-        } else if (ArmPosMode == 1) {
-            telemetry.addData("ArmMode:", "Raised");
-        } else {
-            telemetry.addData("ArmMode:", "Score");
-        }
-
-    }
     public void Toggles_2P() {
-        dpad_left_is_pressed = gamepad1.dpad_left;
-        button_a_is_pressed = gamepad1.a;
-        dpad_up_is_pressed = gamepad1.dpad_up;
-        left_stick_pressed = gamepad1.left_stick_button;
-        right_stick_pressed = gamepad1.right_stick_button;
+
         if (left_stick_pressed && !left_stick_was_pressed) {
-            ArmPosMode--;
             left_stick_was_pressed = true;
         } else if (!left_stick_pressed && left_stick_was_pressed) {
             left_stick_was_pressed = false;
         }
         if (right_stick_pressed && !right_stick_was_pressed) {
-            ArmPosMode++;
             right_stick_was_pressed = true;
         } else if (!right_stick_pressed && right_stick_was_pressed) {
             right_stick_was_pressed = false;
@@ -215,8 +235,15 @@ public class DriveCodeCommon extends LinearOpMode {
         } else if (!button_a_is_pressed && button_a_was_pressed) {
             button_a_was_pressed = false;
         }
+        if (button_x_is_pressed && !button_x_was_pressed) {
+            screwtoggle++;
+            button_x_was_pressed = true;
+        } else if (!button_x_is_pressed && button_x_was_pressed) {
+            button_x_was_pressed = false;
+        }
         if (dpad_left_is_pressed && !dpad_left_was_pressed) {
             dpad_left_was_pressed = true;
+            intaketoggle++;
         } else if (!dpad_left_is_pressed && dpad_left_was_pressed) {
             dpad_left_was_pressed = false;
         }
@@ -227,6 +254,7 @@ public class DriveCodeCommon extends LinearOpMode {
             dpad_up_was_pressed = false;
         }
     }
+
     public void Toggles1P() {
         dpad_left_is_pressed = gamepad1.dpad_left;
         button_a_is_pressed = gamepad1.a;
@@ -234,13 +262,11 @@ public class DriveCodeCommon extends LinearOpMode {
         left_stick_pressed = gamepad1.left_stick_button;
         right_stick_pressed = gamepad1.right_stick_button;
         if (left_stick_pressed && !left_stick_was_pressed) {
-            ArmPosMode--;
             left_stick_was_pressed = true;
         } else if (!left_stick_pressed && left_stick_was_pressed) {
             left_stick_was_pressed = false;
         }
         if (right_stick_pressed && !right_stick_was_pressed) {
-            ArmPosMode++;
             right_stick_was_pressed = true;
         } else if (!right_stick_pressed && right_stick_was_pressed) {
             right_stick_was_pressed = false;
@@ -250,6 +276,12 @@ public class DriveCodeCommon extends LinearOpMode {
             button_a_was_pressed = true;
         } else if (!button_a_is_pressed && button_a_was_pressed) {
             button_a_was_pressed = false;
+        }
+        if (button_x_is_pressed && !button_x_was_pressed) {
+            screwtoggle++;
+            button_x_was_pressed = true;
+        } else if (!button_x_is_pressed && button_x_was_pressed) {
+            button_x_was_pressed = false;
         }
         if (dpad_left_is_pressed && !dpad_left_was_pressed) {
             dpad_left_was_pressed = true;
@@ -277,14 +309,10 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setPower(power);
         robot.BackLeftDrive.setPower(power);
         robot.BackRightDrive.setPower(power);
-        telemetry.addData("here ", 1);
-        telemetry.update();
         //noinspection StatementWithEmptyBody
         while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy()
                && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy()
                && opModeIsActive());
-        telemetry.addData("here ", 2);
-        telemetry.update();
         robot.FrontLeftDrive.setPower(0);
         robot.FrontRightDrive.setPower(0);
         robot.BackLeftDrive.setPower(0);
@@ -356,29 +384,22 @@ public class DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
     public int distancetoticks(int distance_in) {
-        double doubleticks = distance_in * ((ticksPerRotation * 2) / (wheel_Dia_Robot_1 * 3.14)); // 2x is for gear
+        double doubleticks = distance_in * ((ticksPerRotation * 2) / (wheel_Dia* 3.14)); // 2x is for gear
         int ticksint = (int) Math.round(doubleticks);
         return ticksint;
     }
 
     public int degreestoticks(int degrees) {
-        double Ddoubleticks = (degrees / 360.0 * (10000 / rotations_robot_1));
+        double Ddoubleticks = (degrees / 360.0 * (10000 / rotations));
         int ticksint = (int) Math.round(Ddoubleticks);
         telemetry.addData("here ticksint", ticksint);
         telemetry.update();
         return ticksint;
     }
-
     // Intake Raised Scoring
-    public void moveArm(int p){
-        robot.PivotMotor.setTargetPosition(p);
-        robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.PivotMotor.setPower(0.3);
-        //noinspection StatementWithEmptyBody
-        while (robot.PivotMotor.isBusy()){}
-        robot.PivotMotor.setPower(0);
-    }
+
     public void ResetWheelEncoders(){
         robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
