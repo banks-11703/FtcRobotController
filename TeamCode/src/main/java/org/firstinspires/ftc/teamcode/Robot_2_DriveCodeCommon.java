@@ -81,21 +81,15 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     double rotations = 0;
     boolean dpad_up_was_pressed = false;
     boolean button_a_was_pressed = false;
-    boolean left_stick_was_pressed = false;
-    boolean right_stick_was_pressed = false;
-    boolean dpad_left_was_pressed = false;
+    boolean y_was_pressed = false;
     boolean button_x_was_pressed = false;
     boolean button_x_is_pressed;
     boolean button_a_is_pressed;
     boolean dpad_up_is_pressed;
-    boolean left_stick_pressed;
-    boolean right_stick_pressed;
-    boolean dpad_left_is_pressed;
+    boolean y_is_pressed;
     boolean screw_reverse;
-    boolean screw_on;
     boolean Spinner;
     boolean SpinnerReverse;
-    boolean dpad_right_is_pressed;
     boolean override;
     @Override
     public void runOpMode() {
@@ -107,10 +101,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         rotate = gamepad1.right_stick_x;
         strafe = gamepad1.left_stick_x;
         screw_reverse = gamepad1.left_bumper;
-        screw_on = gamepad1.right_bumper;
+        button_x_is_pressed = gamepad1.x; //screw on
         Spinner = gamepad1.b;
-        dpad_right_is_pressed = gamepad1.dpad_right;
-        SpinnerReverse =gamepad1.dpad_left;
+        SpinnerReverse =gamepad1.dpad_right;
+        y_is_pressed = gamepad1.y; // intake
+        button_a_is_pressed = gamepad1.a; // score
+        dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
         robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
         robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
         robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
@@ -121,15 +117,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         rotate = gamepad1.right_stick_x;
         strafe = gamepad1.left_stick_x;
         screw_reverse = gamepad1.left_bumper;
-        button_x_is_pressed = gamepad1.x;
+        button_x_is_pressed = gamepad1.x; //screw on
         Spinner = gamepad1.b;
-        dpad_right_is_pressed = gamepad1.dpad_right;
-        SpinnerReverse =gamepad1.dpad_left;
-        dpad_left_is_pressed = gamepad1.dpad_left;
-        button_a_is_pressed = gamepad1.a;
-        dpad_up_is_pressed = gamepad1.dpad_up;
-        left_stick_pressed = gamepad1.left_stick_button;
-        right_stick_pressed = gamepad1.right_stick_button;
+        SpinnerReverse =gamepad1.dpad_right;
+        y_is_pressed = gamepad1.y; // intake
+        button_a_is_pressed = gamepad1.a; // score
+        dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
         override = gamepad2.back && gamepad2.start;
         robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
         robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
@@ -144,20 +137,16 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         rotate = gamepad2.right_stick_x;
         strafe = gamepad2.left_stick_x;
         screw_reverse = gamepad2.left_bumper;
-        screw_on = gamepad2.right_bumper;
+        button_x_is_pressed = gamepad2.x; //screw on
         Spinner = gamepad2.b;
-        dpad_right_is_pressed = gamepad2.dpad_right;
-        SpinnerReverse =gamepad2.dpad_left;
-        dpad_left_is_pressed = gamepad1.dpad_left;
-        button_a_is_pressed = gamepad1.a;
-        dpad_up_is_pressed = gamepad1.dpad_up;
-        left_stick_pressed = gamepad1.left_stick_button;
-        right_stick_pressed = gamepad1.right_stick_button;
+        SpinnerReverse =gamepad2.dpad_right;
+        y_is_pressed = gamepad2.y; // intake
+        button_a_is_pressed = gamepad2.a; // score
+        dpad_up_is_pressed = gamepad2.dpad_up; // scoring mode
         robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
         robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
         robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
         robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe));
-
     }
     public int IntakeToggle(){
        return intaketoggle % 2;
@@ -219,16 +208,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
 
     public void Toggles_2P() {
 
-        if (left_stick_pressed && !left_stick_was_pressed) {
-            left_stick_was_pressed = true;
-        } else if (!left_stick_pressed && left_stick_was_pressed) {
-            left_stick_was_pressed = false;
-        }
-        if (right_stick_pressed && !right_stick_was_pressed) {
-            right_stick_was_pressed = true;
-        } else if (!right_stick_pressed && right_stick_was_pressed) {
-            right_stick_was_pressed = false;
-        }
         if (button_a_is_pressed && !button_a_was_pressed) {
 
             button_a_was_pressed = true;
@@ -241,11 +220,11 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else if (!button_x_is_pressed && button_x_was_pressed) {
             button_x_was_pressed = false;
         }
-        if (dpad_left_is_pressed && !dpad_left_was_pressed) {
-            dpad_left_was_pressed = true;
+        if (y_is_pressed && !y_was_pressed) {
+            y_was_pressed = true;
             intaketoggle++;
-        } else if (!dpad_left_is_pressed && dpad_left_was_pressed) {
-            dpad_left_was_pressed = false;
+        } else if (!y_is_pressed && y_was_pressed) {
+            y_was_pressed = false;
         }
         if (dpad_up_is_pressed && !dpad_up_was_pressed) {
             ServoMode++;
@@ -256,21 +235,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void Toggles1P() {
-        dpad_left_is_pressed = gamepad1.dpad_left;
-        button_a_is_pressed = gamepad1.a;
-        dpad_up_is_pressed = gamepad1.dpad_up;
-        left_stick_pressed = gamepad1.left_stick_button;
-        right_stick_pressed = gamepad1.right_stick_button;
-        if (left_stick_pressed && !left_stick_was_pressed) {
-            left_stick_was_pressed = true;
-        } else if (!left_stick_pressed && left_stick_was_pressed) {
-            left_stick_was_pressed = false;
-        }
-        if (right_stick_pressed && !right_stick_was_pressed) {
-            right_stick_was_pressed = true;
-        } else if (!right_stick_pressed && right_stick_was_pressed) {
-            right_stick_was_pressed = false;
-        }
         if (button_a_is_pressed && !button_a_was_pressed) {
 
             button_a_was_pressed = true;
@@ -283,11 +247,11 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else if (!button_x_is_pressed && button_x_was_pressed) {
             button_x_was_pressed = false;
         }
-        if (dpad_left_is_pressed && !dpad_left_was_pressed) {
-            dpad_left_was_pressed = true;
+        if (y_is_pressed && !y_was_pressed) {
+            y_was_pressed = true;
             intaketoggle++;
-        } else if (!dpad_left_is_pressed && dpad_left_was_pressed) {
-            dpad_left_was_pressed = false;
+        } else if (!y_is_pressed && y_was_pressed) {
+            y_was_pressed = false;
         }
         if (dpad_up_is_pressed && !dpad_up_was_pressed) {
             ServoMode++;

@@ -57,7 +57,7 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
             else if (Override == 1){
                 Player_2_Override();
             }
-            Toggles1P();
+            Toggles_2P();
             SetServoPosition();
 
             if (Spinner) {
@@ -69,25 +69,19 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
                 robot.SpinnerMotor.setPower(0);
             }
             if (ScrewToggle() == 1) {
-                robot.Screw_Motor.setPower(0.25);
+                robot.Screw_Motor.setPower(0.5);
             } else if (screw_reverse) {
-                robot.Screw_Motor.setPower(-0.25);
+                robot.Screw_Motor.setPower(-0.5);
             } else {
                 robot.Screw_Motor.setPower(0);
             }
             if (IntakeToggle() == 1) {
                 robot.Top_Intake_Motor.setPower(1);
                 robot.Bottom_Intake_Motor.setPower(-1);
-            } else if (dpad_right_is_pressed) {
-                robot.Top_Intake_Motor.setPower(1);
-                robot.Bottom_Intake_Motor.setPower(1);
             } else {
                 robot.Top_Intake_Motor.setPower(0);
                 robot.Bottom_Intake_Motor.setPower(0);
             }
-
-
-
             telemetry.update();
         }
 
