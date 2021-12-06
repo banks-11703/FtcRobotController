@@ -104,16 +104,16 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         rotate = gamepad1.right_stick_x;
         strafe = gamepad1.left_stick_x;
         screw_reverse = gamepad1.left_bumper;
-        button_x_is_pressed = gamepad1.x; //screw on
+        y_is_pressed = gamepad1.y; //intake
         Spinner = gamepad1.b;
         SpinnerReverse =gamepad1.dpad_right;
-        y_is_pressed = gamepad1.y; // intake
+        button_x_is_pressed = gamepad1.x; // screw
         button_a_is_pressed = gamepad1.a; // score
         dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
-        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
-        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
-        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
-        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe));
+        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe)/1.5);
+        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe)/1.5);
+        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe)/1.5);
+        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe)/1.5);
     }
     public void Player_2_Drive(){
         forward_reverse = gamepad1.left_stick_y;
@@ -127,10 +127,10 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         button_a_is_pressed = gamepad1.a; // score
         dpad_up_is_pressed = gamepad2.dpad_up; // scoring mode
         override = gamepad2.back && gamepad2.start;
-        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
-        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
-        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
-        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe));
+        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe)/2);
+        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe)/2);
+        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe)/2);
+        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe)/2);
         if(override){
             Override++;
         }
@@ -153,6 +153,15 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
     public int IntakeToggle(){
        return intaketoggle % 2;
+    }
+    public int Team(){
+        return team % 2;
+    }
+    public int Side(){
+        return side % 2;
+    }
+    public int Mode(){
+        return mode % 2;
     }
     public int ScrewToggle(){
         return screwtoggle % 2;
@@ -218,14 +227,14 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             button_a_was_pressed = false;
         }
         if (button_x_is_pressed && !button_x_was_pressed) {
-            screwtoggle++;
+            intaketoggle++;
             button_x_was_pressed = true;
         } else if (!button_x_is_pressed && button_x_was_pressed) {
             button_x_was_pressed = false;
         }
         if (y_is_pressed && !y_was_pressed) {
             y_was_pressed = true;
-            intaketoggle++;
+            screwtoggle++;
         } else if (!y_is_pressed && y_was_pressed) {
             y_was_pressed = false;
         }

@@ -61,9 +61,9 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
             SetServoPosition();
 
             if (Spinner) {
-                robot.SpinnerMotor.setPower(-0.2);
+                robot.SpinnerMotor.setPower(-0.4);
             } else if(SpinnerReverse){
-                robot.SpinnerMotor.setPower(-0.2);
+                robot.SpinnerMotor.setPower(0.4);
             } else {
                 robot.SpinnerMotor.setPower(0);
             }
