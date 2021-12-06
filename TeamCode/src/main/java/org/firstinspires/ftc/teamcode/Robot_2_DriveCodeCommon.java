@@ -67,6 +67,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     int screwtoggle = 0;
     int ServoMode = 0;
     int barcode = 0;
+    int team = 0;// 0 = red 1 = blue
+    int side = 0;// 0 = left 1 = right
+    int mode = 0;//0 = nothing
     final double HHold = 1.0; //
     final double HScore = 0.9; //
     final double HRelease = 0.735; //
