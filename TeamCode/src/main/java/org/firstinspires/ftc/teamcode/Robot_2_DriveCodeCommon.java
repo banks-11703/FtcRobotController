@@ -116,13 +116,13 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         forward_reverse = gamepad1.left_stick_y;
         rotate = gamepad1.right_stick_x;
         strafe = gamepad1.left_stick_x;
-        screw_reverse = gamepad1.left_bumper;
-        button_x_is_pressed = gamepad1.x; //screw on
+        screw_reverse = gamepad2.left_bumper;
+        button_x_is_pressed = gamepad2.x; //screw on
         Spinner = gamepad1.b;
-        SpinnerReverse =gamepad1.dpad_right;
-        y_is_pressed = gamepad1.y; // intake
+        SpinnerReverse =gamepad1.x;
+        y_is_pressed = gamepad2.y; // intake
         button_a_is_pressed = gamepad1.a; // score
-        dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
+        dpad_up_is_pressed = gamepad2.dpad_up; // scoring mode
         override = gamepad2.back && gamepad2.start;
         robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
         robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
