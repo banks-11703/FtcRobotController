@@ -71,7 +71,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     int side = 0;// 0 = left 1 = right
     int mode = 0;//0 = nothing
     final double HHold = 1.0; //
-    final double HScore = 0.9; //
+    final double HScore = 0.5; //
     final double HRelease = 0.735; //
     final double LHold = 1; //
     final double LScore = 0.78; //
@@ -204,6 +204,8 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             } else {
                 ScoreLow();
             }
+        }else {
+            HighHold();
         }
     }
 
