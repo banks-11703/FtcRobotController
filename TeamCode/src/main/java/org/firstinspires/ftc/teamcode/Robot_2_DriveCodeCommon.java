@@ -81,7 +81,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     final int Scoring = 2300;
     int wheel_Dia = 4;// inches
     double ticksPerRotation = 384.5;
-    double rotations = 0;
+    double rotations = 4.325;
     boolean dpad_up_was_pressed = false;
     boolean button_a_was_pressed = false;
     boolean y_was_pressed = false;
