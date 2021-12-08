@@ -79,7 +79,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     final int Intake = 0;
     final int Raised = 145;
     final int Scoring = 2300;
-    int wheel_Dia = 4;// inches
+    double wheel_Dia = 3.93701;// inches
     double ticksPerRotation = 384.5;
     double rotations = 4.325;
     boolean dpad_up_was_pressed = false;
@@ -275,10 +275,10 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
     }
     public void verticalDrive(int inches, double power) {
-        robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
-        robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
-        robot.BackLeftDrive.setTargetPosition(distancetoticks(inches));
-        robot.BackRightDrive.setTargetPosition(distancetoticks(inches));
+        robot.FrontLeftDrive.setTargetPosition((inches));
+        robot.FrontRightDrive.setTargetPosition((inches));
+        robot.BackLeftDrive.setTargetPosition((inches));
+        robot.BackRightDrive.setTargetPosition((inches));
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
