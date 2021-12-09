@@ -71,9 +71,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     int side = 0;// 0 = left 1 = right
     int mode = 0;//0 = nothing
     final double HHold = 1.0; //
-    final double HScore = 0.5; //
+    final double HScore = 0.4; //
     final double HRelease = 0.735; //
-    final double LHold = 1; //
+    final double LHold = 0.75; //
     final double LScore = 0.78; //
     final double LRelease = 0.67; //
     final int Intake = 0;
@@ -87,6 +87,8 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     boolean y_was_pressed = false;
     boolean button_x_was_pressed = false;
     boolean button_x_is_pressed;
+    boolean button_b_is_pressed;
+    boolean button_b_was_pressed = false;
     boolean button_a_is_pressed;
     boolean dpad_up_is_pressed;
     boolean y_is_pressed;
@@ -177,7 +179,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void HoldMid() {
-        robot.HighGoal.setPosition(HRelease);
+        robot.HighGoal.setPosition(HScore);
         robot.LowGoal.setPosition(LHold);
     }
 
@@ -204,8 +206,10 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             } else {
                 ScoreLow();
             }
-        }else {
+        }else if (ServoMode() == 0 ) {
             HighHold();
+        }else{
+            HoldMid();
         }
     }
 
@@ -274,11 +278,21 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             dpad_up_was_pressed = false;
         }
     }
+    public void spin(double rotations, double power){
+        robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.Screw_Motor.setTargetPosition(rotationstoticks(rotations));
+        robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.Screw_Motor.setPower(power);
+        //noinspection StatementWithEmptyBody
+        while(robot.Screw_Motor.isBusy()){}
+        robot.Screw_Motor.setPower(0);
+    }
     public void verticalDrive(int inches, double power) {
-        robot.FrontLeftDrive.setTargetPosition((inches));
-        robot.FrontRightDrive.setTargetPosition((inches));
-        robot.BackLeftDrive.setTargetPosition((inches));
-        robot.BackRightDrive.setTargetPosition((inches));
+        robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
+        robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
+        robot.BackLeftDrive.setTargetPosition(distancetoticks(inches));
+        robot.BackRightDrive.setTargetPosition(distancetoticks(inches));
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -362,9 +376,13 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-
+    public int rotationstoticks(double rotations){
+        double doubleticks = rotations * ((ticksPerRotation)); // 2x is for gear
+        int ticksint = (int) Math.round(doubleticks);
+        return ticksint;
+    }
     public int distancetoticks(int distance_in) {
-        double doubleticks = distance_in * ((ticksPerRotation * 2) / (wheel_Dia* 3.14)); // 2x is for gear
+        double doubleticks = distance_in * ((ticksPerRotation) / (wheel_Dia* 3.14)); // 2x is for gear
         int ticksint = (int) Math.round(doubleticks);
         return ticksint;
     }
