@@ -71,11 +71,11 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     int side = 0;// 0 = left 1 = right
     int mode = 0;//0 = nothing
     final double HHold = 1.0; //
-    final double HScore = 0.4; //
+    final double HScore = 0.6; //
     final double HRelease = 0.735; //
-    final double LHold = 0.75; //
-    final double LScore = 0.78; //
-    final double LRelease = 0.67; //
+    final double LHold = 0.7; //
+    final double LScore = 0.55; //
+    final double LRelease = 0.35; //
     final int Intake = 0;
     final int Raised = 145;
     final int Scoring = 2300;
@@ -184,12 +184,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void ScoreMid() {
-        robot.HighGoal.setPosition(HRelease);
+        robot.HighGoal.setPosition(HScore);
         robot.LowGoal.setPosition(LScore);
     }
 
     public void ScoreLow() {
-        robot.HighGoal.setPosition(HRelease);
+        robot.HighGoal.setPosition(HScore);
         robot.LowGoal.setPosition(LRelease);
     }
 
@@ -382,7 +382,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         return ticksint;
     }
     public int distancetoticks(int distance_in) {
-        double doubleticks = distance_in * ((ticksPerRotation) / (wheel_Dia* 3.14)); // 2x is for gear
+        double doubleticks = (distance_in * ((ticksPerRotation) / (wheel_Dia* 3.14))); // 2x is for gear
         int ticksint = (int) Math.round(doubleticks);
         return ticksint;
     }
@@ -394,8 +394,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         telemetry.update();
         return ticksint;
     }
-    // Intake Raised Scoring
-
     public void ResetWheelEncoders(){
         robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
