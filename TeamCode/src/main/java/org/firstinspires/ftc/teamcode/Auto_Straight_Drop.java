@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name = "Auto_Straight_Drop", group = "Linear Opmode")
-//@Disabled
+@Disabled
 public class Auto_Straight_Drop extends DriveCodeCommon {
     @Override
     public void runOpMode() {

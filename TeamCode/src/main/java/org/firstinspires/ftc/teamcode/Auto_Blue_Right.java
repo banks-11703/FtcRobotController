@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name = "Auto_Blue_Right", group = "Linear Opmode")
-//@Disabled
+@Disabled
 public class Auto_Blue_Right extends DriveCodeCommon {
     @Override
     public void runOpMode() {
@@ -18,7 +19,7 @@ public class Auto_Blue_Right extends DriveCodeCommon {
         verticalDrive(-12,0.3);
         if (barcode == 0){ ScoreLow();}
         if (barcode == 1){ ScoreMid();}
-        if (barcode == 3){ ScoreTop();}
+        if (barcode == 2){ ScoreTop();}
         sleep(2000);
         HoldMid();
         HighHold();

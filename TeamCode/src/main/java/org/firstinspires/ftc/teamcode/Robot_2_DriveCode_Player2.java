@@ -40,14 +40,14 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
     public void runOpMode() {
         robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
-        ScoringModeTelemetry();
+        Telemetry();
 
         waitForStart();
 
 
         while (opModeIsActive()) {
             telemetry.update();
-            ScoringModeTelemetry();
+            Telemetry();
 
 
 
@@ -61,16 +61,17 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
             SetServoPosition();
 
             if (Spinner) {
-                robot.SpinnerMotor.setPower(-0.2);
+                robot.SpinnerMotor.setPower(1);
             } else if(SpinnerReverse){
-                robot.SpinnerMotor.setPower(0.2);
-            }
-            else {
+                robot.SpinnerMotor.setPower(-1);
+            }  else {
                 robot.SpinnerMotor.setPower(0);
             }
-            if (ScrewToggle() == 1) {
-                robot.Screw_Motor.setPower(-0.75);
-            } else if (screw_reverse) {
+            if (ScrewToggle() == 1 && ScrewSpeedToggle() == 0) {
+                robot.Screw_Motor.setPower(-1);
+            } else if (ScrewToggle() == 1 && ScrewSpeedToggle() == 1){
+                robot.Screw_Motor.setPower(-0.2);
+            }else if (screw_reverse) {
                 robot.Screw_Motor.setPower(0.5);
             } else {
                 robot.Screw_Motor.setPower(0);
@@ -78,9 +79,18 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
             if (IntakeToggle() == 1) {
                 robot.Top_Intake_Motor.setPower(1);
                 robot.Bottom_Intake_Motor.setPower(-1);
-            } else {
+            }else if (Intake_Reverse){
+                robot.Top_Intake_Motor.setPower(-1);
+                robot.Bottom_Intake_Motor.setPower(1);
+            }
+            else {
                 robot.Top_Intake_Motor.setPower(0);
                 robot.Bottom_Intake_Motor.setPower(0);
+            }
+            if (gamepad1.dpad_left){
+                robot.Te_Servo.setPosition(1);
+            } else {
+                robot.Te_Servo.setPosition(0);
             }
             telemetry.update();
         }

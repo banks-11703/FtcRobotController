@@ -36,34 +36,90 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 telemetry.addData("Side", "Left");
                 telemetry.addData("Mode", "Nothing");
                 telemetry.update();
+
             }
+            if (Team() == 0 && Mode() == 1 && Side() == 0) {
+                telemetry.addData("Team", "Red");
+                telemetry.addData("Side", "Left");
+                telemetry.addData("Mode", "Score & Warehouse");
+                telemetry.update();
+            }
+            if (Team() == 0 && Mode() == 0 && Side() == 1) {
+                telemetry.addData("Team", "Red");
+                telemetry.addData("Side", "Right");
+                telemetry.addData("Mode", "Nothing");
+                telemetry.update();
+
+            }
+
             if (Team() == 1 && Mode() == 0 && Side() == 0) {
                 telemetry.addData("Team", "Blue");
                 telemetry.addData("Side", "Left");
                 telemetry.addData("Mode", "Nothing");
                 telemetry.update();
+
             }
 
-            if (Team() == 0 && Mode() == 1 && Side() == 0) {
-                telemetry.addData("Team", "Red");
+            if (Team() == 1 && Mode() == 0 && Side() == 1) {
+                telemetry.addData("Team", "Blue");
                 telemetry.addData("Side", "Right");
                 telemetry.addData("Mode", "Nothing");
                 telemetry.update();
             }
             if (opModeIsActive()){ // ONLY MOVE AT 0.1!!!
+                HighHold();
                 if (Team() == 0 && Mode() == 0 && Side() == 0) {
                     telemetry.addData("Team", "Red");
                     telemetry.addData("Side", "Left");
                     telemetry.addData("Mode", "Nothing");
                     telemetry.update();
-                    verticalDrive(10,0.1);
+
                 }
+                if (Team() == 0 && Mode() == 1 && Side() == 0) {
+                    telemetry.addData("Team", "Red");
+                    telemetry.addData("Side", "Left");
+                    telemetry.addData("Mode", "Score & Warehouse");
+                    telemetry.update();
+                    barcodeReader();
+                    if (barcode == 0){ HoldMid();}
+                    if (barcode == 1){ HoldMid();}
+                    if (barcode == 2){ HighHold();}
+                    verticalDrive(25,0.1);
+                    horizontalDrive(22,0.1);
+                    if (barcode == 0){ ScoreLow();}
+                    if (barcode == 1){ ScoreMid(); }
+                    if (barcode == 2){ ScoreTop();}
+                    sleep(1000);
+                    HighHold();
+                    horizontalDrive(-25,0.1);
+                    turn(90,0.1);
+                    horizontalDrive(-30,0.2);
+                    verticalDrive(40,0.3);
+                    robot.SpinnerMotor.setPower(0.4);
+                    sleep(1000);
+                }
+                if (Team() == 0 && Mode() == 0 && Side() == 1) {
+                    telemetry.addData("Team", "Red");
+                    telemetry.addData("Side", "Right");
+                    telemetry.addData("Mode", "Nothing");
+                    telemetry.update();
+
+                }
+
                 if (Team() == 1 && Mode() == 0 && Side() == 0) {
                     telemetry.addData("Team", "Blue");
                     telemetry.addData("Side", "Left");
                     telemetry.addData("Mode", "Nothing");
                     telemetry.update();
-                    verticalDrive(5,0.1);
+
+                }
+
+                if (Team() == 1 && Mode() == 0 && Side() == 1) {
+                    telemetry.addData("Team", "Blue");
+                    telemetry.addData("Side", "Right");
+                    telemetry.addData("Mode", "Nothing");
+                    telemetry.update();
+
                 }
 
 

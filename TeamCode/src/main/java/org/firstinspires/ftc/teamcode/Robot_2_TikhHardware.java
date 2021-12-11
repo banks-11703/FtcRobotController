@@ -47,6 +47,8 @@ public class Robot_2_TikhHardware
     public DcMotor Top_Intake_Motor;
     public DcMotor Bottom_Intake_Motor;
     public DcMotor Screw_Motor;
+    public Servo Te_Servo;
+    public Servo Starting_Servo;
     HardwareMap hwMap           =  null;
 
 
@@ -67,8 +69,7 @@ public class Robot_2_TikhHardware
         Top_Intake_Motor = hwMap.get(DcMotor.class, "ti");
         Bottom_Intake_Motor = hwMap.get(DcMotor.class, "bi");
         Screw_Motor = hwMap.get(DcMotor.class, "sm");
-
-
+        Te_Servo = hwMap.get(Servo.class, "te");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         FrontLeftDrive.setDirection(DcMotor.Direction.FORWARD);

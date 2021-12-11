@@ -51,9 +51,9 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@TeleOp(name = "TensorFlowBarcode", group = "Concept")
+@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
 @Disabled
-public class TensorFlowBarcode extends LinearOpMode {
+public class ConceptTensorFlowObjectDetection extends LinearOpMode {
   /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
    * the following 4 detectable objects
    *  0: Ball,
@@ -65,10 +65,9 @@ public class TensorFlowBarcode extends LinearOpMode {
    *  FreightFrenzy_BC.tflite  0: Ball,  1: Cube
    *  FreightFrenzy_DM.tflite  0: Duck,  1: Marker
    */
-    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
+    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_DM.tflite";
     private static final String[] LABELS = {
-      "Ball",
-      "Cube",
+
       "Duck",
       "Marker"
     };
@@ -106,7 +105,7 @@ public class TensorFlowBarcode extends LinearOpMode {
         // first.
         initVuforia();
         initTfod();
-        int barcode = 1;
+
         /**
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
@@ -125,7 +124,6 @@ public class TensorFlowBarcode extends LinearOpMode {
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
-
         telemetry.update();
         waitForStart();
 
@@ -135,37 +133,23 @@ public class TensorFlowBarcode extends LinearOpMode {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null && updatedRecognitions.size() > 0) {
-                        Recognition gameElement = updatedRecognitions.get(0);
-
+                    if (updatedRecognitions != null) {
+                      telemetry.addData("# Object Detected", updatedRecognitions.size());
 
                       // step through the list of recognitions and display boundary info.
-
-
-                          if (gameElement.getLeft() < 984 && gameElement.getRight() > 984) {
-                               barcode = 3;
-                          }
-                          else if (gameElement.getLeft() < 351 && gameElement.getRight() > 351){
-                              barcode = 2;
-                          }
-
-                        telemetry.addData("# Object Detected ", barcode);
-                        telemetry.addData("label", gameElement.getLabel());
-                        telemetry.addData("  left,top ", "%.03f , %.03f",
-                                gameElement.getLeft(), gameElement.getTop());
-                        telemetry.addData("right,bottom", "%.03f , %.03f",
-                                gameElement.getRight(), gameElement.getBottom());
-
-
-                    } else  {
-                        telemetry.addData("# Object Detected", barcode);
+                      int i = 0;
+                      for (Recognition recognition : updatedRecognitions) {
+                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                          recognition.getLeft(), recognition.getTop());
+                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                recognition.getRight(), recognition.getBottom());
+                        i++;
+                      }
+                      telemetry.update();
                     }
-                    telemetry.update();
                 }
-
-                telemetry.update();
             }
-            telemetry.addData("hi", 1);
         }
     }
 

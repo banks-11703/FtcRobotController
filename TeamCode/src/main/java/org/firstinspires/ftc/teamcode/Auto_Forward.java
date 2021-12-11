@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name = "Auto_Forward", group = "Linear Opmode")
-//@Disabled
+@Disabled
 public class Auto_Forward extends DriveCodeCommon {
     @Override
     public void runOpMode() {
