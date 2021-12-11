@@ -492,7 +492,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
     }
 
-    public void barcodeReader() {
+    public void barcodeReaderBlue() {
         initVuforia();
         initTfod();
         if (tfod != null) {
@@ -537,5 +537,51 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
 
         }
     }
+    public void barcodeReaderRed() {
+        initVuforia();
+        initTfod();
+        if (tfod != null) {
+            tfod.activate();
+
+            // The TensorFlow software will scale the input images from the camera to a lower resolution.
+            // This can result in lower detection accuracy at longer distances (> 55cm or 22").
+            // If your target is at distance greater than 50 cm (20") you can adjust the magnification value
+            // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
+            // should be set to the value of the images used to create the TensorFlow Object Detection model
+            // (typically 16/9).
+            tfod.setZoom(1, 16.0 / 9.0);
+        }
+        for (int i = 0; i < 50000; i++) {
+            if (tfod != null) {
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null && updatedRecognitions.size() > 0) {
+                    Recognition gameElement = updatedRecognitions.get(0);
+
+                    if (gameElement.getLeft() < 1101 && gameElement.getRight() > 1101) {
+                        barcode = 1;
+                    } else if (gameElement.getLeft() < 475 && gameElement.getRight() > 475) {
+                        barcode = 2;
+                    }
+
+                    telemetry.addData("# Object Detected ", barcode);
+                    telemetry.addData("label", gameElement.getLabel());
+                    telemetry.addData("  left,top ", "%.03f , %.03f",
+                            gameElement.getLeft(), gameElement.getTop());
+                    telemetry.addData("right,bottom", "%.03f , %.03f",
+                            gameElement.getRight(), gameElement.getBottom());
+
+
+                } else {
+                    telemetry.addData("# Object Detected", barcode);
+                }
+                telemetry.update();
+                telemetry.addData("count", i);
+            }
+
+        }
+    }
+
 }
 
