@@ -10,9 +10,6 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
         robot.init(hardwareMap);
         ResetWheelEncoders();
         while(!opModeIsActive()) {
-            telemetry.addData("Team", team);
-            telemetry.addData("Mode", mode);
-            telemetry.addData("Side", side);
             button_a_is_pressed = gamepad1.a;
             button_b_is_pressed = gamepad1.b;
             button_x_is_pressed = gamepad1.x;
@@ -126,9 +123,10 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     if (barcode == 0){ HoldMid();}
                     if (barcode == 1){ HoldMid();}
                     if (barcode == 2){ HighHold();}
+                    robot.Screw_Motor.setPower(-1);
                     verticalDrive(18,0.15);
                     horizontalDrive(-22,0.1);
-                    verticalDrive(6,0.1);
+                    verticalDrive(5,0.1);
                     sleep(500);
                     if (barcode == 0){ ScoreLow();}
                     if (barcode == 1){ ScoreMid();
@@ -139,7 +137,8 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     if (barcode == 2){ ScoreTop();}
                     sleep(1000);
                     HighHold();
-                    verticalDrive(-8,0.1);
+                    robot.Screw_Motor.setPower(0);
+                    verticalDrive(-7,0.1);
                     horizontalDrive(20,0.1);
                     turn(90,0.1);
                     horizontalDrive(-20,0.2);
@@ -170,15 +169,21 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     if (barcode == 0){ HoldMid();}
                     if (barcode == 1){ HoldMid();}
                     if (barcode == 2){ HighHold();}
+                    robot.Screw_Motor.setPower(-1);
                     verticalDrive(20,0.1);
                     horizontalDrive(22,0.1);
-                    verticalDrive(5,0.1);
+                    verticalDrive(4,0.1);
                     if (barcode == 0){ ScoreLow();}
-                    if (barcode == 1){ ScoreMid(); }
+                    if (barcode == 1){ ScoreMid();
+                        HighHold();
+                        sleep(200);
+                        ScoreMid();
+                    }
                     if (barcode == 2){ ScoreTop();}
                     sleep(1000);
                     HighHold();
-                    verticalDrive(-5,0.1);
+                    robot.Screw_Motor.setPower(0);
+                    verticalDrive(-6,0.1);
                     horizontalDrive(-25,0.1);
                     turn(-90,0.1);
                     horizontalDrive(31,0.2);
