@@ -1,6 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+
+import org.firstinspires.ftc.teamcode.Old.DriveCodeCommon;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "Autonomous", group = "Robot_2")
 //@Disabled
@@ -81,6 +87,8 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 telemetry.addData("Side", "Left");
                 telemetry.addData("Mode", "Score & Warehouse");
                 telemetry.update();
+            } else{
+                telemetry.addData("NOTHING","No");
             }
         }
             if (opModeIsActive()){ // ONLY MOVE AT 0.1!!!
@@ -196,4 +204,5 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 telemetry.update();
         }
     }
+
 }

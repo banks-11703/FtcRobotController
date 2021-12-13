@@ -27,12 +27,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Old;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+
+import org.firstinspires.ftc.teamcode.Old.DriveCodeCommon;
 
 
 /**
@@ -48,9 +50,9 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "RedDriveCode_Player1", group = "Robot 1")
+@TeleOp(name = "old_DriveCode_Player2", group = "Linear Opmode")
 @Disabled
-public class RedDriveCode_Player1 extends DriveCodeCommon {
+public class DriveCode_Player2 extends DriveCodeCommon {
 
     @Override
     public void runOpMode() {
@@ -60,19 +62,25 @@ public class RedDriveCode_Player1 extends DriveCodeCommon {
 
         waitForStart();
 
+        //PivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.runtime.reset();
 
         robot.redLED.setMode(DigitalChannel.Mode.OUTPUT);
         robot.greenLED.setMode(DigitalChannel.Mode.OUTPUT);
+        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.update();
             ScoringModeTelemetry();
             ArmPosModeTelemetry();
+            // Setup a variable for each drive wheel to save power level for telemetry
+
             boolean pivot_up;
             boolean pivot_down;
+
             boolean button_y_pressed;
             boolean Grabber_toggle;
             boolean Spinner;
+
             boolean dpad_right_is_pressed;
 
             pivot_up = gamepad1.left_bumper;
@@ -82,17 +90,17 @@ public class RedDriveCode_Player1 extends DriveCodeCommon {
             Spinner = gamepad1.b;
             dpad_right_is_pressed = gamepad1.dpad_right;
             Player_1_Drive();
-            Toggles1P();
+            Toggles_2P();
             SetServoPosition();
 
             if (Spinner) {
-                robot.SpinnerMotor.setPower(-0.2);
+                robot.SpinnerMotor.setPower(-0.3);
             } else {
                 robot.SpinnerMotor.setPower(0);
             }
 
 
-            if (IntakeToggle() == 1) {
+            if (dpad_left_was_pressed) {
                 robot.Intake_Servo.setPower(-1);
             } else if (dpad_right_is_pressed) {
                 robot.Intake_Servo.setPower(1);
@@ -127,7 +135,10 @@ public class RedDriveCode_Player1 extends DriveCodeCommon {
                 robot.Grabber.setPosition(0);
             }
 
+
+            // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + robot.runtime.toString());
+            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.addData("Arm Pos", robot.PivotMotor.getCurrentPosition());
             telemetry.addData("Arm Target Pos", robot.PivotMotor.getTargetPosition());
             telemetry.addData("PosMode", ArmPosMode);

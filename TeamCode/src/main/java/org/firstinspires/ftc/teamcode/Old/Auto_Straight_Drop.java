@@ -1,37 +1,35 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Old;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "Auto_Blue_Left", group = "Linear Opmode")
+@Autonomous(name = "Auto_Straight_Drop", group = "Linear Opmode")
 @Disabled
-public class Auto_Blue_Left extends DriveCodeCommon {
+public class Auto_Straight_Drop extends DriveCodeCommon {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
         ResetWheelEncoders();
         waitForStart();
-        verticalDrive(-5,0.7);
+        verticalDrive(-3,0.7);
         robot.PivotMotor.setTargetPosition(Raised);
         robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.PivotMotor.setPower(0.3);
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
-        horizontalDrive(23,0.5);
+        verticalDrive(13, 0.3);
         robot.PivotMotor.setTargetPosition(Scoring);
         robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.PivotMotor.setPower(0.3);
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
-        verticalDrive(-12,0.5);
+        sleep(1000);
         ScoreMid();
-        sleep(2000);
-        verticalDrive(5,0.5);
         robot.PivotMotor.setTargetPosition(Intake);
         robot.PivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.PivotMotor.setPower(0.3);
         while (robot.PivotMotor.isBusy()){}
         robot.PivotMotor.setPower(0);
-        HighHold();
+        //Should work, maybe
     }
 }
