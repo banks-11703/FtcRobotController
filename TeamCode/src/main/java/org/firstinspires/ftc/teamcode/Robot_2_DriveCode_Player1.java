@@ -30,7 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @TeleOp(name = "DriveCode_Player1", group = "Robot 2")
@@ -44,7 +44,7 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
             Telemetry();
 
         waitForStart();
-
+        robot.Screw_Motor.setPower(0.1);
 
         while (opModeIsActive()) {
             telemetry.update();
@@ -65,7 +65,7 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                 robot.Screw_Motor.setPower(-0.2);
             }else if (screw_reverse) {
                 robot.Screw_Motor.setPower(0.5);
-            } else {
+            } else if (ScrewToggle() == 0) {
                 robot.Screw_Motor.setPower(0);
             }
             if (IntakeToggle() == 1) {
@@ -82,6 +82,23 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                 robot.Te_Servo.setPosition(0);
             } else {
                 robot.Te_Servo.setPosition(1);
+            }
+            if (spin){
+                spin(1,0.3);
+            }
+            if (robot.ScrewDetector.isPressed() && screwspeedtoggle == 1){
+                screwtoggle = 0;
+                robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.Screw_Motor.setTargetPosition(0);
+                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                screwtoggle = 1;
+                //noinspection StatementWithEmptyBody
+                while (robot.Screw_Motor.isBusy()){
+                }
+                screwtoggle = 0;
+                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                screwspeedtoggle = 0;
             }
             telemetry.update();
         }

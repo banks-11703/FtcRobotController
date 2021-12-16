@@ -48,7 +48,6 @@ public class Robot_2_TikhHardware
     public DcMotor Bottom_Intake_Motor;
     public DcMotor Screw_Motor;
     public Servo Te_Servo;
-    public Servo Starting_Servo;
     public TouchSensor ScrewDetector;
     HardwareMap hwMap           =  null;
 

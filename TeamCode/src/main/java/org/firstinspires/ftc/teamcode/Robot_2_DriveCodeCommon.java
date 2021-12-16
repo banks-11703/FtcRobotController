@@ -73,13 +73,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     int mode = 0;//0 = nothing
     final double HHold = 1.0; //
     final double HScore = 0.6; //
-    final double HRelease = 0.735; //
     final double LHold = 0.8; //
     final double LScore = 0.55; //
     final double LRelease = 0.35; //
-    final int Intake = 0;
-    final int Raised = 145;
-    final int Scoring = 2300;
     double wheel_Dia = 3.93701;// inches
     double ticksPerRotation = 384.5;
     double rotations = 4.325;
@@ -102,7 +98,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     boolean SpinnerReverse;
     boolean override;
     boolean shutdown;
-
+    boolean spin;
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -113,11 +109,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         rotate = gamepad1.right_stick_x;
         strafe = gamepad1.left_stick_x;
         screw_reverse = gamepad1.left_bumper;
-        y_is_pressed = gamepad1.y; //intake
+        y_is_pressed = gamepad1.y; //Screw
         Spinner = gamepad1.b;
+        spin = gamepad1.dpad_down;
         SpinnerReverse = gamepad1.dpad_left;
         Teservo = gamepad1.dpad_left; // teservo
-        button_x_is_pressed = gamepad1.x; // screw
+        button_x_is_pressed = gamepad1.x; // intake
         button_a_is_pressed = gamepad1.a; // score
         dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
         Intake_Reverse = gamepad1.right_bumper;
@@ -133,11 +130,11 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         rotate = gamepad1.right_stick_x;
         strafe = gamepad1.left_stick_x;
         screw_reverse = gamepad2.left_bumper;
-        y_is_pressed = gamepad1.y; //intake
+        y_is_pressed = gamepad2.y; //Screw
         Spinner = gamepad1.b;
         SpinnerReverse = gamepad1.dpad_left;
         Teservo = gamepad1.dpad_left; // teservo
-        button_x_is_pressed = gamepad2.x; // screw
+        button_x_is_pressed = gamepad1.x; // Intake
         button_a_is_pressed = gamepad1.a; // score
         dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
         Intake_Reverse = gamepad1.right_bumper;
@@ -427,14 +424,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
 
     public int rotationstoticks(double rotations) {
         double doubleticks = rotations * ((ticksPerRotation)); // 2x is for gear
-        int ticksint = (int) Math.round(doubleticks);
-        return ticksint;
+        return (int) Math.round(doubleticks);
     }
 
     public int distancetoticks(int distance_in) {
         double doubleticks = (distance_in * ((ticksPerRotation) / (wheel_Dia * 3.14))); // 2x is for gear
-        int ticksint = (int) Math.round(doubleticks);
-        return ticksint;
+        return (int) Math.round(doubleticks);
     }
 
     public int degreestoticks(int degrees) {

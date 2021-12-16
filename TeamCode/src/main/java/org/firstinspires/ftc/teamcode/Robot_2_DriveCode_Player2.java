@@ -59,10 +59,9 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
             }
             Toggles_2P();
             SetServoPosition();
-            if (override){
-                robot.Screw_Motor.setPower(0);
-                robot.Top_Intake_Motor.setPower(0);
-                robot.Bottom_Intake_Motor.setPower(0);
+            if (shutdown){
+                screwtoggle = 0;
+                intaketoggle = 0;
                 robot.SpinnerMotor.setPower(0);
             }
             if (Spinner) {
