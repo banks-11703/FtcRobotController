@@ -32,7 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 
 public class Robot_2_TikhHardware
@@ -49,6 +49,7 @@ public class Robot_2_TikhHardware
     public DcMotor Screw_Motor;
     public Servo Te_Servo;
     public Servo Starting_Servo;
+    public TouchSensor ScrewDetector;
     HardwareMap hwMap           =  null;
 
 
@@ -70,6 +71,7 @@ public class Robot_2_TikhHardware
         Bottom_Intake_Motor = hwMap.get(DcMotor.class, "bi");
         Screw_Motor = hwMap.get(DcMotor.class, "sm");
         Te_Servo = hwMap.get(Servo.class, "te");
+        ScrewDetector = hwMap.get(TouchSensor.class, "ts");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         FrontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
