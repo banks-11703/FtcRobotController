@@ -577,8 +577,25 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
                 telemetry.addData("count", i);
             }
 
+
+
         }
     }
-
+    public void ScrewRotation(){ // When switch is hit and the screw is on slow reset to intake pos
+        if (!robot.ScrewDetector.isPressed() && ScrewSpeedToggle() == 1){ // switch is reversed
+            screwtoggle = 0;
+            robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.Screw_Motor.setTargetPosition(-152);
+            robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            screwtoggle = 1;
+            //noinspection StatementWithEmptyBody
+            while (robot.Screw_Motor.isBusy()){
+            }
+            screwtoggle = 0;
+            robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            screwspeedtoggle = 0;
+        }
+    }
 }
 

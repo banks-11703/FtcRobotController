@@ -98,7 +98,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     telemetry.addData("Side", "Left");
                     telemetry.addData("Mode", "Nothing");
                     telemetry.update();
-
+                    barcodeReaderRed();
                 }
                 else if (Team() == 0 && Mode() == 1 && Side() == 0) {
                     telemetry.addData("Team", "Red");
@@ -120,7 +120,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     telemetry.addData("Side", "Left");
                     telemetry.addData("Mode", "Nothing");
                     telemetry.update();
-
+                    barcodeReaderBlue();
                 }
                 else if (Team() == 0 && Mode() == 1 && Side() == 1) {
                     telemetry.addData("Team", "Red");
@@ -134,7 +134,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     robot.Screw_Motor.setPower(-1);
                     verticalDrive(18,0.15);
                     horizontalDrive(-22,0.1);
-                    verticalDrive(5,0.1);
+                    verticalDrive(6,0.1);
                     sleep(500);
                     if (barcode == 0){ ScoreLow();}
                     if (barcode == 1){ ScoreMid();
@@ -146,7 +146,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     sleep(1000);
                     HighHold();
                     robot.Screw_Motor.setPower(0);
-                    verticalDrive(-7,0.1);
+                    verticalDrive(-8,0.1);
                     horizontalDrive(20,0.1);
                     turn(90,0.1);
                     horizontalDrive(-20,0.2);
@@ -194,7 +194,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     verticalDrive(-6,0.1);
                     horizontalDrive(-25,0.1);
                     turn(-90,0.1);
-                    horizontalDrive(31,0.2);
+                    horizontalDrive(20,0.2);
                     verticalDrive(-40,0.3);
                     robot.SpinnerMotor.setPower(0.4);
                     sleep(1000);

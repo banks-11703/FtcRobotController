@@ -48,10 +48,13 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
 
         while (opModeIsActive()) {
             telemetry.update();
+            telemetry.addData("Switch",robot.ScrewDetector.getValue());
+            telemetry.addData("Screw Pos",robot.Screw_Motor.getCurrentPosition());
             Telemetry();
             Player_1_Drive();
             Toggles1P();
             SetServoPosition();
+            ScrewRotation();
             if (Spinner) {
                 robot.SpinnerMotor.setPower(1);
             } else if(SpinnerReverse){
@@ -62,14 +65,14 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
             if (ScrewToggle() == 1 && ScrewSpeedToggle() == 0) {
                 robot.Screw_Motor.setPower(-1);
             } else if (ScrewToggle() == 1 && ScrewSpeedToggle() == 1){
-                robot.Screw_Motor.setPower(-0.2);
+                robot.Screw_Motor.setPower(-0.3);
             }else if (screw_reverse) {
                 robot.Screw_Motor.setPower(0.5);
             } else if (ScrewToggle() == 0) {
                 robot.Screw_Motor.setPower(0);
             }
             if (IntakeToggle() == 1) {
-                robot.Top_Intake_Motor.setPower(0.5);
+                robot.Top_Intake_Motor.setPower(1);
                 robot.Bottom_Intake_Motor.setPower(-1);
             }else if (Intake_Reverse){
                 robot.Top_Intake_Motor.setPower(-1);
@@ -82,23 +85,6 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                 robot.Te_Servo.setPosition(0);
             } else {
                 robot.Te_Servo.setPosition(1);
-            }
-            if (spin){
-                spin(1,0.3);
-            }
-            if (robot.ScrewDetector.isPressed() && screwspeedtoggle == 1){
-                screwtoggle = 0;
-                robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.Screw_Motor.setTargetPosition(0);
-                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                screwtoggle = 1;
-                //noinspection StatementWithEmptyBody
-                while (robot.Screw_Motor.isBusy()){
-                }
-                screwtoggle = 0;
-                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                screwspeedtoggle = 0;
             }
             telemetry.update();
         }
