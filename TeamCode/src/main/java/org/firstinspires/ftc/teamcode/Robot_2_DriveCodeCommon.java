@@ -183,7 +183,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public int Mode() {
-        return mode % 2;
+        return mode % 3;
     }
 
     public int ScrewToggle() {
