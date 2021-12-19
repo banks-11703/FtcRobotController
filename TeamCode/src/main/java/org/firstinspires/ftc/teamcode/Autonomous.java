@@ -1,13 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-
-import org.firstinspires.ftc.teamcode.Old.DriveCodeCommon;
-
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "Autonomous", group = "Robot_2")
 //@Disabled
 public class Autonomous extends Robot_2_DriveCodeCommon {
@@ -50,6 +42,12 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 telemetry.addData("Mode", "Still Nothing");
                 telemetry.update();
             }
+            if (Team() == 0 && Mode() == 2 && Side() == 0) {
+                telemetry.addData("Team", "Red");
+                telemetry.addData("Side", "Left");
+                telemetry.addData("Mode", "Duck, Score, and Warehouse");
+                telemetry.update();
+            }
             if (Team() == 0 && Mode() == 0 && Side() == 1) {
                 telemetry.addData("Team", "Red");
                 telemetry.addData("Side", "Right");
@@ -90,7 +88,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 telemetry.addData("Mode", "Score & Warehouse");
                 telemetry.update();
             } else{
-                telemetry.addData("NOTHING","No");
+                telemetry.addData("You did the stupid","Not in Initialization");
             }
         }
             if (opModeIsActive()){ // ONLY MOVE AT 0.1!!!
@@ -108,6 +106,25 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     telemetry.addData("Mode", "Warehouse");
                     telemetry.update();
                     verticalDrive(25,0.5);
+                }
+                else if (Team() == 0 && Mode() == 2 && Side() == 0) {
+                    telemetry.addData("Team", "Red");
+                    telemetry.addData("Side", "Left");
+                    telemetry.addData("Mode", "Duck, Score, and Warehouse");
+                    telemetry.update();
+                    //read duck/element
+                    verticalDrive(12,0.1);
+                    dropIntake();
+                    horizontalDrive(-31,0.3);
+                    verticalDrive(-4.5,0.1);
+                    spinDuckRed();
+                    verticalDrive(35,0.1);
+                    horizontalDrive(9.5,0.1);
+                    turn(-90,0.1);
+                    verticalDrive(26.5,0.1);
+                    //score
+                    horizontalDrive(50,0.3);
+                    verticalDrive(82,0.3);
                 }
                 else if (Team() == 0 && Mode() == 0 && Side() == 1) {
                     telemetry.addData("Team", "Red");
@@ -146,6 +163,13 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     verticalDrive(-40,0.3);
                     robot.SpinnerMotor.setPower(0.4);
                     sleep(1000);
+                }
+                else if (Team() == 1 && Mode() == 0 && Side() == 0) {
+                    telemetry.addData("Team", "Blue");
+                    telemetry.addData("Side", "Left");
+                    telemetry.addData("Mode", "Nothing");
+                    telemetry.update();
+                    barcodeReaderBlue();
                 }
                 else if (Team() == 1 && Mode() == 0 && Side() == 1) {
                     telemetry.addData("Team", "Blue");
@@ -191,6 +215,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     verticalDrive(-40,0.3);
                     robot.SpinnerMotor.setPower(0.4);
                     sleep(1000);
+
                 }
                 else if (Team() == 1 && Mode() == 0 && Side() == 0) {
                     telemetry.addData("Team", "Blue");
@@ -198,27 +223,9 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     telemetry.addData("Mode", "Nothing");
                     telemetry.update();
                 }
-                else if (Team() == 0 && Mode() == 2 && Side() == 0) {
-                    telemetry.addData("Team", "Red");
-                    telemetry.addData("Side", "Left");
-                    telemetry.addData("Mode", "Duck, Score, and Warehouse");
-                    telemetry.update();
-                    //read duck/element
-                    verticalDrive(12,0.1);
-                    dropIntake();
-                    horizontalDrive(-27,0.1);
-                    verticalDrive(-4.5,0.1);
-                    //spin duck
-                    verticalDrive(35,0.1);
-                    horizontalDrive(9.5,0.1);
-                    turn(90,0.1);
-                    verticalDrive(26.5,0.1);
-                    //score
-                    horizontalDrive(45,0.1);
-                    verticalDrive(82,0.1);
-                }
+
                 else{
-                    telemetry.addData("NOTHING","No");
+                    telemetry.addData("You did the stupid","Not in Initialization");
                 }
                 telemetry.update();
         }

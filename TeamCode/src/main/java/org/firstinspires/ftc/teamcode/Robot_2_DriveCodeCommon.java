@@ -71,6 +71,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     int team = 0;// 0 = red 1 = blue
     int side = 0;// 0 = left 1 = right
     int mode = 0;//0 = nothing
+    int Duck_Spinner_direction = 0;
     final double HHold = 1.0; //
     final double HScore = 0.6; //
     final double LHold = 0.8; //
@@ -98,7 +99,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     boolean SpinnerReverse;
     boolean override;
     boolean shutdown;
-    boolean spin;
+    boolean Spinner_Direction;
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -111,8 +112,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         screw_reverse = gamepad1.left_bumper;
         y_is_pressed = gamepad1.y; //Screw
         Spinner = gamepad1.b;
-        spin = gamepad1.dpad_down;
-        SpinnerReverse = gamepad1.dpad_left;
+        Spinner_Direction = gamepad1.dpad_down;
         Teservo = gamepad1.dpad_left; // teservo
         button_x_is_pressed = gamepad1.x; // intake
         button_a_is_pressed = gamepad1.a; // score
@@ -132,12 +132,13 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         screw_reverse = gamepad2.left_bumper;
         y_is_pressed = gamepad2.y; //Screw
         Spinner = gamepad1.b;
-        SpinnerReverse = gamepad1.dpad_left;
+        Spinner_Direction = gamepad2.dpad_down;
         Teservo = gamepad1.dpad_left; // teservo
         button_x_is_pressed = gamepad1.x; // Intake
         button_a_is_pressed = gamepad1.a; // score
         dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
         Intake_Reverse = gamepad1.right_bumper;
+
         dpad_right_is_pressed = gamepad2.dpad_right; // Screw Speed
         override = gamepad2.back && gamepad2.start;
         shutdown = gamepad2.a && gamepad2.b && gamepad2.y;
@@ -163,11 +164,10 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         button_a_is_pressed = gamepad2.a; // score
         dpad_up_is_pressed = gamepad2.dpad_up; // scoring mode
         Intake_Reverse = gamepad2.right_bumper;
-        Teservo = gamepad1.dpad_left; // teservo
-        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
-        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
-        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
-        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe));
+        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.5);
+        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe) / 1.5);
+        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) / 1.5);
+        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe) / 1.5);
     }
 
     public int IntakeToggle() {
@@ -245,6 +245,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else {
             telemetry.addData("ScoringMode:", "Low");
         }
+        
         telemetry.addData("Screw Speed", ScrewSpeedToggle());
         telemetry.update();
     }
@@ -317,7 +318,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
 
     }
-
+/*
     public void spin(double rotations, double power) {
         robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -330,7 +331,8 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.Screw_Motor.setPower(0);
     }
 
-    public void verticalDrive(double inches, double power) {
+*/
+   public void verticalDrive(double inches, double power) {
         robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
         robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
         robot.BackLeftDrive.setTargetPosition(distancetoticks(inches));
@@ -421,12 +423,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-
+/*
     public int rotationstoticks(double rotations) {
         double doubleticks = rotations * ((ticksPerRotation)); // 2x is for gear
         return (int) Math.round(doubleticks);
     }
-
+*/
     public int distancetoticks(double distance_in) {
         double doubleticks = (distance_in * ((ticksPerRotation) / (wheel_Dia * 3.14))); // 2x is for gear
         return (int) Math.round(doubleticks);
@@ -439,7 +441,17 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         telemetry.update();
         return ticksint;
     }
+    final int Ramp_Distance = 0;
+    public void Driving(){
+        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()){
+            if (java.lang.Math.abs(robot.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(robot.BackLeftDrive.getCurrentPosition()) < Ramp_Distance){
+                sleep(1);
 
+            } else if (java.lang.Math.abs(robot.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(robot.BackLeftDrive.getCurrentPosition()) > Ramp_Distance){
+                sleep(1);
+            }
+        }
+    }
     public void ResetWheelEncoders() {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -493,7 +505,17 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         sleep(1000);
         robot.SpinnerMotor.setPower(0);
     }
-
+    public void spinDuckRed () {
+        robot.SpinnerMotor.setPower(-0.8);
+        verticalDrive(-2,0.05);
+        sleep(3000);
+        robot.SpinnerMotor.setPower(0);
+    }
+    public void spinDuckBlue () {
+        robot.SpinnerMotor.setPower(0.8);
+        sleep(3000);
+        robot.SpinnerMotor.setPower(0);
+    }
     public void barcodeReaderBlue() {
         initVuforia();
         initTfod();

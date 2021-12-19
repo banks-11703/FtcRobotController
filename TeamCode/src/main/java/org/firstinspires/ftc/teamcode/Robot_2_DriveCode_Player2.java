@@ -49,8 +49,6 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
             telemetry.update();
             Telemetry();
 
-
-
             if (Override == 0){
                 Player_2_Drive();
             }
