@@ -30,7 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+
 
 
 @TeleOp(name = "DriveCode_Player1", group = "Robot 2")
@@ -55,9 +55,9 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
             Toggles1P();
             SetServoPosition();
             ScrewRotation();
-            if (Spinner) {
+            if (Spinner && SpinnerDirection() == 1) {
                 robot.SpinnerMotor.setPower(1);
-            } else if(SpinnerReverse){
+            } else if(Spinner && SpinnerDirection() == 0){
                 robot.SpinnerMotor.setPower(-1);
             }  else {
                 robot.SpinnerMotor.setPower(0);

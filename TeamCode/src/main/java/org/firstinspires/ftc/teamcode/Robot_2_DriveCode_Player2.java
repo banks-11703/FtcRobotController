@@ -62,9 +62,9 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
                 intaketoggle = 0;
                 robot.SpinnerMotor.setPower(0);
             }
-            if (Spinner) {
+            if (Spinner && SpinnerDirection() == 1) {
                 robot.SpinnerMotor.setPower(1);
-            } else if(SpinnerReverse){
+            } else if(Spinner && SpinnerDirection() == 0){
                 robot.SpinnerMotor.setPower(-1);
             }  else {
                 robot.SpinnerMotor.setPower(0);
@@ -72,9 +72,9 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
             if (ScrewToggle() == 1 && ScrewSpeedToggle() == 0) {
                 robot.Screw_Motor.setPower(-1);
             } else if (ScrewToggle() == 1 && ScrewSpeedToggle() == 1){
-                robot.Screw_Motor.setPower(-0.2);
+                robot.Screw_Motor.setPower(-0.5);
             }else if (screw_reverse) {
-                robot.Screw_Motor.setPower(0.2);
+                robot.Screw_Motor.setPower(0.5);
             } else {
                 robot.Screw_Motor.setPower(0);
             }

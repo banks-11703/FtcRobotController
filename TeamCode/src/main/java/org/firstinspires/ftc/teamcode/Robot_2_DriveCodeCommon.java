@@ -99,7 +99,8 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     boolean SpinnerReverse;
     boolean override;
     boolean shutdown;
-    boolean Spinner_Direction;
+    boolean dpad_down_is_pressed;
+    boolean dpad_down_was_pressed;
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -112,7 +113,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         screw_reverse = gamepad1.left_bumper;
         y_is_pressed = gamepad1.y; //Screw
         Spinner = gamepad1.b;
-        Spinner_Direction = gamepad1.dpad_down;
+        dpad_down_is_pressed = gamepad1.dpad_down;
         Teservo = gamepad1.dpad_left; // teservo
         button_x_is_pressed = gamepad1.x; // intake
         button_a_is_pressed = gamepad1.a; // score
@@ -132,7 +133,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         screw_reverse = gamepad2.left_bumper;
         y_is_pressed = gamepad2.y; //Screw
         Spinner = gamepad1.b;
-        Spinner_Direction = gamepad2.dpad_down;
+        dpad_down_is_pressed = gamepad2.dpad_down;
         Teservo = gamepad1.dpad_left; // teservo
         button_x_is_pressed = gamepad1.x; // Intake
         button_a_is_pressed = gamepad1.a; // score
@@ -192,6 +193,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     public int ScrewSpeedToggle() {
         return screwspeedtoggle % 2;
     }
+    public int SpinnerDirection() {
+        return Duck_Spinner_direction % 2;
+    }
     public void HighHold() {
         robot.HighGoal.setPosition(HHold);
         robot.LowGoal.setPosition(LHold);
@@ -245,7 +249,11 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else {
             telemetry.addData("ScoringMode:", "Low");
         }
-        
+        if (Duck_Spinner_direction == 0){
+            telemetry.addData("Team","Blue");
+        } else {
+            telemetry.addData("Team","Red");
+        }
         telemetry.addData("Screw Speed", ScrewSpeedToggle());
         telemetry.update();
     }
@@ -282,6 +290,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
             dpad_up_was_pressed = false;
         }
+        if (dpad_down_is_pressed && !dpad_down_was_pressed) {
+            Duck_Spinner_direction++;
+            dpad_down_was_pressed = true;
+        } else if (!dpad_down_is_pressed && dpad_down_was_pressed) {
+            dpad_down_was_pressed = false;
+        }
     }
 
     public void Toggles1P() {
@@ -316,7 +330,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
             dpad_up_was_pressed = false;
         }
-
+        if (dpad_down_is_pressed && !dpad_down_was_pressed) {
+            Duck_Spinner_direction++;
+            dpad_down_was_pressed = true;
+        } else if (!dpad_down_is_pressed && dpad_down_was_pressed) {
+            dpad_down_was_pressed = false;
+        }
     }
 /*
     public void spin(double rotations, double power) {
