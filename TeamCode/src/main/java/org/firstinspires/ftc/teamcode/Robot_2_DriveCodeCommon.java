@@ -330,7 +330,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.Screw_Motor.setPower(0);
     }
 
-    public void verticalDrive(int inches, double power) {
+    public void verticalDrive(double inches, double power) {
         robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
         robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
         robot.BackLeftDrive.setTargetPosition(distancetoticks(inches));
@@ -361,7 +361,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void horizontalDrive(int inches, double power) {
+    public void horizontalDrive(double inches, double power) {
         robot.FrontLeftDrive.setTargetPosition(+distancetoticks(inches));
         robot.FrontRightDrive.setTargetPosition(-distancetoticks(inches));
         robot.BackLeftDrive.setTargetPosition(-distancetoticks(inches));
@@ -427,7 +427,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         return (int) Math.round(doubleticks);
     }
 
-    public int distancetoticks(int distance_in) {
+    public int distancetoticks(double distance_in) {
         double doubleticks = (distance_in * ((ticksPerRotation) / (wheel_Dia * 3.14))); // 2x is for gear
         return (int) Math.round(doubleticks);
     }
@@ -487,6 +487,11 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         tfodParameters.inputSize = 320;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
+    }
+    public void dropIntake () {
+        robot.SpinnerMotor.setPower(0.4);
+        sleep(1000);
+        robot.SpinnerMotor.setPower(0);
     }
 
     public void barcodeReaderBlue() {

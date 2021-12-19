@@ -201,8 +201,21 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 else if (Team() == 0 && Mode() == 2 && Side() == 0) {
                     telemetry.addData("Team", "Red");
                     telemetry.addData("Side", "Left");
-                    telemetry.addData("Mode", "Nothing");
+                    telemetry.addData("Mode", "Duck, Score, and Warehouse");
                     telemetry.update();
+                    //read duck/element
+                    verticalDrive(12,0.1);
+                    dropIntake();
+                    horizontalDrive(-27,0.1);
+                    verticalDrive(-4.5,0.1);
+                    //spin duck
+                    verticalDrive(35,0.1);
+                    horizontalDrive(9.5,0.1);
+                    turn(90,0.1);
+                    verticalDrive(26.5,0.1);
+                    //score
+                    horizontalDrive(45,0.1);
+                    verticalDrive(82,0.1);
                 }
                 else{
                     telemetry.addData("NOTHING","No");
