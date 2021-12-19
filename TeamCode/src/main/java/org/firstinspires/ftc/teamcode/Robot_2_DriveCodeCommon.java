@@ -139,7 +139,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         button_a_is_pressed = gamepad1.a; // score
         dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
         Intake_Reverse = gamepad1.right_bumper;
-
         dpad_right_is_pressed = gamepad2.dpad_right; // Screw Speed
         override = gamepad2.back && gamepad2.start;
         shutdown = gamepad2.a && gamepad2.b && gamepad2.y;
@@ -360,18 +359,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.FrontLeftDrive.setPower(power);
-        robot.FrontRightDrive.setPower(power);
-        robot.BackLeftDrive.setPower(power);
-        robot.BackRightDrive.setPower(power);
-        //noinspection StatementWithEmptyBody
-        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy()
-                && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy()
-                && opModeIsActive()) ;
-        robot.FrontLeftDrive.setPower(0);
-        robot.FrontRightDrive.setPower(0);
-        robot.BackLeftDrive.setPower(0);
-        robot.BackRightDrive.setPower(0);
+       MotorPower(power);
+       Driving(power);
+       MotorPower(0);
         robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -392,17 +382,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.FrontLeftDrive.setPower(power);
-        robot.FrontRightDrive.setPower(power);
-        robot.BackLeftDrive.setPower(power);
-        robot.BackRightDrive.setPower(power);
-        //noinspection StatementWithEmptyBody
-        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive())
-            ;
-        robot.FrontLeftDrive.setPower(0);
-        robot.FrontRightDrive.setPower(0);
-        robot.BackLeftDrive.setPower(0);
-        robot.BackRightDrive.setPower(0);
+        MotorPower(power);
+        Driving(power);
+        MotorPower(0);
         robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -422,17 +404,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.FrontLeftDrive.setPower(power);
-        robot.FrontRightDrive.setPower(power);
-        robot.BackLeftDrive.setPower(power);
-        robot.BackRightDrive.setPower(power);
-        //noinspection StatementWithEmptyBody
-        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive())
-            ;
-        robot.FrontLeftDrive.setPower(0);
-        robot.FrontRightDrive.setPower(0);
-        robot.BackLeftDrive.setPower(0);
-        robot.BackRightDrive.setPower(0);
+        MotorPower(power);
+        Driving(power);
+        MotorPower(0);
         robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -461,15 +435,34 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         return ticksint;
     }
     final int Ramp_Distance = 0;
-    public void Driving(){
+    public void Driving(double power){
         while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()){
             if (java.lang.Math.abs(robot.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(robot.BackLeftDrive.getCurrentPosition()) < Ramp_Distance){
-                sleep(1);
-
+                sleep(200);
+                MotorPower(power - 0.05);
+                sleep(200);
+                MotorPower(power - 0.05);
+                sleep(200);
+                MotorPower(power - 0.05);
+                sleep(200);
+                MotorPower(power - 0.05);
             } else if (java.lang.Math.abs(robot.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(robot.BackLeftDrive.getCurrentPosition()) > Ramp_Distance){
-                sleep(1);
+                sleep(200);
+                MotorPower(power + 0.05);
+                sleep(200);
+                MotorPower(power + 0.05);
+                sleep(200);
+                MotorPower(power + 0.05);
+                sleep(200);
+                MotorPower(power + 0.05);
             }
         }
+    }
+    public void MotorPower(double power){
+        robot.FrontLeftDrive.setPower(power);
+        robot.FrontRightDrive.setPower(power);
+        robot.BackLeftDrive.setPower(power);
+        robot.BackRightDrive.setPower(power);
     }
     public void ResetWheelEncoders() {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -632,15 +625,14 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             screwtoggle = 0;
             robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.Screw_Motor.setTargetPosition(-152);
+            robot.Screw_Motor.setTargetPosition(-87);
             robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             screwtoggle = 1;
-            //noinspection StatementWithEmptyBody
-            while (robot.Screw_Motor.isBusy()){
+            if(java.lang.Math.abs(java.lang.Math.abs(robot.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(robot.Screw_Motor.getCurrentPosition())) <= 5  ){
+                screwtoggle = 0;
+                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                screwspeedtoggle = 0;
             }
-            screwtoggle = 0;
-            robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            screwspeedtoggle = 0;
         }
     }
 }

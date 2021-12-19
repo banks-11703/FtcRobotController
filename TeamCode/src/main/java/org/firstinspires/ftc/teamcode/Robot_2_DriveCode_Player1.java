@@ -63,11 +63,11 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                 robot.SpinnerMotor.setPower(0);
             }
             if (ScrewToggle() == 1 && ScrewSpeedToggle() == 0) {
-                robot.Screw_Motor.setPower(-1);
+                robot.Screw_Motor.setPower(-0.6);
             } else if (ScrewToggle() == 1 && ScrewSpeedToggle() == 1){
-                robot.Screw_Motor.setPower(-0.3);
+                robot.Screw_Motor.setPower(-0.2);
             }else if (screw_reverse) {
-                robot.Screw_Motor.setPower(0.5);
+                robot.Screw_Motor.setPower(0.2);
             } else if (ScrewToggle() == 0) {
                 robot.Screw_Motor.setPower(0);
             }
