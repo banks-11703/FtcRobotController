@@ -133,8 +133,8 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         strafe = gamepad1.left_stick_x;
         screw_reverse = gamepad2.left_bumper;
         y_is_pressed = gamepad2.y; //Screw
-        Spinner = gamepad1.b;
-        dpad_down_is_pressed = gamepad2.dpad_down;
+        Spinner = gamepad2.b;
+        dpad_down_is_pressed = gamepad2.dpad_down; // Duck Spinner Direction / Team
         Teservo = gamepad1.dpad_left; // teservo
         button_x_is_pressed = gamepad1.x; // Intake
         button_a_is_pressed = gamepad1.a; // score
@@ -161,7 +161,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         Spinner = gamepad2.b;
         SpinnerReverse = gamepad2.x;
         y_is_pressed = gamepad2.y; // intake
-        dpad_right_is_pressed = gamepad2.dpad_right; // Screw Speed
+        dpad_right_is_pressed = gamepad2.dpad_right; // N/A
         button_a_is_pressed = gamepad2.a; // score
         dpad_up_is_pressed = gamepad2.dpad_up; // scoring mode
         Intake_Reverse = gamepad2.right_bumper;
