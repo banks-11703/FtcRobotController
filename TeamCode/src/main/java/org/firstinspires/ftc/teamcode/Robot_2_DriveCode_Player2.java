@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @TeleOp(name = "DriveCode_Player2", group = "Robot 2")
@@ -64,20 +65,26 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
                 robot.SpinnerMotor.setPower(0);
             }
             if (Spinner && SpinnerDirection() == 1) {
-                robot.SpinnerMotor.setPower(1);
-            } else if(Spinner && SpinnerDirection() == 0){
                 robot.SpinnerMotor.setPower(-1);
+            } else if(Spinner && SpinnerDirection() == 0){
+                robot.SpinnerMotor.setPower(1);
             }  else {
                 robot.SpinnerMotor.setPower(0);
             }
-            if (ScrewToggle() == 1 && ScrewSpeedToggle() == 0) {
-                robot.Screw_Motor.setPower(-0.6);
-            } else if (ScrewToggle() == 1 && ScrewSpeedToggle() == 1){
-                robot.Screw_Motor.setPower(-0.2);
-            }else if (screw_reverse) {
+            if (ScrewToggle() == 1) {
+                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.Screw_Motor.setPower(-0.8);
+            } else if (screw_reverse) {
+                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.Screw_Motor.setPower(0.2);
-            } else {
-                robot.Screw_Motor.setPower(0);
+            } else if (ScrewToggle() == 0) {
+                robot.Screw_Motor.setPower(-0.2);
+                if (robot.ScrewDetector.isPressed()) { // switch is reversed
+                    robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.Screw_Motor.setTargetPosition(-145);
+                    robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                }
             }
             if (IntakeToggle() == 1) {
                 robot.Top_Intake_Motor.setPower(1);

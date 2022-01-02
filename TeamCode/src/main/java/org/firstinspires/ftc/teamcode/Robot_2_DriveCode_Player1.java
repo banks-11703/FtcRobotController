@@ -30,7 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @TeleOp(name = "DriveCode_Player1", group = "Robot 2")
@@ -41,47 +41,52 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
     public void runOpMode() {
         robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
-            Telemetry();
+        Telemetry();
 
         waitForStart();
-        robot.Screw_Motor.setPower(0.1);
 
         while (opModeIsActive()) {
             telemetry.update();
-            telemetry.addData("Switch",robot.ScrewDetector.getValue());
-            telemetry.addData("Screw Pos",robot.Screw_Motor.getCurrentPosition());
+            telemetry.addData("Switch", robot.ScrewDetector.getValue());
+            telemetry.addData("Screw Pos", robot.Screw_Motor.getCurrentPosition());
             Telemetry();
             Player_1_Drive();
             Toggles1P();
             SetServoPosition();
             ScrewRotation();
             if (Spinner && SpinnerDirection() == 1) {
-                robot.SpinnerMotor.setPower(1);
-            } else if(Spinner && SpinnerDirection() == 0){
                 robot.SpinnerMotor.setPower(-1);
-            }  else {
+            } else if (Spinner && SpinnerDirection() == 0) {
+                robot.SpinnerMotor.setPower(1);
+            } else {
                 robot.SpinnerMotor.setPower(0);
             }
-            if (ScrewToggle() == 1 && ScrewSpeedToggle() == 0) {
-                robot.Screw_Motor.setPower(-0.6);
-            } else if (ScrewToggle() == 1 && ScrewSpeedToggle() == 1){
-                robot.Screw_Motor.setPower(-0.2);
-            }else if (screw_reverse) {
+            if (ScrewToggle() == 1) {
+                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.Screw_Motor.setPower(-0.8);
+            } else if (screw_reverse) {
+                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.Screw_Motor.setPower(0.2);
             } else if (ScrewToggle() == 0) {
-                robot.Screw_Motor.setPower(0);
+                robot.Screw_Motor.setPower(-0.2);
+                if (robot.ScrewDetector.isPressed()) { // switch is reversed
+                    robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.Screw_Motor.setTargetPosition(-140);
+                    robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                }
             }
             if (IntakeToggle() == 1) {
                 robot.Top_Intake_Motor.setPower(1);
                 robot.Bottom_Intake_Motor.setPower(-1);
-            }else if (Intake_Reverse){
+            } else if (Intake_Reverse) {
                 robot.Top_Intake_Motor.setPower(-1);
                 robot.Bottom_Intake_Motor.setPower(1);
-            }  else {
+            } else {
                 robot.Top_Intake_Motor.setPower(0);
                 robot.Bottom_Intake_Motor.setPower(0);
             }
-            if (gamepad1.dpad_left){
+            if (gamepad1.dpad_left) {
                 robot.Te_Servo.setPosition(0);
             } else {
                 robot.Te_Servo.setPosition(1);

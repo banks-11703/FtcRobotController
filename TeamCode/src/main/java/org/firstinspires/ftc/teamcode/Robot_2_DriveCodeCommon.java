@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -72,8 +73,8 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     int side = 0;// 0 = left 1 = right
     int mode = 0;//0 = nothing
     int Duck_Spinner_direction = 0;
-    final double HHold = 1.0; //
-    final double HScore = 0.6; //
+    final double HHold = 0.7; //
+    final double HScore = 0.175; //
     final double LHold = 0.8; //
     final double LScore = 0.55; //
     final double LRelease = 0.35; //
@@ -119,7 +120,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         button_a_is_pressed = gamepad1.a; // score
         dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
         Intake_Reverse = gamepad1.right_bumper;
-        dpad_right_is_pressed = gamepad1.dpad_right; // Screw Speed
+        dpad_right_is_pressed = gamepad1.dpad_right; // N/A
         robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.5);
         robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe) / 1.5);
         robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) / 1.5);
@@ -139,7 +140,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         button_a_is_pressed = gamepad1.a; // score
         dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
         Intake_Reverse = gamepad1.right_bumper;
-        dpad_right_is_pressed = gamepad2.dpad_right; // Screw Speed
+        dpad_right_is_pressed = gamepad2.dpad_right; // N/A
         override = gamepad2.back && gamepad2.start;
         shutdown = gamepad2.a && gamepad2.b && gamepad2.y;
         robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.5);
@@ -248,12 +249,19 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else {
             telemetry.addData("ScoringMode:", "Low");
         }
-        if (Duck_Spinner_direction == 0){
+        if (SpinnerDirection() == 0){
             telemetry.addData("Team","Blue");
         } else {
             telemetry.addData("Team","Red");
         }
-        telemetry.addData("Screw Speed", ScrewSpeedToggle());
+        telemetry.addData("Target - Current ",java.lang.Math.abs(java.lang.Math.abs(robot.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(robot.Screw_Motor.getCurrentPosition())));
+        if (robot.ScrewDetector.isPressed()){
+            telemetry.addData("magnet",1) ;
+            telemetry.update();
+        }
+        if (!robot.ScrewDetector.isPressed()){
+            telemetry.addData("magnet",0) ;
+        }
         telemetry.update();
     }
 
@@ -279,7 +287,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
         if (dpad_right_is_pressed && !dpad_right_was_pressed) {
             dpad_right_was_pressed = true;
-            screwspeedtoggle++;
         } else if (!dpad_right_is_pressed && dpad_right_was_pressed) {
             dpad_right_was_pressed = false;
         }
@@ -319,7 +326,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
         if (dpad_right_is_pressed && !dpad_right_was_pressed) {
             dpad_right_was_pressed = true;
-            screwspeedtoggle++;
         } else if (!dpad_right_is_pressed && dpad_right_was_pressed) {
             dpad_right_was_pressed = false;
         }
@@ -621,14 +627,18 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
     }
     public void ScrewRotation(){ // When switch is hit and the screw is on slow reset to intake pos
-        if (!robot.ScrewDetector.isPressed() && ScrewSpeedToggle() == 1){ // switch is reversed
+        if (robot.ScrewDetector.isPressed() && ScrewSpeedToggle() == 1){ // switch is reversed
             screwtoggle = 0;
             robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.Screw_Motor.setTargetPosition(-87);
+            robot.Screw_Motor.setTargetPosition(-100);
+            telemetry.update();
             robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            telemetry.update();
             screwtoggle = 1;
-            if(java.lang.Math.abs(java.lang.Math.abs(robot.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(robot.Screw_Motor.getCurrentPosition())) <= 5  ){
+            telemetry.addData("Target - Current ",java.lang.Math.abs(java.lang.Math.abs(robot.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(robot.Screw_Motor.getCurrentPosition())));
+            telemetry.update();
+            if(java.lang.Math.abs(robot.Screw_Motor.getTargetPosition() - robot.Screw_Motor.getCurrentPosition()) <= 10  ){
                 screwtoggle = 0;
                 robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 screwspeedtoggle = 0;
