@@ -95,7 +95,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     boolean button_a_is_pressed;
     boolean dpad_up_is_pressed;
     boolean dpad_right_is_pressed;
-    boolean dpad_right_was_pressed;
+    boolean dpad_right_was_pressed = false;
     boolean y_is_pressed;
     boolean screw_reverse;
     boolean Spinner;
@@ -248,11 +248,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else {
             HoldMid();
         }
-        if (Stopper){
-            robot.Stopper_Servo.setPosition(1);
-        } else{
-            robot.Stopper_Servo.setPosition(0);
-        }
     }
 
 
@@ -372,16 +367,22 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Rampcelleration(inches,power,rate);
         MotorPower(0);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        ResetWheelEncoders();
     }
-
+    public boolean teleopverticalDrive(double inches, double power, double rate) {
+        robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
+        robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
+        robot.BackLeftDrive.setTargetPosition(distancetoticks(inches));
+        robot.BackRightDrive.setTargetPosition(distancetoticks(inches));
+        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        boolean completion = TeleopRampcelleration(inches,power, rate);
+        MotorPower(0);
+        ResetWheelEncoders();
+        return completion;
+    }
     public void horizontalDrive(double inches, double power, double rate) {
         robot.FrontLeftDrive.setTargetPosition(+distancetoticks(inches));
         robot.FrontRightDrive.setTargetPosition(-distancetoticks(inches));
@@ -394,14 +395,22 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         MotorPower(power);
         Rampcelleration(inches,power, rate);
         MotorPower(0);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        ResetWheelEncoders();
+    }
+    public boolean teleophorizontalDrive(double inches, double power, double rate) {
+        robot.FrontLeftDrive.setTargetPosition(+distancetoticks(inches));
+        robot.FrontRightDrive.setTargetPosition(-distancetoticks(inches));
+        robot.BackLeftDrive.setTargetPosition(-distancetoticks(inches));
+        robot.BackRightDrive.setTargetPosition(+distancetoticks(inches));
+        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        MotorPower(power);
+        boolean completion = TeleopRampcelleration(inches,power, rate);
+        MotorPower(0);
+        ResetWheelEncoders();
+        return completion;
     }
     public void driveLeft(double inches, double power, double rate){
         horizontalDrive(-inches, power, rate);
@@ -419,14 +428,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         MotorPower(power);
         Rampcelleration(degrees,power, rate);
         MotorPower(0);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        ResetWheelEncoders();
     }
 
     public int distancetoticks(double distance_in) {
@@ -467,6 +469,38 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             }
         }
     }
+    public boolean TeleopRampcelleration(double distance, double power, double rate) {
+        //MotorPower(power);
+        double Ramp_Distance = (distance/3) ; // inches
+        Timestamp = robot.runtime.time();
+        telemetry.addData("time check",TimeSinceStamp());
+        telemetry.update();
+        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()) {
+            if (java.lang.Math.abs(robot.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(robot.BackLeftDrive.getCurrentPosition()) < distancetoticks(Ramp_Distance)  && TimeSinceStamp() >= 0.05 && power > MinPower ) {
+                Timestamp = robot.runtime.time();
+                telemetry.addData("power",power);
+                if(!gamepad1.dpad_right){
+                    RunWithoutWheelEncoders();
+                    return false;
+                }
+                MotorPower(power -= (2*rate));
+                telemetry.update();
+            } else if (java.lang.Math.abs(robot.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(robot.BackLeftDrive.getCurrentPosition()) > distancetoticks(Ramp_Distance) && TimeSinceStamp() >= 0.2 && power < MaxPower ) {
+                Timestamp = robot.runtime.time();
+                telemetry.addData("power",power);
+                if(!gamepad1.dpad_right){
+                    RunWithoutWheelEncoders();
+                    return false;
+                }
+                MotorPower(power += rate); // power = power + 0.05;
+                telemetry.update();
+            } else {
+                telemetry.addData("bruh","");
+                telemetry.update();
+            }
+        }
+        return true;
+    }
     public double TimeSinceStamp(){
         return robot.runtime.time() - Timestamp;
     }
@@ -487,7 +521,17 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+    public void RunWithoutWheelEncoders() {
+        robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+    }
     public static final String VUFORIA_KEY =
             "AX+OlhD/////AAABmchQ+gluEkQLp3sQrhqiF3KHXxsnEsgLAJDu9DSV2wC7G6+9s0Uu9q6Z4aKcCBw6z78OwtprS93nTxJmhXG56BASKXvkqGnrvWtBboz4/IdpGMdfND1atvPm2D4TuE3PPw5nw2VSrHvUWu86aThoKYJIR0fAgqSIlzgcdZ9KLishl5n5KQLeBJpXCsW1tWvYV1Jkw3AAqxPoG5mR9ORbRTu/VXfvJKI6uQQBoAIziccUNtb7i2IoyjN/Dh4Juk9Y3r+GcXlTIBVygDyUgxyL2E+TL8IYzq2snIhTkZpCebeM5+ULPVZrI7xkAj2D/SwG0r23lsWLE105tDs3xjBOlhF/VfG7UOp+fXKt9xqIMnbu";
     public VuforiaLocalizer vuforia;

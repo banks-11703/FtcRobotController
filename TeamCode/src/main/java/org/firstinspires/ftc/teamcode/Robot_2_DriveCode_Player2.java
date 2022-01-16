@@ -46,7 +46,6 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
         while (opModeIsActive()) {
             telemetry.update();
             Telemetry();
-
             if (Override == 0) {
                 Player_2_Drive();
             } else if (Override == 1) {
@@ -58,6 +57,11 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
                 screwtoggle = 0;
                 intaketoggle = 0;
                 robot.SpinnerMotor.setPower(0);
+            }
+            if (Stopper){
+                robot.Stopper_Servo.setPosition(1);
+            } else{
+                robot.Stopper_Servo.setPosition(0);
             }
             if (Spinner && SpinnerDirection() == 1) {
                 robot.SpinnerMotor.setPower(-1);
@@ -97,10 +101,19 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
                 robot.Te_Servo.setPosition(0);
             }*/
             if (dpad_right_was_pressed && SpinnerDirection() == 0){
+                boolean completion = true;
                 Timestamp = robot.runtime.time();
-                verticalDrive(24,0.5, 0.05);
-                horizontalDrive(24,1, 0.05);
-                verticalDrive(100,0.1, 0.05);
+                ResetWheelEncoders();
+                teleopverticalDrive(24,0.3, 0.05);
+                completion = teleophorizontalDrive(-30,0.3, 0.05);
+                if (!completion){
+                    RunWithoutWheelEncoders();
+                }
+                if(completion) {
+                    teleopverticalDrive(100, 0.5, 0.1);
+                    RunWithoutWheelEncoders();
+                }
+
             }
             telemetry.update();
         }

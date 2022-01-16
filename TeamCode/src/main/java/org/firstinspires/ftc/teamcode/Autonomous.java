@@ -184,7 +184,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 telemetry.addData("Side", "Right");
                 telemetry.addData("Mode", "Warehouse");
                 telemetry.update();
-                verticalDrive(25, 0.5, 0.05);
+                verticalDrive(24, 0.5, 0.05);
             } else if (Team() == 1 && Mode() == 1 && Side() == 0) {
                 telemetry.addData("Team", "Blue");
                 telemetry.addData("Side", "Left");
