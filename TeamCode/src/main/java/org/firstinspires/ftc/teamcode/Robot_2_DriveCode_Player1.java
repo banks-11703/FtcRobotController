@@ -50,11 +50,11 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
             Toggles1P();
             SetServoPosition();
             if (Spinner && SpinnerDirection() == 1) {
-                robot.SpinnerMotor.setPower(-1);
+                robot.Bottom_Intake_Motor.setPower(-1);
             } else if (Spinner && SpinnerDirection() == 0) {
-                robot.SpinnerMotor.setPower(1);
+                robot.Bottom_Intake_Motor.setPower(1);
             } else {
-                robot.SpinnerMotor.setPower(0);
+                robot.Bottom_Intake_Motor.setPower(0);
             }
             if (ScrewToggle() == 1) {
                 robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

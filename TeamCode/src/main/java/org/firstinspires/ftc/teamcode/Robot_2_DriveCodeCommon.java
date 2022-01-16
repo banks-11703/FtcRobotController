@@ -412,9 +412,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         ResetWheelEncoders();
         return completion;
     }
-    public void driveLeft(double inches, double power, double rate){
-        horizontalDrive(-inches, power, rate);
-    }
 
     public void turn(int degrees, double power, double rate) {
         robot.FrontLeftDrive.setTargetPosition(-degreestoticks(degrees));
@@ -562,22 +559,22 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void dropIntake() {
-        robot.SpinnerMotor.setPower(0.4);
+        robot.Bottom_Intake_Motor.setPower(0.4);
         sleep(1000);
-        robot.SpinnerMotor.setPower(0);
+        robot.Bottom_Intake_Motor.setPower(0);
     }
 
     public void spinDuckRed() {
-        robot.SpinnerMotor.setPower(-0.8);
+        robot.Bottom_Intake_Motor.setPower(-0.8);
         verticalDrive(-2, 0.05,0);
         sleep(3000);
-        robot.SpinnerMotor.setPower(0);
+        robot.Bottom_Intake_Motor.setPower(0);
     }
 
     public void spinDuckBlue() {
-        robot.SpinnerMotor.setPower(0.8);
+        robot.Bottom_Intake_Motor.setPower(0.8);
         sleep(3000);
-        robot.SpinnerMotor.setPower(0);
+        robot.Bottom_Intake_Motor.setPower(0);
     }
 
     public void barcodeReaderBlue() {

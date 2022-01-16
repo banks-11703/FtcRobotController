@@ -44,9 +44,8 @@ public class Robot_2_TikhHardware
     public DcMotor BackRightDrive = null;
     public Servo HighGoal;
     public Servo LowGoal;
-    public DcMotor SpinnerMotor;
     public DcMotor Top_Intake_Motor;
-    public DcMotor Bottom_Intake_Motor;
+    public DcMotor Bottom_Intake_Motor;// also duck spinner
     public DcMotor Screw_Motor;
     public Servo Stopper_Servo;
   //  public Servo Te_Servo;
@@ -68,7 +67,6 @@ public class Robot_2_TikhHardware
         BackRightDrive = hwMap.get(DcMotor.class, "br");
         HighGoal = hwMap.get(Servo.class, "hg");
         LowGoal = hwMap.get(Servo.class, "lg");
-        SpinnerMotor = hwMap.get(DcMotor.class, "sp");
         Top_Intake_Motor = hwMap.get(DcMotor.class, "ti");
         Bottom_Intake_Motor = hwMap.get(DcMotor.class, "bi");
         Screw_Motor = hwMap.get(DcMotor.class, "sm");

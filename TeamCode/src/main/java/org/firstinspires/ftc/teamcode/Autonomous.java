@@ -165,7 +165,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 turn(90, 0.1, 0.05);
                 horizontalDrive(-20, 0.2, 0.05);
                 verticalDrive(-40, 0.3, 0.05);
-                robot.SpinnerMotor.setPower(0.4);
+                robot.Bottom_Intake_Motor.setPower(0.4);
                 sleep(1000);
             } else if (Team() == 1 && Mode() == 0 && Side() == 0) {
                 telemetry.addData("Team", "Blue");
@@ -224,7 +224,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 turn(-90, 0.1, 0.05);
                 horizontalDrive(20, 0.2, 0.05);
                 verticalDrive(-40, 0.3, 0.05);
-                robot.SpinnerMotor.setPower(0.4);
+                robot.Bottom_Intake_Motor.setPower(0.4);
                 sleep(1000);
 
             } else if (Team() == 1 && Mode() == 0 && Side() == 0) {

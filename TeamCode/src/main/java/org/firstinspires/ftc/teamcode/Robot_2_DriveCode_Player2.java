@@ -56,68 +56,65 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
             if (shutdown) {
                 screwtoggle = 0;
                 intaketoggle = 0;
-                robot.SpinnerMotor.setPower(0);
-            }
-            if (Stopper){
-                robot.Stopper_Servo.setPosition(1);
-            } else{
-                robot.Stopper_Servo.setPosition(0);
-            }
-            if (Spinner && SpinnerDirection() == 1) {
-                robot.SpinnerMotor.setPower(-1);
-            } else if (Spinner && SpinnerDirection() == 0) {
-                robot.SpinnerMotor.setPower(1);
-            } else {
-                robot.SpinnerMotor.setPower(0);
-            }
-            if (ScrewToggle() == 1) {
-                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.Screw_Motor.setPower(-0.8);
-            } else if (screw_reverse) {
-                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.Screw_Motor.setPower(0.2);
-            } else if (ScrewToggle() == 0) {
-                robot.Screw_Motor.setPower(-0.2);
-                if (robot.ScrewDetector.isPressed()) {
-                    robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.Screw_Motor.setTargetPosition(-145);
-                    robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                }
-            }
-            if (IntakeToggle() == 1) {
-                robot.Top_Intake_Motor.setPower(1);
-                robot.Bottom_Intake_Motor.setPower(-1);
-            } else if (Intake_Reverse) {
-                robot.Top_Intake_Motor.setPower(-1);
-                robot.Bottom_Intake_Motor.setPower(1);
-            } else {
-                robot.Top_Intake_Motor.setPower(0);
                 robot.Bottom_Intake_Motor.setPower(0);
             }
+            if (Stopper) {
+                robot.Stopper_Servo.setPosition(1);
+            } else {
+                robot.Stopper_Servo.setPosition(0);
+            }
+        }
+        if (ScrewToggle() == 1) {
+            robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.Screw_Motor.setPower(-0.8);
+        } else if (screw_reverse) {
+            robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.Screw_Motor.setPower(0.2);
+        } else if (ScrewToggle() == 0) {
+            robot.Screw_Motor.setPower(-0.2);
+            if (robot.ScrewDetector.isPressed()) {
+                robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.Screw_Motor.setTargetPosition(-145);
+                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            }
+        }
+        if (IntakeToggle() == 1) {
+            robot.Top_Intake_Motor.setPower(1);
+            robot.Bottom_Intake_Motor.setPower(-1);
+        } else if (Intake_Reverse) {
+            robot.Top_Intake_Motor.setPower(-1);
+            robot.Bottom_Intake_Motor.setPower(1);
+        } else if (Spinner && SpinnerDirection() == 1) {
+            robot.Bottom_Intake_Motor.setPower(-1);
+        } else if (Spinner && SpinnerDirection() == 0) {
+            robot.Bottom_Intake_Motor.setPower(1);
+        } else {
+            robot.Top_Intake_Motor.setPower(0);
+            robot.Bottom_Intake_Motor.setPower(0);
+        }
+
            /* if (gamepad1.dpad_left) {
                 robot.Te_Servo.setPosition(1);
             } else {
                 robot.Te_Servo.setPosition(0);
             }*/
-            if (dpad_right_was_pressed && SpinnerDirection() == 0){
-                boolean completion = true;
-                Timestamp = robot.runtime.time();
-                ResetWheelEncoders();
-                teleopverticalDrive(24,0.3, 0.05);
-                completion = teleophorizontalDrive(-30,0.3, 0.05);
-                if (!completion){
-                    RunWithoutWheelEncoders();
-                }
-                if(completion) {
-                    teleopverticalDrive(100, 0.5, 0.1);
-                    RunWithoutWheelEncoders();
-                }
-
+        if (dpad_right_was_pressed && SpinnerDirection() == 0) {
+            boolean completion;
+            Timestamp = robot.runtime.time();
+            ResetWheelEncoders();
+            teleopverticalDrive(24, 0.3, 0.05);
+            completion = teleophorizontalDrive(-30, 0.3, 0.05);
+            if (!completion) {
+                RunWithoutWheelEncoders();
             }
-            telemetry.update();
-        }
+            if (completion) {
+                teleopverticalDrive(100, 0.5, 0.1);
+                RunWithoutWheelEncoders();
+            }
 
+        }
+        telemetry.update();
     }
 
 }
