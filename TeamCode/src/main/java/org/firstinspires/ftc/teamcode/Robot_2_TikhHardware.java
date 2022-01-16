@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 public class Robot_2_TikhHardware
@@ -47,8 +48,10 @@ public class Robot_2_TikhHardware
     public DcMotor Top_Intake_Motor;
     public DcMotor Bottom_Intake_Motor;
     public DcMotor Screw_Motor;
-    public Servo Te_Servo;
+    public Servo Stopper_Servo;
+  //  public Servo Te_Servo;
     public TouchSensor ScrewDetector;
+    public ElapsedTime runtime = new ElapsedTime();
     HardwareMap hwMap           =  null;
 
 
@@ -69,7 +72,8 @@ public class Robot_2_TikhHardware
         Top_Intake_Motor = hwMap.get(DcMotor.class, "ti");
         Bottom_Intake_Motor = hwMap.get(DcMotor.class, "bi");
         Screw_Motor = hwMap.get(DcMotor.class, "sm");
-        Te_Servo = hwMap.get(Servo.class, "te");
+        Stopper_Servo = hwMap.get(Servo.class, "ss");
+      //  Te_Servo = hwMap.get(Servo.class, "te");
         ScrewDetector = hwMap.get(TouchSensor.class, "ts");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery

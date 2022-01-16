@@ -36,39 +36,34 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp(name = "DriveCode_Player2", group = "Robot 2")
 //@Disabled
 public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
-
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         Telemetry();
-
         waitForStart();
-
-
+        robot.runtime.reset();
         while (opModeIsActive()) {
             telemetry.update();
             Telemetry();
 
-            if (Override == 0){
+            if (Override == 0) {
                 Player_2_Drive();
-            }
-            else if (Override == 1){
+            } else if (Override == 1) {
                 Player_2_Override();
             }
             Toggles_2P();
             SetServoPosition();
-            ScrewRotation();
-            if (shutdown){
+            if (shutdown) {
                 screwtoggle = 0;
                 intaketoggle = 0;
                 robot.SpinnerMotor.setPower(0);
             }
             if (Spinner && SpinnerDirection() == 1) {
                 robot.SpinnerMotor.setPower(-1);
-            } else if(Spinner && SpinnerDirection() == 0){
+            } else if (Spinner && SpinnerDirection() == 0) {
                 robot.SpinnerMotor.setPower(1);
-            }  else {
+            } else {
                 robot.SpinnerMotor.setPower(0);
             }
             if (ScrewToggle() == 1) {
@@ -79,7 +74,7 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
                 robot.Screw_Motor.setPower(0.2);
             } else if (ScrewToggle() == 0) {
                 robot.Screw_Motor.setPower(-0.2);
-                if (robot.ScrewDetector.isPressed()) { // switch is reversed
+                if (robot.ScrewDetector.isPressed()) {
                     robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     robot.Screw_Motor.setTargetPosition(-145);
                     robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -89,18 +84,23 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
             if (IntakeToggle() == 1) {
                 robot.Top_Intake_Motor.setPower(1);
                 robot.Bottom_Intake_Motor.setPower(-1);
-            }else if (Intake_Reverse){
+            } else if (Intake_Reverse) {
                 robot.Top_Intake_Motor.setPower(-1);
                 robot.Bottom_Intake_Motor.setPower(1);
-            }
-            else {
+            } else {
                 robot.Top_Intake_Motor.setPower(0);
                 robot.Bottom_Intake_Motor.setPower(0);
             }
-            if (gamepad1.dpad_left){
+           /* if (gamepad1.dpad_left) {
                 robot.Te_Servo.setPosition(1);
             } else {
                 robot.Te_Servo.setPosition(0);
+            }*/
+            if (dpad_right_was_pressed && SpinnerDirection() == 0){
+                Timestamp = robot.runtime.time();
+                verticalDrive(24,0.5, 0.05);
+                horizontalDrive(24,1, 0.05);
+                verticalDrive(100,0.1, 0.05);
             }
             telemetry.update();
         }

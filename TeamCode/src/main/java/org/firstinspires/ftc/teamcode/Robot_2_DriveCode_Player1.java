@@ -34,17 +34,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @TeleOp(name = "DriveCode_Player1", group = "Robot 2")
-//@Disabled
 public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
-
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         Telemetry();
-
         waitForStart();
-
         while (opModeIsActive()) {
             telemetry.update();
             telemetry.addData("Switch", robot.ScrewDetector.getValue());
@@ -53,7 +49,6 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
             Player_1_Drive();
             Toggles1P();
             SetServoPosition();
-            ScrewRotation();
             if (Spinner && SpinnerDirection() == 1) {
                 robot.SpinnerMotor.setPower(-1);
             } else if (Spinner && SpinnerDirection() == 0) {
@@ -71,9 +66,8 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                 robot.Screw_Motor.setPower(-0.2);
                 if (robot.ScrewDetector.isPressed()) { // switch is reversed
                     robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.Screw_Motor.setTargetPosition(-140);
+                    robot.Screw_Motor.setTargetPosition(-145);
                     robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
                 }
             }
             if (IntakeToggle() == 1) {
@@ -86,11 +80,11 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                 robot.Top_Intake_Motor.setPower(0);
                 robot.Bottom_Intake_Motor.setPower(0);
             }
-            if (gamepad1.dpad_left) {
+          /*  if (gamepad1.dpad_left) {
                 robot.Te_Servo.setPosition(0);
             } else {
                 robot.Te_Servo.setPosition(1);
-            }
+            }*/
             telemetry.update();
         }
 
