@@ -48,7 +48,6 @@ public class Robot_2_TikhHardware
     public DcMotor Bottom_Intake_Motor;// also duck spinner
     public DcMotor Screw_Motor;
     public Servo Stopper_Servo;
-  //  public Servo Te_Servo;
     public TouchSensor ScrewDetector;
     public ElapsedTime runtime = new ElapsedTime();
     HardwareMap hwMap           =  null;
@@ -71,10 +70,7 @@ public class Robot_2_TikhHardware
         Bottom_Intake_Motor = hwMap.get(DcMotor.class, "bi");
         Screw_Motor = hwMap.get(DcMotor.class, "sm");
         Stopper_Servo = hwMap.get(Servo.class, "ss");
-      //  Te_Servo = hwMap.get(Servo.class, "te");
         ScrewDetector = hwMap.get(TouchSensor.class, "ts");
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
         FrontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         FrontRightDrive.setDirection(DcMotor.Direction.REVERSE);
         BackLeftDrive.setDirection(DcMotor.Direction.FORWARD);

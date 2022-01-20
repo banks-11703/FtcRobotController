@@ -258,8 +258,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             telemetry.addData("ScoringMode:", "High");
         } else if (ServoMode() == 2) {
             telemetry.addData("ScoringMode:", "Med");
-        }
-        else {
+        } else {
             telemetry.addData("ScoringMode:", "Low");
         }
         if (SpinnerDirection() == 0) {
@@ -268,13 +267,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             telemetry.addData("Team", "Red");
         }
         telemetry.addData("Target - Current ", java.lang.Math.abs(java.lang.Math.abs(robot.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(robot.Screw_Motor.getCurrentPosition())));
-        if (robot.ScrewDetector.isPressed()) {
-            telemetry.addData("magnet", 1);
-            telemetry.update();
-        }
-        if (!robot.ScrewDetector.isPressed()) {
-            telemetry.addData("magnet", 0);
-        }
         telemetry.update();
     }
 
@@ -570,13 +562,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         sleep(3000);
         robot.Bottom_Intake_Motor.setPower(0);
     }
-
-    public void spinDuckBlue() {
-        robot.Bottom_Intake_Motor.setPower(0.8);
-        sleep(3000);
-        robot.Bottom_Intake_Motor.setPower(0);
-    }
-
     public void barcodeReaderBlue() {
         initVuforia();
         initTfod();

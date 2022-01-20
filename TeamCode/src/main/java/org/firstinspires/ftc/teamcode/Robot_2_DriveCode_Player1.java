@@ -49,13 +49,7 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
             Player_1_Drive();
             Toggles1P();
             SetServoPosition();
-            if (Spinner && SpinnerDirection() == 1) {
-                robot.Bottom_Intake_Motor.setPower(-1);
-            } else if (Spinner && SpinnerDirection() == 0) {
-                robot.Bottom_Intake_Motor.setPower(1);
-            } else {
-                robot.Bottom_Intake_Motor.setPower(0);
-            }
+
             if (ScrewToggle() == 1) {
                 robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.Screw_Motor.setPower(-0.8);
@@ -64,7 +58,7 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                 robot.Screw_Motor.setPower(0.2);
             } else if (ScrewToggle() == 0) {
                 robot.Screw_Motor.setPower(-0.2);
-                if (robot.ScrewDetector.isPressed()) { // switch is reversed
+                if (robot.ScrewDetector.isPressed()) {
                     robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     robot.Screw_Motor.setTargetPosition(-145);
                     robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -80,11 +74,6 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                 robot.Top_Intake_Motor.setPower(0);
                 robot.Bottom_Intake_Motor.setPower(0);
             }
-          /*  if (gamepad1.dpad_left) {
-                robot.Te_Servo.setPosition(0);
-            } else {
-                robot.Te_Servo.setPosition(1);
-            }*/
             telemetry.update();
         }
 
