@@ -91,6 +91,8 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     boolean Teservo;
     boolean button_x_is_pressed;
     boolean button_b_is_pressed;
+    boolean button_y_is_pressed;
+    boolean button_y_was_pressed;
     boolean button_b_was_pressed = false;
     boolean button_a_is_pressed;
     boolean dpad_up_is_pressed;
@@ -105,6 +107,24 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     boolean dpad_down_is_pressed;
     boolean dpad_down_was_pressed;
     boolean Stopper;
+    private final Object runningNotifier = new Object();
+
+    public enum DuckScoring {
+        TOP, MIDDLE, BOTTOM
+    }
+
+    public enum DuckPosition {
+        LEFT, MIDDLE, RIGHT, UNKNOWN
+    }
+
+    // TODO: Complete this function
+    public DuckScoring convertDuckPosition(int duckPosition, boolean isLeft) {
+        return DuckScoring.TOP;
+        // Check if isLeft is true
+        // if its true,
+        // if not, leave be
+    }
+
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -361,6 +381,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         MotorPower(0);
         ResetWheelEncoders();
     }
+    @SuppressWarnings("UnusedReturnValue")
     public boolean teleopverticalDrive(double inches, double power, double rate) {
         robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
         robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
@@ -556,12 +577,172 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.Bottom_Intake_Motor.setPower(0);
     }
 
+    public void spinDuckBlue() {
+        robot.Bottom_Intake_Motor.setPower(-0.4);
+        sleep(4000);
+        robot.Bottom_Intake_Motor.setPower(0);
+    }
+
     public void spinDuckRed() {
-        robot.Bottom_Intake_Motor.setPower(-0.8);
-        verticalDrive(-2, 0.05,0);
+        robot.Bottom_Intake_Motor.setPower(0.5);
+        verticalDrive(0.1, 0.05,0.1);
         sleep(3000);
         robot.Bottom_Intake_Motor.setPower(0);
     }
+
+    public void choosePosition() {
+        boolean done = false;
+
+        while (!done) {
+            button_a_is_pressed = gamepad1.a;
+            button_b_is_pressed = gamepad1.b;
+            button_x_is_pressed = gamepad1.x;
+            button_y_is_pressed = gamepad1.y;
+
+            if (button_y_is_pressed && !button_y_was_pressed) {
+                button_y_was_pressed = true;
+                done = true;
+            } else if (!button_y_is_pressed && button_y_was_pressed) {
+                button_y_was_pressed = false;
+            }
+
+            if (button_a_is_pressed && !button_a_was_pressed) {
+                team++;
+                button_a_was_pressed = true;
+            } else if (!button_a_is_pressed && button_a_was_pressed) {
+                button_a_was_pressed = false;
+            }
+
+            if (button_x_is_pressed && !button_x_was_pressed) {
+                side++;
+                button_x_was_pressed = true;
+            } else if (!button_x_is_pressed && button_x_was_pressed) {
+                button_x_was_pressed = false;
+            }
+
+            if (button_b_is_pressed && !button_b_was_pressed) {
+                mode++;
+                button_b_was_pressed = true;
+            } else if (!button_b_is_pressed && button_b_was_pressed) {
+                button_b_was_pressed = false;
+            }
+
+            displayTelemetry();
+        }
+    }
+
+    public void displayTelemetry() {
+        if (Team() == 0 && Mode() == 0 && Side() == 0) {
+            telemetry.addData("Team", "Red");
+            telemetry.addData("Side", "Left");
+            telemetry.addData("Mode", "Nothing");
+            telemetry.update();
+
+        } else if (Team() == 0 && Mode() == 2 && Side() == 1) {
+            telemetry.addData("Team", "Red");
+            telemetry.addData("Side", "Right");
+            telemetry.addData("Mode", "Warehouse");
+            telemetry.update();
+        } else if (Team() == 0 && Mode() == 1 && Side() == 0) {
+            telemetry.addData("Team", "Red");
+            telemetry.addData("Side", "Left");
+            telemetry.addData("Mode", "Duck, Score, and Warehouse");
+            telemetry.update();
+        } else if (Team() == 0 && Mode() == 0 && Side() == 1) {
+            telemetry.addData("Team", "Red");
+            telemetry.addData("Side", "Right");
+            telemetry.addData("Mode", "Nothing");
+            telemetry.update();
+        } else if (Team() == 0 && Mode() == 1 && Side() == 1) {
+            telemetry.addData("Team", "Red");
+            telemetry.addData("Side", "Right");
+            telemetry.addData("Mode", "Score & Warehouse");
+            telemetry.update();
+        } else if (Team() == 1 && Mode() == 0 && Side() == 0) {
+            telemetry.addData("Team", "Blue");
+            telemetry.addData("Side", "Left");
+            telemetry.addData("Mode", "Nothing");
+            telemetry.update();
+        } else if (Team() == 1 && Mode() == 0 && Side() == 1) {
+            telemetry.addData("Team", "Blue");
+            telemetry.addData("Side", "Right");
+            telemetry.addData("Mode", "Nothing");
+            telemetry.update();
+        } else if (Team() == 1 && Mode() == 2 && Side() == 0) {
+            telemetry.addData("Team", "Blue");
+            telemetry.addData("Side", "Left");
+            telemetry.addData("Mode", "Warehouse");
+            telemetry.update();
+        } else if (Team() == 1 && Mode() == 1 && Side() == 1) {
+            telemetry.addData("Team", "Blue");
+            telemetry.addData("Side", "Right");
+            telemetry.addData("Mode", "Duck, Score, and Warehouse");
+            telemetry.update();
+        } else if (Team() == 1 && Mode() == 1 && Side() == 0) {
+            telemetry.addData("Team", "Blue");
+            telemetry.addData("Side", "Left");
+            telemetry.addData("Mode", "Score & Warehouse");
+            telemetry.update();
+        } else {
+            telemetry.addData("You did the stupid", "Not in Initialization");
+            telemetry.update();
+        }
+    }
+
+    public void waitForPressA() {
+        while (!gamepad1.a){
+            telemetry.addData("wait for a", "null");
+            telemetry.update();
+        }
+        telemetry.addData("continuing", null);
+        telemetry.update();
+    }
+
+    public DuckPosition waitUntilStart() {
+        DuckPosition duckPosition = DuckPosition.UNKNOWN;
+        while (!isStarted()) {
+            synchronized (runningNotifier) {
+                try {
+                    //duckPosition = getDuckPosition();
+                    duckPosition = DuckPosition.LEFT;
+                    runningNotifier.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return DuckPosition.UNKNOWN;
+                }
+            }
+        }
+        return duckPosition;
+    }
+
+    /**
+     * @return enum of space the duck is in.
+     * @description Get position duck is in.
+     */
+    @SuppressWarnings("JavaDoc")
+    public DuckPosition getDuckPosition() {
+        // Get list of visible objects
+        List<Recognition> updatedRecognitions = tfod.getRecognitions();
+        if (updatedRecognitions == null) {
+            return DuckPosition.UNKNOWN;
+        }
+        if (updatedRecognitions.size() > 0) {
+            // object seen
+            Recognition gameElement = updatedRecognitions.get(0);
+            if (gameElement.getLeft() < 300) {
+
+                return DuckPosition.MIDDLE;
+            } else {
+                // if robot parked on left side, set top
+                //otherwise, set bottom
+                return DuckPosition.RIGHT;
+            }
+        } else {
+            // object not seen
+            return DuckPosition.LEFT;
+        }
+    }
+
     public void barcodeReaderBlue() {
         initVuforia();
         initTfod();
