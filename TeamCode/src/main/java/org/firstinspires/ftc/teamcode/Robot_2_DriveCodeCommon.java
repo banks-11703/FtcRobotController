@@ -377,8 +377,10 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Rampcelleration(inches,power,rate);
-        MotorPower(0);
+        MotorPower(power);
+        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()) { }
+        //Rampcelleration(inches,power,rate);
+        MotorPower(0.01);
         ResetWheelEncoders();
     }
     @SuppressWarnings("UnusedReturnValue")
@@ -406,8 +408,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         MotorPower(power);
-        Rampcelleration(inches,power, rate);
-        MotorPower(0);
+        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()) { }
+        //Rampcelleration(inches,power, rate);
+        MotorPower(0.01);
         ResetWheelEncoders();
     }
     public boolean teleophorizontalDrive(double inches, double power, double rate) {
@@ -426,7 +429,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         return completion;
     }
 
-    public void turn(int degrees, double power, double rate) {
+    public void turn(int degrees, double power) {
         robot.FrontLeftDrive.setTargetPosition(-degreestoticks(degrees));
         robot.FrontRightDrive.setTargetPosition(degreestoticks(degrees));
         robot.BackLeftDrive.setTargetPosition(-degreestoticks(degrees));
@@ -436,8 +439,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         MotorPower(power);
-        Rampcelleration(degrees,power, rate);
-        MotorPower(0);
+        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()) { }
+        //Rampcelleration(degrees,power, rate);
+        MotorPower(0.01);
         ResetWheelEncoders();
     }
 
@@ -572,21 +576,43 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void dropIntake() {
-        robot.Bottom_Intake_Motor.setPower(0.4);
-        sleep(1000);
+        robot.Bottom_Intake_Motor.setPower(-0.4);
+        sleep(2000);
         robot.Bottom_Intake_Motor.setPower(0);
     }
 
     public void spinDuckBlue() {
-        robot.Bottom_Intake_Motor.setPower(-0.4);
+        robot.Bottom_Intake_Motor.setPower(-0.5);
         sleep(4000);
         robot.Bottom_Intake_Motor.setPower(0);
     }
 
+    public void RedRightDSW(){
+        verticalDrive(11.5,0.2,0.1);
+        dropIntake();
+        horizontalDrive(-36.5,0.3,0.1);
+        verticalDrive(-4,0.2,0.1);
+        spinDuckRed();
+        HighHold();
+        sleep(500);
+        robot.Screw_Motor.setPower(-1);
+        verticalDrive(18,0.2,0.1);//in 20
+        horizontalDrive(59,0.2,0.1);
+        verticalDrive(1,0.2,0.1);
+        ScoreTop();
+        sleep(1000);
+        HighHold();
+        robot.Screw_Motor.setPower(0);
+        verticalDrive(-6,0.2,0.1);
+        horizontalDrive(25,0.2,0.1);
+        turn(-90,0.1);
+        horizontalDrive(27,0.3,0.1);
+        verticalDrive(40,0.3,0.1);
+    }
+
     public void spinDuckRed() {
         robot.Bottom_Intake_Motor.setPower(0.5);
-        verticalDrive(0.1, 0.05,0.1);
-        sleep(3000);
+        sleep(4500);
         robot.Bottom_Intake_Motor.setPower(0);
     }
 
