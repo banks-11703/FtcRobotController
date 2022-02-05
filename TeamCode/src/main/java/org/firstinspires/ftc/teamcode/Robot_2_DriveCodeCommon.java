@@ -194,6 +194,15 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe) / 1.5);
     }
 
+    public void DuckSpinner(){
+        if (gamepad2.a){
+            robot.Bottom_Intake_Motor.setPower(0.7);
+        }
+        else if (gamepad2.b){
+            robot.Bottom_Intake_Motor.setPower(-0.7);
+        }
+    }
+
     public int IntakeToggle() {
         return intaketoggle % 2;
     }
@@ -321,12 +330,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
             dpad_up_was_pressed = false;
         }
-        if (dpad_down_is_pressed && !dpad_down_was_pressed) {
-            Duck_Spinner_direction++;
-            dpad_down_was_pressed = true;
-        } else if (!dpad_down_is_pressed && dpad_down_was_pressed) {
-            dpad_down_was_pressed = false;
-        }
+//        if (dpad_down_is_pressed && !dpad_down_was_pressed) {
+//            Duck_Spinner_direction++;
+//            dpad_down_was_pressed = true;
+//        } else if (!dpad_down_is_pressed && dpad_down_was_pressed) {
+//            dpad_down_was_pressed = false;
+//        }
     }
 
     public void Toggles1P() {
@@ -576,28 +585,29 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void dropIntake() {
-        robot.Bottom_Intake_Motor.setPower(-0.4);
-        sleep(2000);
+        robot.Bottom_Intake_Motor.setPower(-1);
+        sleep(1000);
         robot.Bottom_Intake_Motor.setPower(0);
     }
 
     public void spinDuckBlue() {
-        robot.Bottom_Intake_Motor.setPower(-0.5);
-        sleep(4000);
+        robot.Bottom_Intake_Motor.setPower(-0.7);
+        sleep(4500);
         robot.Bottom_Intake_Motor.setPower(0);
     }
 
     public void RedRightDSW(){
-        verticalDrive(11.5,0.2,0.1);
+        verticalDrive(13.5,0.2,0.1);
         dropIntake();
-        horizontalDrive(-36.5,0.3,0.1);
-        verticalDrive(-4,0.2,0.1);
+        horizontalDrive(-38.5,0.3,0.1);
+        verticalDrive(-5.5,0.1,0.1);
         spinDuckRed();
         HighHold();
         sleep(500);
         robot.Screw_Motor.setPower(-1);
-        verticalDrive(18,0.2,0.1);//in 20
-        horizontalDrive(59,0.2,0.1);
+        verticalDrive(17,0.2,0.1);//in 20
+        horizontalDrive(-5,0.2,0.1);
+        horizontalDrive(61,0.2,0.1);
         verticalDrive(1,0.2,0.1);
         ScoreTop();
         sleep(1000);
@@ -610,8 +620,63 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         verticalDrive(40,0.3,0.1);
     }
 
+    public void RedRightSW(){
+        verticalDrive(5,0.3,0.1);
+        dropIntake();
+        verticalDrive(13,0.2,0.1);
+        horizontalDrive(-22,0.2,0.1);
+        verticalDrive(5,0.2,0.1);
+        sleep(1000);
+        ScoreTop();
+        sleep(1000);
+        HighHold();
+        verticalDrive(-8,0.2,0.1);
+        horizontalDrive(20,0.2,0.1);
+        turn(90,0.1);
+        horizontalDrive(-20,0.3,0.1);
+        verticalDrive(-40,0.3,0.1);}
+
+    public void BlueLeftSW(){
+        verticalDrive(20,0.1,0.1);
+        horizontalDrive(22,0.1,0.1);
+        verticalDrive(2,0.1,0.1);
+        ScoreLow();
+        sleep(1000);
+        HighHold();
+        verticalDrive(-6,0.1,0.1);
+        horizontalDrive(-25,0.1,0.1);
+        turn(-90,0.1);
+        horizontalDrive(27,0.2,0.1);
+        verticalDrive(-40,0.3,0.1);
+        sleep(1000);
+        HighHold();
+        verticalDrive(-6,0.1,0.1);
+        horizontalDrive(-25,0.1,0.1);
+        turn(-90,0.1);
+        horizontalDrive(20,0.2,0.1);
+        verticalDrive(-40,0.3,0.1);
+    }
+
+    public void BlueRightDSW(){
+        verticalDrive(5,0.2,0.1);
+        dropIntake();
+        turn(90,0.2);
+        horizontalDrive(-4,0.2,0.1);
+        verticalDrive(-17.5,0.1,0.1);
+        sleep(250);
+        spinDuckBlue();
+        horizontalDrive(45,0.2,0.1);
+        verticalDrive(33,0.2,0.1);
+        sleep(1000);
+        ScoreTop();
+        sleep(1000);
+        HighHold();
+        horizontalDrive(-57,0.3,0.1);
+        verticalDrive(75,0.3,0.1);
+    }
+
     public void spinDuckRed() {
-        robot.Bottom_Intake_Motor.setPower(0.5);
+        robot.Bottom_Intake_Motor.setPower(0.8);
         sleep(4500);
         robot.Bottom_Intake_Motor.setPower(0);
     }

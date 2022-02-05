@@ -82,7 +82,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 }
 
                 telemetry.update();
-            }//Red, Left, Duck, Score, and Warehouse
+            }//Red, Left, Duck, Score, and Warehouse   :)
             else if (Team() == 0 && Mode() == 2 && Side() == 1) {
                 telemetry.addData("Team", "Red");
                 telemetry.addData("Side", "Right");
@@ -103,87 +103,19 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 telemetry.update();
                 switch (duckPosition) {
                     case LEFT:
-                        verticalDrive(-2,0.3,0.1);
-                        HighHold();
-                        sleep(500);
-                        robot.Screw_Motor.setPower(-0.8);
-                        verticalDrive(18,0.15,0.1);
-                        horizontalDrive(-22,0.1,0.1);
-                        verticalDrive(4,0.1,0.1);
-                        sleep(500);
-                        ScoreTop();
-                        sleep(1000);
-                        HighHold();
-                        robot.Screw_Motor.setPower(0);
-                        verticalDrive(-8,0.1,0.1);
-                        horizontalDrive(20,0.1,0.1);
-                        turn(90,0.1);
-                        horizontalDrive(-20,0.2,0.1);
-                        verticalDrive(-40,0.3,0.1);
+                        RedRightSW();
                         break;
                     case MIDDLE:
-                        verticalDrive(-2,0.3,0.1);
-                        HoldMid();
-                        sleep(500);
-                        robot.Screw_Motor.setPower(-0.8);
-                        verticalDrive(18,0.15,0.1);
-                        horizontalDrive(-22,0.1,0.1);
-                        verticalDrive(4,0.1,0.1);
-                        sleep(500);
-                        ScoreMid();
-                        HighHold();
-                        sleep(200);
-                        ScoreMid();
-                        sleep(1000);
-                        HighHold();
-                        robot.Screw_Motor.setPower(0);
-                        verticalDrive(-8,0.1,0.1);
-                        horizontalDrive(20,0.1,0.1);
-                        turn(90,0.1);
-                        horizontalDrive(-20,0.2,0.1);
-                        verticalDrive(-40,0.3,0.1);
+                        RedRightSW();
                         break;
                     case RIGHT:
-                        verticalDrive(-2,0.3,0.1);
-                        HoldMid();
-                        sleep(500);
-                        robot.Screw_Motor.setPower(-0.8);
-                        verticalDrive(18,0.15,0.1);
-                        horizontalDrive(-22,0.1,0.1);
-                        verticalDrive(4,0.1,0.1);
-                        sleep(500);
-                        ScoreLow();
-                        sleep(1000);
-                        HighHold();
-                        robot.Screw_Motor.setPower(0);
-                        verticalDrive(-8,0.1,0.1);
-                        horizontalDrive(20,0.1,0.1);
-                        turn(90,0.1);
-                        horizontalDrive(-20,0.2,0.1);
-                        verticalDrive(-40,0.3,0.1);
+                        RedRightSW();
                         break;
                     default:
-                        telemetry.addData("it's broken", "");
-                        verticalDrive(-2,0.3,0.1);
-                        HighHold();
-                        robot.Screw_Motor.setPower(-0.8);
-                        verticalDrive(18,0.15,0.1);
-                        horizontalDrive(-22,0.1,0.1);
-                        verticalDrive(4,0.1,0.1);
-                        sleep(500);
-                        ScoreTop();
-                        sleep(1000);
-                        HighHold();
-                        robot.Screw_Motor.setPower(0);
-                        verticalDrive(-8,0.1,0.1);
-                        horizontalDrive(20,0.1,0.1);
-                        turn(90,0.1);
-                        horizontalDrive(-20,0.2,0.1);
-                        verticalDrive(-40,0.3,0.1);
-
+                        RedRightSW();
                         break;
                 }
-            }//Red, Right, Score & Warehouse
+            }//Red, Right, Score & Warehouse           :/
 
             else if (Team() == 1 && Mode() == 0 && Side() == 0) {
                 telemetry.addData("Team", "Blue");
@@ -206,91 +138,20 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
 
                 switch (duckPosition) {
                     case LEFT:
-                        HoldMid();
-                        sleep(500);
-                        robot.Screw_Motor.setPower(-0.8);
-                        verticalDrive(20,0.1,0.1);
-                        horizontalDrive(22,0.1,0.1);
-                        verticalDrive(2,0.1,0.1);
-                        ScoreLow();
-                        sleep(1000);
-                        HighHold();
-                        robot.Screw_Motor.setPower(0);
-                        verticalDrive(-6,0.1,0.1);
-                        horizontalDrive(-25,0.1,0.1);
-                        turn(-90,0.1);
-                        horizontalDrive(27,0.2,0.1);
-                        verticalDrive(-40,0.3,0.1);
+                        BlueLeftSW();
                         break;
                     case MIDDLE:
-                        HoldMid();
-                        sleep(500);
-                        robot.Screw_Motor.setPower(-0.8);
-                        verticalDrive(20,0.1,0.1);
-                        horizontalDrive(22,0.1,0.1);
-                        verticalDrive(3,0.1,0.1);
-                        ScoreMid();
-                        HighHold();
-                        sleep(200);
-                        ScoreMid();
-                        sleep(1000);
-                        HighHold();
-                        robot.Screw_Motor.setPower(0);
-                        verticalDrive(-6,0.1,0.1);
-                        horizontalDrive(-25,0.1,0.1);
-                        turn(-90,0.1);
-                        horizontalDrive(27,0.2,0.1);
-                        verticalDrive(-40,0.3,0.1);
+                        BlueLeftSW();
                         break;
                     case RIGHT:
-                        HighHold();
-                        sleep(500);
-                        robot.Screw_Motor.setPower(-1);
-                        verticalDrive(20,0.1,0.1);
-                        horizontalDrive(22,0.1,0.1);
-                        verticalDrive(2,0.1,0.1);
-                        ScoreTop();
-                        sleep(1000);
-                        HighHold();
-                        robot.Screw_Motor.setPower(0);
-                        verticalDrive(-6,0.1,0.1);
-                        horizontalDrive(-25,0.1,0.1);
-                        turn(-90,0.1);
-                        horizontalDrive(27,0.2,0.1);
-                        verticalDrive(-40,0.3,0.1);
+                        BlueLeftSW();
                         break;
                     default:
-                        telemetry.addData("it's broken", "");
-                        HighHold();
-                        robot.Screw_Motor.setPower(-0.8);
-                        verticalDrive(20,0.1,0.1);
-                        horizontalDrive(22,0.1,0.1);
-                        verticalDrive(2,0.1,0.1);
-                        ScoreTop();
-                        sleep(1000);
-                        HighHold();
-                        robot.Screw_Motor.setPower(0);
-                        verticalDrive(-6,0.1,0.1);
-                        horizontalDrive(-25,0.1,0.1);
-                        turn(-90,0.1);
-                        horizontalDrive(27,0.2,0.1);
-                        verticalDrive(-40,0.3,0.1);
+                        BlueLeftSW();
                         break;
                 }
 
-
-
-                if (duckPosition == DuckPosition.RIGHT){ ScoreTop();}
-                sleep(1000);
-                HighHold();
-                robot.Screw_Motor.setPower(0);
-                verticalDrive(-6,0.1,0.1);
-                horizontalDrive(-25,0.1,0.1);
-                turn(-90,0.1);
-                horizontalDrive(20,0.2,0.1);
-                verticalDrive(-40,0.3,0.1);
-
-            }//Blue, Left, Score & Warehouse
+            }//Blue, Left, Score & Warehouse           :)
             else if (Team() == 1 && Mode() == 0 && Side() == 1) {
                 telemetry.addData("Team", "Blue");
                 telemetry.addData("Side", "Right");
@@ -305,69 +166,16 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
 
                 switch (duckPosition) {
                     case LEFT:
-                        //robot.Screw_Motor.setPower(0.5);
-                        verticalDrive(5,0.1, 0.1);
-                        dropIntake();
-                        verticalDrive(-0.5,0.4,0.1);
-                        verticalDrive(0.5,0.4,0.1);
-                        turn(90,0.1);
-                        horizontalDrive(-2,0.1,0.1);
-                        verticalDrive(-15.5,0.1,0.1);
-                        sleep(250);
-                        spinDuckBlue();
-                        horizontalDrive(43,0.1,0.1);
-                        verticalDrive(29,0.1,0.1);
-                        ScoreLow();
+                       BlueRightDSW();
                         break;
                     case MIDDLE:
-                        //robot.Screw_Motor.setPower(0.5);
-                        verticalDrive(5,0.1,0.1);
-                        dropIntake();
-                        verticalDrive(-0.5,0.4,0.1);
-                        verticalDrive(0.5,0.4,0.1);
-                        turn(90,0.1);
-                        horizontalDrive(-2,0.1,0.1);
-                        verticalDrive(-15.5,0.1,0.1);
-                        sleep(250);
-                        spinDuckBlue();
-                        horizontalDrive(43,0.1,0.1);
-                        verticalDrive(29,0.1,0.1);
-                        ScoreMid();
+                        BlueRightDSW();
                         break;
                     case RIGHT:
-                        robot.Screw_Motor.setPower(-0.5);
-                        verticalDrive(5,0.2,0.1);
-                        dropIntake();
-                        turn(90,0.1);
-                        horizontalDrive(-2,0.2,0.1);
-                        verticalDrive(-16.5,0.2,0.1);
-                        sleep(250);
-                        spinDuckBlue();
-                        horizontalDrive(43,0.2,0.1);
-                        verticalDrive(33,0.2,0.1);
-                        ScoreTop();
-                        horizontalDrive(-49,0.3,0.1);
-                        verticalDrive(75,0.3,0.1);
+                        BlueRightDSW();
                         break;
                     default:
-                        duckPosition = DuckPosition.UNKNOWN;
-                        telemetry.addData("it's broken", "");
-                        telemetry.update();
-                        //robot.Screw_Motor.setPower(0.5);
-                        verticalDrive(5,0.1,0.1);
-                        dropIntake();
-                        verticalDrive(-0.5,0.4,0.1);
-                        verticalDrive(0.5,0.4,0.1);
-                        turn(90,0.1);
-                        horizontalDrive(-2,0.1,0.1);
-                        verticalDrive(-15.5,0.1,0.1);
-                        sleep(250);
-                        spinDuckBlue();
-                        horizontalDrive(43,0.1,0.1);
-                        verticalDrive(29,0.1,0.1);
-                        ScoreTop();
-                        horizontalDrive(-42,0.2,0.1);
-                        verticalDrive(75,0.2,0.1);
+                        BlueRightDSW();
                         break;
                 }
             }//Blue, Right, Duck, Score, and Warehouse

@@ -98,6 +98,7 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
                 }
 
             }
+            DuckSpinner();
             if (dpad_right_was_pressed && SpinnerDirection() == 1) {
                 boolean completion;
                 Timestamp = robot.runtime.time();
