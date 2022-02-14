@@ -387,7 +387,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         MotorPower(power);
-        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()) { }
         //Rampcelleration(inches,power,rate);
         MotorPower(0.01);
         ResetWheelEncoders();
@@ -417,7 +416,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         MotorPower(power);
-        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()) { }
         //Rampcelleration(inches,power, rate);
         MotorPower(0.01);
         ResetWheelEncoders();
@@ -431,7 +429,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        MotorPower(power);
         boolean completion = TeleopRampcelleration(inches,power, rate);
         MotorPower(0);
         ResetWheelEncoders();
@@ -448,8 +445,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         MotorPower(power);
-        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()) { }
-        //Rampcelleration(degrees,power, rate);
+        //Rampcelleration(degrees,power,0);
         MotorPower(0.01);
         ResetWheelEncoders();
     }
@@ -780,18 +776,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
     }
 
-    public void waitForPressA() {
-        while (!gamepad1.a){
-            telemetry.addData("wait for a", "null");
-            telemetry.update();
-        }
-        telemetry.addData("continuing", null);
-        telemetry.update();
-    }
-
     public DuckPosition waitUntilStart() {
         DuckPosition duckPosition = DuckPosition.UNKNOWN;
-        while (!isStarted()) {
+        while (!opModeIsActive()) {
             synchronized (runningNotifier) {
                 try {
                     //duckPosition = getDuckPosition();
