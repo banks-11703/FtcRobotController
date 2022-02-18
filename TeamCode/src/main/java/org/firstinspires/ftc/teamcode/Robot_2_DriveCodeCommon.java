@@ -196,7 +196,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
 
     public void DuckSpinner(){
         if (gamepad2.a){
-            robot.Bottom_Intake_Motor.setPower(0.7x);
+            robot.Bottom_Intake_Motor.setPower(0.7);
         }
         else if (gamepad2.b){
             robot.Bottom_Intake_Motor.setPower(-0.7);
