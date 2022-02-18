@@ -166,10 +166,10 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         dpad_right_is_pressed = gamepad1.dpad_right; // N/A
         override = gamepad2.back && gamepad2.start;
         shutdown = gamepad2.a && gamepad2.b && gamepad2.y;
-        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.25);
-        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe) / 1.25);
-        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) / 1.25);
-        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe) / 1.25);
+        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) );
+        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe) );
+        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) );
+        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe) );
         if (override) {
             Override++;
         }
@@ -196,7 +196,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
 
     public void DuckSpinner(){
         if (gamepad2.a){
-            robot.Bottom_Intake_Motor.setPower(0.7);
+            robot.Bottom_Intake_Motor.setPower(0.7x);
         }
         else if (gamepad2.b){
             robot.Bottom_Intake_Motor.setPower(-0.7);
@@ -591,7 +591,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void spinDuckBlue() {
-        robot.Bottom_Intake_Motor.setPower(-0.7);
+        robot.Bottom_Intake_Motor.setPower(-0.6);
         sleep(4500);
         robot.Bottom_Intake_Motor.setPower(0);
     }
@@ -600,12 +600,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         verticalDrive(13.5,0.2,0.1);
         dropIntake();
         horizontalDrive(-38.5,0.3,0.1);
-        verticalDrive(-5.5,0.1,0.1);
+        verticalDrive(-9,0.1,0.1);
         spinDuckRed();
         HighHold();
         sleep(500);
         robot.Screw_Motor.setPower(-1);
-        verticalDrive(17,0.2,0.1);//in 20
+        verticalDrive(15.5,0.2,0.1);//in 20
         horizontalDrive(-5,0.2,0.1);
         horizontalDrive(61,0.2,0.1);
         verticalDrive(1,0.2,0.1);
@@ -638,6 +638,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
 
     public void BlueLeftSW(){
         verticalDrive(20,0.1,0.1);
+        dropIntake();
         horizontalDrive(22,0.1,0.1);
         verticalDrive(2,0.1,0.1);
         ScoreLow();
@@ -666,7 +667,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         sleep(250);
         spinDuckBlue();
         horizontalDrive(45,0.2,0.1);
-        verticalDrive(33,0.2,0.1);
+        verticalDrive(31,0.2,0.1);
         sleep(1000);
         ScoreTop();
         sleep(1000);
@@ -676,7 +677,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void spinDuckRed() {
-        robot.Bottom_Intake_Motor.setPower(0.8);
+        robot.Bottom_Intake_Motor.setPower(0.5);
         sleep(4500);
         robot.Bottom_Intake_Motor.setPower(0);
     }
@@ -729,52 +730,69 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             telemetry.addData("Mode", "Nothing");
             telemetry.update();
 
-        } else if (Team() == 0 && Mode() == 2 && Side() == 1) {
+        } //r l n
+        else if (Team() == 0 && Mode() == 2 && Side() == 1) {
             telemetry.addData("Team", "Red");
             telemetry.addData("Side", "Right");
             telemetry.addData("Mode", "Warehouse");
             telemetry.update();
-        } else if (Team() == 0 && Mode() == 1 && Side() == 0) {
+        }//r r w
+        else if (Team() == 0 && Mode() == 1 && Side() == 0) {
             telemetry.addData("Team", "Red");
             telemetry.addData("Side", "Left");
             telemetry.addData("Mode", "Duck, Score, and Warehouse");
             telemetry.update();
-        } else if (Team() == 0 && Mode() == 0 && Side() == 1) {
+        } // r l dsw
+        else if (Team() == 0 && Mode() == 0 && Side() == 1) {
             telemetry.addData("Team", "Red");
             telemetry.addData("Side", "Right");
             telemetry.addData("Mode", "Nothing");
             telemetry.update();
-        } else if (Team() == 0 && Mode() == 1 && Side() == 1) {
+        } //r r n
+        else if (Team() == 0 && Mode() == 1 && Side() == 1) {
             telemetry.addData("Team", "Red");
             telemetry.addData("Side", "Right");
             telemetry.addData("Mode", "Score & Warehouse");
             telemetry.update();
-        } else if (Team() == 1 && Mode() == 0 && Side() == 0) {
+        } //r r sw
+        else if (Team() == 0 && Mode() == 2 && Side() == 0) {
+            telemetry.addData("Team", "Red");
+            telemetry.addData("Side", "Left");
+            telemetry.addData("Mode", "Drop Intake");
+            telemetry.update();
+        }// r l di
+
+        else if (Team() == 1 && Mode() == 0 && Side() == 0) {
             telemetry.addData("Team", "Blue");
             telemetry.addData("Side", "Left");
             telemetry.addData("Mode", "Nothing");
             telemetry.update();
-        } else if (Team() == 1 && Mode() == 0 && Side() == 1) {
+        }//b l n
+        else if (Team() == 1 && Mode() == 0 && Side() == 1) {
             telemetry.addData("Team", "Blue");
             telemetry.addData("Side", "Right");
             telemetry.addData("Mode", "Nothing");
             telemetry.update();
-        } else if (Team() == 1 && Mode() == 2 && Side() == 0) {
+        } //b r n
+        else if (Team() == 1 && Mode() == 2 && Side() == 0) {
             telemetry.addData("Team", "Blue");
             telemetry.addData("Side", "Left");
             telemetry.addData("Mode", "Warehouse");
             telemetry.update();
-        } else if (Team() == 1 && Mode() == 1 && Side() == 1) {
+        } //b l w
+        else if (Team() == 1 && Mode() == 1 && Side() == 1) {
             telemetry.addData("Team", "Blue");
             telemetry.addData("Side", "Right");
             telemetry.addData("Mode", "Duck, Score, and Warehouse");
             telemetry.update();
-        } else if (Team() == 1 && Mode() == 1 && Side() == 0) {
+        } //b r dsw
+        else if (Team() == 1 && Mode() == 1 && Side() == 0) {
             telemetry.addData("Team", "Blue");
             telemetry.addData("Side", "Left");
             telemetry.addData("Mode", "Score & Warehouse");
             telemetry.update();
-        } else {
+        } //b l sw
+        else {
             telemetry.addData("You did the stupid", "Not in Initialization");
             telemetry.update();
         }

@@ -57,7 +57,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 telemetry.addData("Side", "Left");
                 telemetry.addData("Mode", "Nothing");
                 telemetry.update();
-            }//Red, Left, Nothing                           ✔
+            }//Red, Left, Nothing                           :)
             else if (Team() == 0 && Mode() == 1 && Side() == 0) {
                 telemetry.addData("Team", "Red");
                 telemetry.addData("Side", "Left");
@@ -77,6 +77,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                     default:
                         duckPosition = DuckPosition.LEFT;
                         telemetry.addData("it's broken", "");
+                        telemetry.update();
                         RedRightDSW();
                         break;
                 }
@@ -89,13 +90,13 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 telemetry.addData("Mode", "Warehouse");
                 telemetry.update();
                 verticalDrive(45,0.5,0.1);
-            }//Red, Right, Warehouse                   ✔
+            }//Red, Right, Warehouse                   :)
             else if (Team() == 0 && Mode() == 0 && Side() == 1) {
                 telemetry.addData("Team", "Red");
                 telemetry.addData("Side", "Right");
                 telemetry.addData("Mode", "Nothing");
                 telemetry.update();
-            }//Red, Right, Nothing                     ✔
+            }//Red, Right, Nothing                     :)
             else if (Team() == 0 && Mode() == 1 && Side() == 1) {
                 telemetry.addData("Team", "Red");
                 telemetry.addData("Side", "Right");
@@ -116,20 +117,27 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                         break;
                 }
             }//Red, Right, Score & Warehouse           :/
+            else if (Team() == 0 && Mode() == 2 && Side() == 0) {
+                telemetry.addData("Team", "Red");
+                telemetry.addData("Side", "Left");
+                telemetry.addData("Mode", "Drop Intake");
+                telemetry.update();
+                dropIntake();
+            }//Blue, Left, Drop Intake                 :)
 
             else if (Team() == 1 && Mode() == 0 && Side() == 0) {
                 telemetry.addData("Team", "Blue");
                 telemetry.addData("Side", "Left");
                 telemetry.addData("Mode", "Nothing");
                 telemetry.update();
-            }//Blue, Left, Nothing                     ✔
+            }//Blue, Left, Nothing                     :)
             else if (Team() == 1 && Mode() == 2 && Side() == 0) {
                 telemetry.addData("Team", "Blue");
                 telemetry.addData("Side", "Left");
                 telemetry.addData("Mode", "Warehouse");
                 telemetry.update();
                 verticalDrive(45,0.5,0.1);
-            }//Blue, Left, Warehouse                   ✔
+            }//Blue, Left, Warehouse                   :)
             else if (Team() == 1 && Mode() == 1 && Side() == 0) {
                 telemetry.addData("Team", "Blue");
                 telemetry.addData("Side", "Left");
@@ -157,7 +165,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
                 telemetry.addData("Side", "Right");
                 telemetry.addData("Mode", "Nothing");
                 telemetry.update();
-            }//Blue, Right, Nothing                    ✔
+            }//Blue, Right, Nothing                    :)
             else if (Team() == 1 && Mode() == 1 && Side() == 1) {
                 telemetry.addData("Team", "Blue");
                 telemetry.addData("Side", "Right");
