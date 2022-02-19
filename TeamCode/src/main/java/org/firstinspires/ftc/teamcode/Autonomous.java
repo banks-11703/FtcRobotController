@@ -166,7 +166,7 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
 
                 switch (duckPosition) {
                     case LEFT:
-                       BlueRightDSW();
+                        BlueRightDSW();
                         break;
                     case MIDDLE:
                         BlueRightDSW();

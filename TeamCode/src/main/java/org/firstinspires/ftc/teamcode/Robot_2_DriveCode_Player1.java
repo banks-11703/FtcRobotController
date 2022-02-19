@@ -52,7 +52,8 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
 
             if (ScrewToggle() == 1) {
                 robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.Screw_Motor.setPower(-0.8);
+                robot.Screw_Motor.setPower(-0.7);
+                intaketoggle = 0;
             } else if (screw_reverse) {
                 robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.Screw_Motor.setPower(0.2);
@@ -64,15 +65,33 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                     robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
             }
-            if (IntakeToggle() == 1) {
+            if (intakeToggle() == 1) {
                 robot.Top_Intake_Motor.setPower(1);
-                robot.Bottom_Intake_Motor.setPower(-1);
+                robot.Bottom_Intake_Motor.setPower(1);
+                intaketoggle = 0;
             } else if (Intake_Reverse) {
                 robot.Top_Intake_Motor.setPower(-1);
-                robot.Bottom_Intake_Motor.setPower(1);
+                robot.Bottom_Intake_Motor.setPower(-1);
             } else {
                 robot.Top_Intake_Motor.setPower(0);
                 robot.Bottom_Intake_Motor.setPower(0);
+            }
+            if (!robot.intakeDetector.isPressed() && !cubeIntaking && TimeSinceStamp3() >= 3 && intakeToggle() == 1) {
+                Timestamp2 = robot.runtime.time();
+                intaketoggle = 0;
+                cubeIntaking = true;
+            }
+            if (TimeSinceStamp2() >= 1 && ScrewToggle() == 0 && cubeIntaking) {
+                intaketoggle = 1;
+                cubeIntaking = false;
+                timestamp3 = robot.runtime.time();
+            }
+            if(intakeSensorDistance >= 2.6){
+                cubeInScrewOpening = false;
+            }
+            if(intakeSensorDistance <= 2.6){
+                cubeInScrewOpening = true;
+                screwtoggle = 0;
             }
             telemetry.update();
         }

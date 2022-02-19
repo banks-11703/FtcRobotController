@@ -73,7 +73,7 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
 
                 }
             }
-            if (IntakeToggle() == 1) {
+            if (intakeToggle() == 1) {
                 robot.Top_Intake_Motor.setPower(1);
                 robot.Bottom_Intake_Motor.setPower(-1);
             } else if (Intake_Reverse) {
@@ -112,8 +112,14 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
                     teleopverticalDrive(100, 0.5, 0.1);
                     RunWithoutWheelEncoders();
                 }
-
             }
+            if (!robot.intakeDetector.isPressed()) {
+                Timestamp2 = robot.runtime.time();
+                intaketoggle = 0;
+            }
+//            if (TimeSinceStamp2() >= 3) {
+//                intaketoggle = 1;
+//            }
             telemetry.update();
         }
     }

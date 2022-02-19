@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -72,6 +73,8 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     int mode = 0;//0 = nothing
     int Duck_Spinner_direction = 0;
     double Timestamp = 0;
+    double Timestamp2 = 0;
+    double timestamp3 = 0;
     double MaxPower = 1;
     double MinPower = 0.1;
     final double HHold = 0.7; //
@@ -107,6 +110,8 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     boolean dpad_down_is_pressed;
     boolean dpad_down_was_pressed;
     boolean Stopper;
+    boolean cubeIntaking;
+    boolean cubeInScrewOpening;
     private final Object runningNotifier = new Object();
 
     public enum DuckScoring {
@@ -203,7 +208,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
     }
 
-    public int IntakeToggle() {
+    public int intakeToggle() {
         return intaketoggle % 2;
     }
 
@@ -295,6 +300,13 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else {
             telemetry.addData("Team", "Red");
         }
+        if (cubeInScrewOpening){
+            telemetry.addData("Cube in screw opening",intakeSensorDistance);
+        }
+        if (!cubeInScrewOpening){
+            telemetry.addData("Cube not in screw opening",intakeSensorDistance);
+        }
+
         telemetry.addData("Target - Current ", java.lang.Math.abs(java.lang.Math.abs(robot.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(robot.Screw_Motor.getCurrentPosition())));
         telemetry.update();
     }
@@ -330,12 +342,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else if (!dpad_up_is_pressed && dpad_up_was_pressed) {
             dpad_up_was_pressed = false;
         }
-//        if (dpad_down_is_pressed && !dpad_down_was_pressed) {
-//            Duck_Spinner_direction++;
-//            dpad_down_was_pressed = true;
-//        } else if (!dpad_down_is_pressed && dpad_down_was_pressed) {
-//            dpad_down_was_pressed = false;
-//        }
+        if (dpad_down_is_pressed && !dpad_down_was_pressed) {
+            Duck_Spinner_direction++;
+            dpad_down_was_pressed = true;
+        } else if (!dpad_down_is_pressed && dpad_down_was_pressed) {
+            dpad_down_was_pressed = false;
+        }
     }
 
     public void Toggles1P() {
@@ -376,7 +388,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             dpad_down_was_pressed = false;
         }
     }
-
+    public double intakeSensorDistance;{
+        robot.intakeSensor.getDistance(DistanceUnit.INCH);
+    }
     public void verticalDrive(double inches, double power, double rate) {
         robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
         robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
@@ -386,8 +400,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        MotorPower(power);
-        //Rampcelleration(inches,power,rate);
+        Rampcelleration(inches,power,rate);
         MotorPower(0.01);
         ResetWheelEncoders();
     }
@@ -415,8 +428,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        MotorPower(power);
-        //Rampcelleration(inches,power, rate);
+        Rampcelleration(inches,power, rate);
         MotorPower(0.01);
         ResetWheelEncoders();
     }
@@ -444,8 +456,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        MotorPower(power);
-        //Rampcelleration(degrees,power,0);
+        Rampcelleration(degrees,power,0);
         MotorPower(0.01);
         ResetWheelEncoders();
     }
@@ -522,6 +533,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
     public double TimeSinceStamp(){
         return robot.runtime.time() - Timestamp;
+    }
+    public double TimeSinceStamp2(){
+        return robot.runtime.time() - Timestamp2;
+    }
+    public double TimeSinceStamp3(){
+        return robot.runtime.time() - timestamp3;
     }
     public void MotorPower(double power) {
         robot.FrontLeftDrive.setPower(power);
