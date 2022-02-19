@@ -32,6 +32,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 
 @TeleOp(name = "DriveCode_Player1", group = "Robot 2")
 public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
@@ -58,7 +60,7 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                 robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.Screw_Motor.setPower(0.2);
             } else if (ScrewToggle() == 0) {
-                robot.Screw_Motor.setPower(-0.2);
+                robot.Screw_Motor.setPower(-0.1);
                 if (robot.ScrewDetector.isPressed()) {
                     robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     robot.Screw_Motor.setTargetPosition(-145);
@@ -68,7 +70,7 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
             if (intakeToggle() == 1) {
                 robot.Top_Intake_Motor.setPower(1);
                 robot.Bottom_Intake_Motor.setPower(1);
-                intaketoggle = 0;
+                screwtoggle = 0;
             } else if (Intake_Reverse) {
                 robot.Top_Intake_Motor.setPower(-1);
                 robot.Bottom_Intake_Motor.setPower(-1);
@@ -86,12 +88,15 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                 cubeIntaking = false;
                 timestamp3 = robot.runtime.time();
             }
-            if(intakeSensorDistance >= 2.6){
+            if(robot.intakeSensor.getDistance(DistanceUnit.INCH) >= 3.5){
                 cubeInScrewOpening = false;
-            }
-            if(intakeSensorDistance <= 2.6){
+            }else if(robot.intakeSensor.getDistance(DistanceUnit.INCH) <= 3.5){
                 cubeInScrewOpening = true;
                 screwtoggle = 0;
+                timestamp4 = robot.runtime.time();
+            }
+            if (timestamp4 >= 2 && cubeInScrewOpening){
+                intaketoggle = 0;
             }
             telemetry.update();
         }

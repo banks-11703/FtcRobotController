@@ -75,6 +75,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     double Timestamp = 0;
     double Timestamp2 = 0;
     double timestamp3 = 0;
+    double timestamp4 = 0;
     double MaxPower = 1;
     double MinPower = 0.1;
     final double HHold = 0.7; //
@@ -301,12 +302,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             telemetry.addData("Team", "Red");
         }
         if (cubeInScrewOpening){
-            telemetry.addData("Cube in screw opening",intakeSensorDistance);
+            telemetry.addData("Cube in screw opening",robot.intakeSensor.getDistance(DistanceUnit.INCH));
         }
         if (!cubeInScrewOpening){
-            telemetry.addData("Cube not in screw opening",intakeSensorDistance);
+            telemetry.addData("Cube not in screw opening",robot.intakeSensor.getDistance(DistanceUnit.INCH));
         }
-
+        telemetry.addData("Distance", robot.intakeSensor.getDistance(DistanceUnit.INCH));
         telemetry.addData("Target - Current ", java.lang.Math.abs(java.lang.Math.abs(robot.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(robot.Screw_Motor.getCurrentPosition())));
         telemetry.update();
     }
@@ -388,9 +389,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             dpad_down_was_pressed = false;
         }
     }
-    public double intakeSensorDistance;{
-        robot.intakeSensor.getDistance(DistanceUnit.INCH);
-    }
+//    public double intakeSensorDistance;{
+//        robot.intakeSensor.getDistance(DistanceUnit.INCH);
+//    }
     public void verticalDrive(double inches, double power, double rate) {
         robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
         robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
@@ -539,6 +540,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
     public double TimeSinceStamp3(){
         return robot.runtime.time() - timestamp3;
+    }
+    public double TimeSinceStamp4(){
+        return robot.runtime.time() - timestamp4;
     }
     public void MotorPower(double power) {
         robot.FrontLeftDrive.setPower(power);
