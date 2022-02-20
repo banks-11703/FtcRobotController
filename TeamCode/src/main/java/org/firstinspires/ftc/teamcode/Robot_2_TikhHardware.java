@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -52,6 +53,10 @@ public class Robot_2_TikhHardware
     public TouchSensor ScrewDetector;
     public TouchSensor intakeDetector;
     public DistanceSensor intakeSensor;
+    public DigitalChannel redLED;
+    public DigitalChannel greenLED;
+    public DigitalChannel redLED1;
+    public DigitalChannel greenLED1;
     public ElapsedTime runtime = new ElapsedTime();
     HardwareMap hwMap           =  null;
 
@@ -76,6 +81,10 @@ public class Robot_2_TikhHardware
         ScrewDetector = hwMap.get(TouchSensor.class, "ts");
         intakeDetector = hwMap.get(TouchSensor.class, "ID");
         intakeSensor = hwMap.get(DistanceSensor.class,"is");
+        redLED= hwMap.get(DigitalChannel.class, "red");
+        greenLED = hwMap.get(DigitalChannel.class, "green");
+        redLED1 = hwMap.get(DigitalChannel.class, "red1");
+        greenLED1 = hwMap.get(DigitalChannel.class, "green1");
         FrontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         FrontRightDrive.setDirection(DcMotor.Direction.REVERSE);
         BackLeftDrive.setDirection(DcMotor.Direction.FORWARD);

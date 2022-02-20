@@ -150,7 +150,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         button_a_is_pressed = gamepad1.a; // score
         dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
         Intake_Reverse = gamepad1.right_bumper;
-        dpad_right_is_pressed = gamepad1.dpad_right; // N/A
+        dpad_right_is_pressed = gamepad1.dpad_right; // Auto Warehouse
         robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.5);
         robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe) / 1.5);
         robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) / 1.5);
@@ -170,7 +170,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         button_a_is_pressed = gamepad1.a; // score
         dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
         Intake_Reverse = gamepad1.right_bumper;
-        dpad_right_is_pressed = gamepad1.dpad_right; // N/A
+        dpad_right_is_pressed = gamepad1.dpad_right; // Auto Warehouse
         override = gamepad2.back && gamepad2.start;
         shutdown = gamepad2.a && gamepad2.b && gamepad2.y;
         robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.25);
@@ -191,7 +191,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         Spinner = gamepad2.b;
         SpinnerReverse = gamepad2.x;
         y_is_pressed = gamepad2.y; // intake
-        dpad_right_is_pressed = gamepad2.dpad_right; // N/A
+        dpad_right_is_pressed = gamepad2.dpad_right; // Auto Warehouse
         button_a_is_pressed = gamepad2.a; // score
         dpad_up_is_pressed = gamepad2.dpad_up; // scoring mode
         Intake_Reverse = gamepad2.right_bumper;
@@ -391,9 +391,6 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             dpad_down_was_pressed = false;
         }
     }
-//    public double intakeSensorDistance;{
-//        robot.intakeSensor.getDistance(DistanceUnit.INCH);
-//    }
     public void verticalDrive(double inches, double power, double rate) {
         robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
         robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
@@ -844,69 +841,91 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
     }
 
-    public void barcodeReaderBlue() {
-        initVuforia();
-        initTfod();
-        if (tfod != null) {
-            tfod.activate();
-            tfod.setZoom(1, 16.0 / 9.0);
-        }
-        for (int i = 0; i < 50000; i++) {
-            if (tfod != null) {
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null && updatedRecognitions.size() > 0) {
-                    Recognition gameElement = updatedRecognitions.get(0);
-                    if (gameElement.getLeft() < 1003 && gameElement.getRight() > 1003) {
-                        barcode = 2;
-                    } else if (gameElement.getLeft() < 445 && gameElement.getRight() > 445) {
-                        barcode = 1;
-                    }
-                    telemetry.addData("# Object Detected ", barcode);
-                    telemetry.addData("label", gameElement.getLabel());
-                    telemetry.addData("  left,top ", "%.03f , %.03f",
-                            gameElement.getLeft(), gameElement.getTop());
-                    telemetry.addData("right,bottom", "%.03f , %.03f",
-                            gameElement.getRight(), gameElement.getBottom());
-                } else {
-                    telemetry.addData("# Object Detected", barcode);
-                }
-                telemetry.update();
-                telemetry.addData("count", i);
-            }
-        }
+//    public void barcodeReaderBlue() {
+//        initVuforia();
+//        initTfod();
+//        if (tfod != null) {
+//            tfod.activate();
+//            tfod.setZoom(1, 16.0 / 9.0);
+//        }
+//        for (int i = 0; i < 50000; i++) {
+//            if (tfod != null) {
+//                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+//                if (updatedRecognitions != null && updatedRecognitions.size() > 0) {
+//                    Recognition gameElement = updatedRecognitions.get(0);
+//                    if (gameElement.getLeft() < 1003 && gameElement.getRight() > 1003) {
+//                        barcode = 2;
+//                    } else if (gameElement.getLeft() < 445 && gameElement.getRight() > 445) {
+//                        barcode = 1;
+//                    }
+//                    telemetry.addData("# Object Detected ", barcode);
+//                    telemetry.addData("label", gameElement.getLabel());
+//                    telemetry.addData("  left,top ", "%.03f , %.03f",
+//                            gameElement.getLeft(), gameElement.getTop());
+//                    telemetry.addData("right,bottom", "%.03f , %.03f",
+//                            gameElement.getRight(), gameElement.getBottom());
+//                } else {
+//                    telemetry.addData("# Object Detected", barcode);
+//                }
+//                telemetry.update();
+//                telemetry.addData("count", i);
+//            }
+//        }
+//    }
+//
+//    public void barcodeReaderRed() {
+//        initVuforia();
+//        initTfod();
+//        if (tfod != null) {
+//            tfod.activate();
+//            tfod.setZoom(1, 16.0 / 9.0);
+//        }
+//        for (int i = 0; i < 50000; i++) {
+//            if (tfod != null) {
+//                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+//                if (updatedRecognitions != null && updatedRecognitions.size() > 0) {
+//                    Recognition gameElement = updatedRecognitions.get(0);
+//                    if (gameElement.getLeft() < 1101 && gameElement.getRight() > 1101) {
+//                        barcode = 1;
+//                    } else if (gameElement.getLeft() < 475 && gameElement.getRight() > 475) {
+//                        barcode = 2;
+//                    }
+//                    telemetry.addData("# Object Detected ", barcode);
+//                    telemetry.addData("label", gameElement.getLabel());
+//                    telemetry.addData("  left,top ", "%.03f , %.03f",
+//                            gameElement.getLeft(), gameElement.getTop());
+//                    telemetry.addData("right,bottom", "%.03f , %.03f",
+//                            gameElement.getRight(), gameElement.getBottom());
+//                } else {
+//                    telemetry.addData("# Object Detected", barcode);
+//                }
+//                telemetry.update();
+//                telemetry.addData("count", i);
+//            }
+//        }
+//    }
+    public enum Color{
+        red, green, amber, flashRed, flashRG, flashAmber
     }
 
-    public void barcodeReaderRed() {
-        initVuforia();
-        initTfod();
-        if (tfod != null) {
-            tfod.activate();
-            tfod.setZoom(1, 16.0 / 9.0);
-        }
-        for (int i = 0; i < 50000; i++) {
-            if (tfod != null) {
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null && updatedRecognitions.size() > 0) {
-                    Recognition gameElement = updatedRecognitions.get(0);
-                    if (gameElement.getLeft() < 1101 && gameElement.getRight() > 1101) {
-                        barcode = 1;
-                    } else if (gameElement.getLeft() < 475 && gameElement.getRight() > 475) {
-                        barcode = 2;
-                    }
-                    telemetry.addData("# Object Detected ", barcode);
-                    telemetry.addData("label", gameElement.getLabel());
-                    telemetry.addData("  left,top ", "%.03f , %.03f",
-                            gameElement.getLeft(), gameElement.getTop());
-                    telemetry.addData("right,bottom", "%.03f , %.03f",
-                            gameElement.getRight(), gameElement.getBottom());
-                } else {
-                    telemetry.addData("# Object Detected", barcode);
+    public void lightSequence() {
+        Color color = Color.red;
+        switch (color) {
+            case red:
+                if(robot.intakeSensor.getDistance(DistanceUnit.INCH) >= 3.5){
+                    robot.redLED.setState(true);
+                    robot.greenLED.setState(false);
+                    robot.redLED1.setState(true);
+                    robot.greenLED1.setState(false);
+                } else if (robot.intakeSensor.getDistance(DistanceUnit.INCH) <= 3.5){
+                    robot.redLED.setState(false);
+                    robot.greenLED.setState(true);
+                    robot.redLED1.setState(false);
+                    robot.greenLED1.setState(true);
                 }
-                telemetry.update();
-                telemetry.addData("count", i);
-            }
+                break;
         }
-    }
 
+    }
 }
 
