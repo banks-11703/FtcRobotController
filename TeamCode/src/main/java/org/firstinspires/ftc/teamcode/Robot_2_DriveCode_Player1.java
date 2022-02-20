@@ -51,7 +51,6 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
             Player_1_Drive();
             Toggles1P();
             SetServoPosition();
-
             if (ScrewToggle() == 1) {
                 robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.Screw_Motor.setPower(-0.7);
@@ -88,15 +87,17 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
                 cubeIntaking = false;
                 timestamp3 = robot.runtime.time();
             }
-            if(robot.intakeSensor.getDistance(DistanceUnit.INCH) >= 3.5){
+            if (robot.intakeSensor.getDistance(DistanceUnit.INCH) >= 4.5) {
                 cubeInScrewOpening = false;
-            }else if(robot.intakeSensor.getDistance(DistanceUnit.INCH) <= 3.5){
+            } else if (robot.intakeSensor.getDistance(DistanceUnit.INCH) <= 4.5) {
                 cubeInScrewOpening = true;
                 screwtoggle = 0;
                 timestamp4 = robot.runtime.time();
+                cubeWasInScrewOpening = true;
             }
-            if (timestamp4 >= 2 && cubeInScrewOpening){
+            if (timestamp4 >= 2 && !cubeInScrewOpening && cubeWasInScrewOpening) {
                 intaketoggle = 0;
+                cubeWasInScrewOpening = false;
             }
             telemetry.update();
         }

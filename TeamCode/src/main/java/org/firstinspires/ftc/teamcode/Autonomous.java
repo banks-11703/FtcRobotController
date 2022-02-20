@@ -22,8 +22,6 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
         }
         telemetry.addData("Unknown", "");
         telemetry.update();
-        telemetry.update();
-
         DuckPosition duckPosition = DuckPosition.UNKNOWN;
         while (!isStarted()) {
             duckPosition = getDuckPosition();
@@ -32,7 +30,6 @@ public class Autonomous extends Robot_2_DriveCodeCommon {
         }
         telemetry.addData("Done!", duckPosition);
         telemetry.update();
-
         if (opModeIsActive()) { // ONLY MOVE AT 0.1!!!
             telemetry.addData("Entered OpMode","");
             telemetry.update();

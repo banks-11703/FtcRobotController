@@ -113,6 +113,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     boolean Stopper;
     boolean cubeIntaking;
     boolean cubeInScrewOpening;
+    boolean cubeWasInScrewOpening;
     private final Object runningNotifier = new Object();
 
     public enum DuckScoring {
@@ -283,6 +284,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else {
             HoldMid();
         }
+        robot.Stopper_Servo.setPosition(0.5);
     }
 
 
