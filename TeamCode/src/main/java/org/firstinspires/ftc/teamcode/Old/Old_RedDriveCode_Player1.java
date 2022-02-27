@@ -201,8 +201,6 @@ public class Old_RedDriveCode_Player1 extends LinearOpMode {
             else if (dpad_right_is_pressed){Intake_Servo.setPower(1);}
             else{ Intake_Servo.setPower(0);}
 
-
-            //todo (Friday) Get Motor Encoder working
             if (ArmPosMode == 0) {
                 PivotMotor.setTargetPosition(Intake);
             }

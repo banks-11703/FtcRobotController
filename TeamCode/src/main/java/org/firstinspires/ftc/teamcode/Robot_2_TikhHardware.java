@@ -49,7 +49,10 @@ public class Robot_2_TikhHardware
     public DcMotor Top_Intake_Motor;
     public DcMotor Bottom_Intake_Motor;// also duck spinner
     public DcMotor Screw_Motor;
+    public DcMotor cappingMotor;
     public Servo Stopper_Servo;
+    public Servo cappingServoX;
+    public Servo cappingServoY;
     public TouchSensor ScrewDetector;
     public TouchSensor intakeDetector;
     public DistanceSensor intakeSensor;
@@ -77,7 +80,10 @@ public class Robot_2_TikhHardware
         Top_Intake_Motor = hwMap.get(DcMotor.class, "ti");
         Bottom_Intake_Motor = hwMap.get(DcMotor.class, "bi");
         Screw_Motor = hwMap.get(DcMotor.class, "sm");
+        cappingMotor = hwMap.get(DcMotor.class, "cm");
         Stopper_Servo = hwMap.get(Servo.class, "ss");
+        cappingServoX = hwMap.get(Servo.class, "leftrightcappingservo");
+        cappingServoY = hwMap.get(Servo.class, "updowncappingservo");
         ScrewDetector = hwMap.get(TouchSensor.class, "ts");
         intakeDetector = hwMap.get(TouchSensor.class, "ID");
         intakeSensor = hwMap.get(DistanceSensor.class,"is");
