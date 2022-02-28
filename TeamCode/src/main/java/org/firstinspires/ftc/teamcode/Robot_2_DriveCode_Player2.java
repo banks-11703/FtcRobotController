@@ -1,18 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @TeleOp(name = "DriveCode_Player2", group = "Robot 2")
 public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
     @Override
     public void runOpMode() {
-        robot.init(hardwareMap);
+        teleop.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         Telemetry();
-        robot.cappingServoY.setPosition(0.15);
+        teleop.cappingServoY.setPosition(0.15);
         waitForStart();
-        robot.runtime.reset();
+        teleop.runtime.reset();
         while (opModeIsActive()) {
             telemetry.update();
             Telemetry();
@@ -32,7 +30,7 @@ public class Robot_2_DriveCode_Player2 extends Robot_2_DriveCodeCommon {
             if (shutdown) {
                 screwtoggle = 0;
                 intaketoggle = 0;
-                robot.Bottom_Intake_Motor.setPower(0);
+                teleop.Bottom_Intake_Motor.setPower(0);
             }
 
 

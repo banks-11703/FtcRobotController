@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-public class Robot_2_TikhHardware
+public class TikhHardware_Teleop
 {
     public DcMotor FrontLeftDrive = null;
     public DcMotor BackLeftDrive = null;
@@ -64,7 +64,7 @@ public class Robot_2_TikhHardware
     HardwareMap hwMap           =  null;
 
 
-    public Robot_2_TikhHardware(){
+    public TikhHardware_Teleop(){
 
     }
 

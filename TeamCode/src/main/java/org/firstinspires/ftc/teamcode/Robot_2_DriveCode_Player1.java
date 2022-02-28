@@ -2,13 +2,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "DriveCode_Player1", group = "Robot 2")
 public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
     @Override
     public void runOpMode() {
-        robot.init(hardwareMap);
+        teleop.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         Telemetry();
         waitForStart();
@@ -22,8 +21,8 @@ public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
             autoWarehouse();
             screw();
             intake();
-            robot.cappingServoY.setPosition(0.15);
-            robot.cappingServoX.setPosition(0.5);
+            teleop.cappingServoY.setPosition(0.15);
+            teleop.cappingServoX.setPosition(0.5);
             telemetry.update();
         }
 

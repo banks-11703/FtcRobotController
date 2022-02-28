@@ -14,7 +14,7 @@ import java.util.List;
 @TeleOp(name = "Robot_2_DriveCodeCommon", group = "Linear Opmode")
 @Disabled
 public class Robot_2_DriveCodeCommon extends LinearOpMode {
-    Robot_2_TikhHardware robot = new Robot_2_TikhHardware();
+    TikhHardware_Teleop teleop = new TikhHardware_Teleop();
     double forward_reverse;
     double rotate;
     double strafe;
@@ -90,7 +90,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        robot.init(hardwareMap);
+        teleop.init(hardwareMap);
     }
 
     public void Player_1_Drive() {
@@ -107,10 +107,10 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
         Intake_Reverse = gamepad1.right_bumper;
         dpad_right_is_pressed = gamepad1.dpad_right; // Auto Warehouse
-        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.5);
-        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe) / 1.5);
-        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) / 1.5);
-        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe) / 1.5);
+        teleop.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.5);
+        teleop.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe) / 1.5);
+        teleop.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) / 1.5);
+        teleop.BackRightDrive.setPower((+forward_reverse - rotate - strafe) / 1.5);
     }
 
     public void Player_2_Drive() {
@@ -129,10 +129,10 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         dpad_right_is_pressed = gamepad1.dpad_right; // Auto Warehouse
         override = gamepad2.back && gamepad2.start;
         shutdown = gamepad2.a && gamepad2.b && gamepad2.y;
-        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.25);
-        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe) / 1.25);
-        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) / 1.25);
-        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe) / 1.25);
+        teleop.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.25);
+        teleop.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe) / 1.25);
+        teleop.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) / 1.25);
+        teleop.BackRightDrive.setPower((+forward_reverse - rotate - strafe) / 1.25);
         if (override) {
             Override++;
         }
@@ -151,10 +151,10 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         button_a_is_pressed = gamepad2.a; // score
         dpad_up_is_pressed = gamepad2.dpad_up; // scoring mode
         Intake_Reverse = gamepad2.right_bumper;
-        robot.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.5);
-        robot.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe) / 1.5);
-        robot.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) / 1.5);
-        robot.BackRightDrive.setPower((+forward_reverse - rotate - strafe) / 1.5);
+        teleop.BackLeftDrive.setPower((+forward_reverse + rotate + strafe) / 1.5);
+        teleop.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe) / 1.5);
+        teleop.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) / 1.5);
+        teleop.BackRightDrive.setPower((+forward_reverse - rotate - strafe) / 1.5);
     }
     public int intakeToggle() {
         return intaketoggle % 2;
@@ -181,33 +181,33 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void HighHold() {
-        robot.HighGoal.setPosition(HHold);
-        robot.LowGoal.setPosition(LHold);
+        teleop.HighGoal.setPosition(HHold);
+        teleop.LowGoal.setPosition(LHold);
     }
 
     public void ScoreHub() {
-        robot.HighGoal.setPosition(HHub);
-        robot.LowGoal.setPosition(LHold);
+        teleop.HighGoal.setPosition(HHub);
+        teleop.LowGoal.setPosition(LHold);
     }
 
     public void ScoreTop() {
-        robot.HighGoal.setPosition(HScore);
-        robot.LowGoal.setPosition(LHold);
+        teleop.HighGoal.setPosition(HScore);
+        teleop.LowGoal.setPosition(LHold);
     }
 
     public void HoldMid() {
-        robot.HighGoal.setPosition(HScore);
-        robot.LowGoal.setPosition(LHold);
+        teleop.HighGoal.setPosition(HScore);
+        teleop.LowGoal.setPosition(LHold);
     }
 
     public void ScoreMid() {
-        robot.HighGoal.setPosition(HScore);
-        robot.LowGoal.setPosition(LScore);
+        teleop.HighGoal.setPosition(HScore);
+        teleop.LowGoal.setPosition(LScore);
     }
 
     public void ScoreLow() {
-        robot.HighGoal.setPosition(HScore);
-        robot.LowGoal.setPosition(LRelease);
+        teleop.HighGoal.setPosition(HScore);
+        teleop.LowGoal.setPosition(LRelease);
     }
 
     public int ServoMode() {
@@ -230,41 +230,41 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         } else {
             HoldMid();
         }
-        robot.Stopper_Servo.setPosition(0.5);
+        teleop.Stopper_Servo.setPosition(0.5);
     }
 
     public void capping() {
-        robot.cappingServoY.scaleRange(0.05, 0.3);
-        xPos = robot.cappingServoX.getPosition();
-        if (gamepad2.left_bumper && ((xPos - robot.cappingServoX.getPosition()) <= 0.02)){
-            robot.cappingServoX.setPosition(xPos - 0.05);
-        } else if (gamepad2.right_bumper && (robot.cappingServoX.getPosition() - xPos) <= 0.02){
-            robot.cappingServoX.setPosition(xPos + 0.05);
+        teleop.cappingServoY.scaleRange(0.05, 0.3);
+        xPos = teleop.cappingServoX.getPosition();
+        if (gamepad2.left_bumper && ((xPos - teleop.cappingServoX.getPosition()) <= 0.02)){
+            teleop.cappingServoX.setPosition(xPos - 0.05);
+        } else if (gamepad2.right_bumper && (teleop.cappingServoX.getPosition() - xPos) <= 0.02){
+            teleop.cappingServoX.setPosition(xPos + 0.05);
         }
 //        if (!gamepad2.a) {
 //            robot.cappingServoX.setPosition(gamepad2.left_stick_x);
 //        }
-        robot.cappingServoY.setPosition(gamepad2.left_stick_y);
-        robot.cappingMotor.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
+        teleop.cappingServoY.setPosition(gamepad2.left_stick_y);
+        teleop.cappingMotor.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
     }
 
     public void sensors() {
-        if (!robot.intakeDetector.isPressed() && !cubeIntaking && TimeSinceStamp3() >= 3 && intakeToggle() == 1) {
-            Timestamp2 = robot.runtime.time();
+        if (!teleop.intakeDetector.isPressed() && !cubeIntaking && TimeSinceStamp3() >= 3 && intakeToggle() == 1) {
+            Timestamp2 = teleop.runtime.time();
             intaketoggle = 0;
             cubeIntaking = true;
         }
         if (TimeSinceStamp2() >= 1 && ScrewToggle() == 0 && cubeIntaking) {
             intaketoggle = 1;
             cubeIntaking = false;
-            timestamp3 = robot.runtime.time();
+            timestamp3 = teleop.runtime.time();
         }
-        if (robot.intakeSensor.getDistance(DistanceUnit.INCH) >= 2.9) {
+        if (teleop.intakeSensor.getDistance(DistanceUnit.INCH) >= 2.9) {
             cubeInScrewOpening = false;
-        } else if (robot.intakeSensor.getDistance(DistanceUnit.INCH) <= 2.9) {
+        } else if (teleop.intakeSensor.getDistance(DistanceUnit.INCH) <= 2.9) {
             cubeInScrewOpening = true;
             screwtoggle = 0;
-            timestamp4 = robot.runtime.time();
+            timestamp4 = teleop.runtime.time();
             cubeWasInScrewOpening = true;
         }
         if (timestamp4 >= 2 && !cubeInScrewOpening && cubeWasInScrewOpening) {
@@ -276,7 +276,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     public void autoWarehouse() {
         if (dpad_right_was_pressed && SpinnerDirection() == 0) {
             boolean completion;
-            Timestamp = robot.runtime.time();
+            Timestamp = teleop.runtime.time();
             ResetWheelEncoders();
             teleopverticalDrive(24, 0.3, 0.05);
             completion = teleophorizontalDrive(-30, 0.3, 0.05);
@@ -289,7 +289,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             }
         } else if (dpad_right_was_pressed && SpinnerDirection() == 1) {
             boolean completion;
-            Timestamp = robot.runtime.time();
+            Timestamp = teleop.runtime.time();
             ResetWheelEncoders();
             teleopverticalDrive(24, 0.3, 0.05);
             completion = teleophorizontalDrive(30, 0.3, 0.05);
@@ -304,32 +304,32 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
     public void screw(){
         if (ScrewToggle() == 1) {
-            robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.Screw_Motor.setPower(-0.7);
+            teleop.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            teleop.Screw_Motor.setPower(-0.7);
             intaketoggle = 0;
         } else if (screw_reverse) {
-            robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.Screw_Motor.setPower(0.2);
+            teleop.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            teleop.Screw_Motor.setPower(0.2);
         } else if (ScrewToggle() == 0) {
-            robot.Screw_Motor.setPower(-0.1);
-            if (robot.ScrewDetector.isPressed()) {
-                robot.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.Screw_Motor.setTargetPosition(-145);
-                robot.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            teleop.Screw_Motor.setPower(-0.1);
+            if (teleop.ScrewDetector.isPressed()) {
+                teleop.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                teleop.Screw_Motor.setTargetPosition(-145);
+                teleop.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
         }
     }
     public void intake(){
-        if (intakeToggle() == 1 && ScrewToggle() == 0 && (Math.abs(robot.Screw_Motor.getTargetPosition() - robot.Screw_Motor.getCurrentPosition()) <= 10)) {
-            robot.Top_Intake_Motor.setPower(1);
-            robot.Bottom_Intake_Motor.setPower(1);
+        if (intakeToggle() == 1 && ScrewToggle() == 0 && (Math.abs(teleop.Screw_Motor.getTargetPosition() - teleop.Screw_Motor.getCurrentPosition()) <= 10)) {
+            teleop.Top_Intake_Motor.setPower(1);
+            teleop.Bottom_Intake_Motor.setPower(1);
             screwtoggle = 0;
         } else if (Intake_Reverse) {
-            robot.Top_Intake_Motor.setPower(-1);
-            robot.Bottom_Intake_Motor.setPower(-1);
+            teleop.Top_Intake_Motor.setPower(-1);
+            teleop.Bottom_Intake_Motor.setPower(-1);
         } else {
-            robot.Top_Intake_Motor.setPower(0);
-            robot.Bottom_Intake_Motor.setPower(0);
+            teleop.Top_Intake_Motor.setPower(0);
+            teleop.Bottom_Intake_Motor.setPower(0);
         }
     }
     public void Telemetry() {
@@ -348,16 +348,16 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             telemetry.addData("Team", "Red");
         }
         if (cubeInScrewOpening) {
-            telemetry.addData("Cube in screw opening", robot.intakeSensor.getDistance(DistanceUnit.INCH));
+            telemetry.addData("Cube in screw opening", teleop.intakeSensor.getDistance(DistanceUnit.INCH));
         }
         if (!cubeInScrewOpening) {
-            telemetry.addData("Cube not in screw opening", robot.intakeSensor.getDistance(DistanceUnit.INCH));
+            telemetry.addData("Cube not in screw opening", teleop.intakeSensor.getDistance(DistanceUnit.INCH));
         }
-        telemetry.addData("Switch", robot.ScrewDetector.getValue());
-        telemetry.addData("Screw Pos", robot.Screw_Motor.getCurrentPosition());
-        telemetry.addData("Capping Servo X", robot.cappingServoX.getPosition());
-        telemetry.addData("Distance", robot.intakeSensor.getDistance(DistanceUnit.INCH));
-        telemetry.addData("Target - Current ", java.lang.Math.abs(java.lang.Math.abs(robot.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(robot.Screw_Motor.getCurrentPosition())));
+        telemetry.addData("Switch", teleop.ScrewDetector.getValue());
+        telemetry.addData("Screw Pos", teleop.Screw_Motor.getCurrentPosition());
+        telemetry.addData("Capping Servo X", teleop.cappingServoX.getPosition());
+        telemetry.addData("Distance", teleop.intakeSensor.getDistance(DistanceUnit.INCH));
+        telemetry.addData("Target - Current ", java.lang.Math.abs(java.lang.Math.abs(teleop.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(teleop.Screw_Motor.getCurrentPosition())));
         telemetry.update();
     }
 
@@ -440,14 +440,14 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void verticalDrive(double inches, double power, double rate) {
-        robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
-        robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
-        robot.BackLeftDrive.setTargetPosition(distancetoticks(inches));
-        robot.BackRightDrive.setTargetPosition(distancetoticks(inches));
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
+        teleop.FrontRightDrive.setTargetPosition(distancetoticks(inches));
+        teleop.BackLeftDrive.setTargetPosition(distancetoticks(inches));
+        teleop.BackRightDrive.setTargetPosition(distancetoticks(inches));
+        teleop.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Rampcelleration(inches, power, rate);
         MotorPower(0.01);
         ResetWheelEncoders();
@@ -455,14 +455,14 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
 
     @SuppressWarnings("UnusedReturnValue")
     public boolean teleopverticalDrive(double inches, double power, double rate) {
-        robot.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
-        robot.FrontRightDrive.setTargetPosition(distancetoticks(inches));
-        robot.BackLeftDrive.setTargetPosition(distancetoticks(inches));
-        robot.BackRightDrive.setTargetPosition(distancetoticks(inches));
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.FrontLeftDrive.setTargetPosition(distancetoticks(inches));
+        teleop.FrontRightDrive.setTargetPosition(distancetoticks(inches));
+        teleop.BackLeftDrive.setTargetPosition(distancetoticks(inches));
+        teleop.BackRightDrive.setTargetPosition(distancetoticks(inches));
+        teleop.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         boolean completion = TeleopRampcelleration(inches, power, rate);
         MotorPower(0);
         ResetWheelEncoders();
@@ -470,28 +470,28 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void horizontalDrive(double inches, double power, double rate) {
-        robot.FrontLeftDrive.setTargetPosition(+distancetoticks(inches));
-        robot.FrontRightDrive.setTargetPosition(-distancetoticks(inches));
-        robot.BackLeftDrive.setTargetPosition(-distancetoticks(inches));
-        robot.BackRightDrive.setTargetPosition(+distancetoticks(inches));
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.FrontLeftDrive.setTargetPosition(+distancetoticks(inches));
+        teleop.FrontRightDrive.setTargetPosition(-distancetoticks(inches));
+        teleop.BackLeftDrive.setTargetPosition(-distancetoticks(inches));
+        teleop.BackRightDrive.setTargetPosition(+distancetoticks(inches));
+        teleop.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Rampcelleration(inches, power, rate);
         MotorPower(0.01);
         ResetWheelEncoders();
     }
 
     public boolean teleophorizontalDrive(double inches, double power, double rate) {
-        robot.FrontLeftDrive.setTargetPosition(+distancetoticks(inches));
-        robot.FrontRightDrive.setTargetPosition(-distancetoticks(inches));
-        robot.BackLeftDrive.setTargetPosition(-distancetoticks(inches));
-        robot.BackRightDrive.setTargetPosition(+distancetoticks(inches));
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.FrontLeftDrive.setTargetPosition(+distancetoticks(inches));
+        teleop.FrontRightDrive.setTargetPosition(-distancetoticks(inches));
+        teleop.BackLeftDrive.setTargetPosition(-distancetoticks(inches));
+        teleop.BackRightDrive.setTargetPosition(+distancetoticks(inches));
+        teleop.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         boolean completion = TeleopRampcelleration(inches, power, rate);
         MotorPower(0);
         ResetWheelEncoders();
@@ -499,14 +499,14 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void turn(int degrees, double power) {
-        robot.FrontLeftDrive.setTargetPosition(-degreestoticks(degrees));
-        robot.FrontRightDrive.setTargetPosition(degreestoticks(degrees));
-        robot.BackLeftDrive.setTargetPosition(-degreestoticks(degrees));
-        robot.BackRightDrive.setTargetPosition(degreestoticks(degrees));
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.FrontLeftDrive.setTargetPosition(-degreestoticks(degrees));
+        teleop.FrontRightDrive.setTargetPosition(degreestoticks(degrees));
+        teleop.BackLeftDrive.setTargetPosition(-degreestoticks(degrees));
+        teleop.BackRightDrive.setTargetPosition(degreestoticks(degrees));
+        teleop.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.FrontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.BackRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        teleop.BackLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Rampcelleration(degrees, power, 0);
         MotorPower(0.01);
         ResetWheelEncoders();
@@ -529,17 +529,17 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     public void Rampcelleration(double distance, double power, double rate) {
         //MotorPower(power);
         double Ramp_Distance = (distance / 3); // inches
-        Timestamp = robot.runtime.time();
+        Timestamp = teleop.runtime.time();
         telemetry.addData("time check", TimeSinceStamp());
         telemetry.update();
-        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()) {
-            if (java.lang.Math.abs(robot.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(robot.BackLeftDrive.getCurrentPosition()) < distancetoticks(Ramp_Distance) && TimeSinceStamp() >= 0.05 && power > MinPower) {
-                Timestamp = robot.runtime.time();
+        while (teleop.FrontLeftDrive.isBusy() && teleop.FrontRightDrive.isBusy() && teleop.BackLeftDrive.isBusy() && teleop.BackRightDrive.isBusy() && opModeIsActive()) {
+            if (java.lang.Math.abs(teleop.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(teleop.BackLeftDrive.getCurrentPosition()) < distancetoticks(Ramp_Distance) && TimeSinceStamp() >= 0.05 && power > MinPower) {
+                Timestamp = teleop.runtime.time();
                 telemetry.addData("power", power);
                 MotorPower(power -= (2 * rate));
                 telemetry.update();
-            } else if (java.lang.Math.abs(robot.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(robot.BackLeftDrive.getCurrentPosition()) > distancetoticks(Ramp_Distance) && TimeSinceStamp() >= 0.2 && power < MaxPower) {
-                Timestamp = robot.runtime.time();
+            } else if (java.lang.Math.abs(teleop.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(teleop.BackLeftDrive.getCurrentPosition()) > distancetoticks(Ramp_Distance) && TimeSinceStamp() >= 0.2 && power < MaxPower) {
+                Timestamp = teleop.runtime.time();
                 telemetry.addData("power", power);
                 MotorPower(power += rate); // power = power + 0.05;
                 telemetry.update();
@@ -553,12 +553,12 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     public boolean TeleopRampcelleration(double distance, double power, double rate) {
         //MotorPower(power);
         double Ramp_Distance = (distance / 3); // inches
-        Timestamp = robot.runtime.time();
+        Timestamp = teleop.runtime.time();
         telemetry.addData("time check", TimeSinceStamp());
         telemetry.update();
-        while (robot.FrontLeftDrive.isBusy() && robot.FrontRightDrive.isBusy() && robot.BackLeftDrive.isBusy() && robot.BackRightDrive.isBusy() && opModeIsActive()) {
-            if (java.lang.Math.abs(robot.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(robot.BackLeftDrive.getCurrentPosition()) < distancetoticks(Ramp_Distance) && TimeSinceStamp() >= 0.05 && power > MinPower) {
-                Timestamp = robot.runtime.time();
+        while (teleop.FrontLeftDrive.isBusy() && teleop.FrontRightDrive.isBusy() && teleop.BackLeftDrive.isBusy() && teleop.BackRightDrive.isBusy() && opModeIsActive()) {
+            if (java.lang.Math.abs(teleop.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(teleop.BackLeftDrive.getCurrentPosition()) < distancetoticks(Ramp_Distance) && TimeSinceStamp() >= 0.05 && power > MinPower) {
+                Timestamp = teleop.runtime.time();
                 telemetry.addData("power", power);
                 if (!gamepad1.dpad_right) {
                     RunWithoutWheelEncoders();
@@ -566,8 +566,8 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
                 }
                 MotorPower(power -= (2 * rate));
                 telemetry.update();
-            } else if (java.lang.Math.abs(robot.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(robot.BackLeftDrive.getCurrentPosition()) > distancetoticks(Ramp_Distance) && TimeSinceStamp() >= 0.2 && power < MaxPower) {
-                Timestamp = robot.runtime.time();
+            } else if (java.lang.Math.abs(teleop.BackLeftDrive.getTargetPosition()) - java.lang.Math.abs(teleop.BackLeftDrive.getCurrentPosition()) > distancetoticks(Ramp_Distance) && TimeSinceStamp() >= 0.2 && power < MaxPower) {
+                Timestamp = teleop.runtime.time();
                 telemetry.addData("power", power);
                 if (!gamepad1.dpad_right) {
                     RunWithoutWheelEncoders();
@@ -584,48 +584,48 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public double TimeSinceStamp() {
-        return robot.runtime.time() - Timestamp;
+        return teleop.runtime.time() - Timestamp;
     }
 
     public double TimeSinceStamp2() {
-        return robot.runtime.time() - Timestamp2;
+        return teleop.runtime.time() - Timestamp2;
     }
 
     public double TimeSinceStamp3() {
-        return robot.runtime.time() - timestamp3;
+        return teleop.runtime.time() - timestamp3;
     }
 
     public double TimeSinceStamp4() {
-        return robot.runtime.time() - timestamp4;
+        return teleop.runtime.time() - timestamp4;
     }
 
     public void MotorPower(double power) {
-        robot.FrontLeftDrive.setPower(power);
-        robot.FrontRightDrive.setPower(power);
-        robot.BackLeftDrive.setPower(power);
-        robot.BackRightDrive.setPower(power);
+        teleop.FrontLeftDrive.setPower(power);
+        teleop.FrontRightDrive.setPower(power);
+        teleop.BackLeftDrive.setPower(power);
+        teleop.BackRightDrive.setPower(power);
     }
 
     public void ResetWheelEncoders() {
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        teleop.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        teleop.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        teleop.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        teleop.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        teleop.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        teleop.FrontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        teleop.BackRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        teleop.BackLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void RunWithoutWheelEncoders() {
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.FrontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.BackRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.BackLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        teleop.FrontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        teleop.FrontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        teleop.BackRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        teleop.BackLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        teleop.FrontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        teleop.FrontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        teleop.BackRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        teleop.BackLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 
@@ -659,15 +659,15 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void dropIntake() {
-        robot.Bottom_Intake_Motor.setPower(-1);
+        teleop.Bottom_Intake_Motor.setPower(-1);
         sleep(1000);
-        robot.Bottom_Intake_Motor.setPower(0);
+        teleop.Bottom_Intake_Motor.setPower(0);
     }
 
     public void spinDuckBlue() {
-        robot.Bottom_Intake_Motor.setPower(-0.7);
+        teleop.Bottom_Intake_Motor.setPower(-0.7);
         sleep(4500);
-        robot.Bottom_Intake_Motor.setPower(0);
+        teleop.Bottom_Intake_Motor.setPower(0);
     }
 
     public void RedRightDSW() {
@@ -678,7 +678,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         spinDuckRed();
         HighHold();
         sleep(500);
-        robot.Screw_Motor.setPower(-1);
+        teleop.Screw_Motor.setPower(-1);
         verticalDrive(17, 0.2, 0.1);//in 20
         horizontalDrive(-5, 0.2, 0.1);
         horizontalDrive(61, 0.2, 0.1);
@@ -686,7 +686,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         ScoreTop();
         sleep(1000);
         HighHold();
-        robot.Screw_Motor.setPower(0);
+        teleop.Screw_Motor.setPower(0);
         verticalDrive(-6, 0.2, 0.1);
         horizontalDrive(25, 0.2, 0.1);
         turn(-90, 0.1);
@@ -751,9 +751,9 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     }
 
     public void spinDuckRed() {
-        robot.Bottom_Intake_Motor.setPower(0.8);
+        teleop.Bottom_Intake_Motor.setPower(0.8);
         sleep(4500);
-        robot.Bottom_Intake_Motor.setPower(0);
+        teleop.Bottom_Intake_Motor.setPower(0);
     }
 
     public void choosePosition() {
@@ -971,15 +971,15 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         Color color = Color.red;
 
         if (gamepad2.x) {
-            robot.redLED.setState(true);
-            robot.greenLED.setState(false);
-            robot.redLED1.setState(true);
-            robot.greenLED1.setState(false);
+            teleop.redLED.setState(true);
+            teleop.greenLED.setState(false);
+            teleop.redLED1.setState(true);
+            teleop.greenLED1.setState(false);
         } else {
-            robot.redLED.setState(false);
-            robot.greenLED.setState(true);
-            robot.redLED1.setState(false);
-            robot.greenLED1.setState(true);
+            teleop.redLED.setState(false);
+            teleop.greenLED.setState(true);
+            teleop.redLED1.setState(false);
+            teleop.greenLED1.setState(true);
         }
 
 
