@@ -232,18 +232,19 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
         teleop.Stopper_Servo.setPosition(0.5);
     }
-
+    public void autoduck(){
+        if (gamepad1.x){
+//            teleop.Bottom_Intake_Motor.
+        }
+    }
     public void capping() {
-        teleop.cappingServoY.scaleRange(0.05, 0.3);
+        teleop.cappingServoY.scaleRange(0.3, 0.55);
         xPos = teleop.cappingServoX.getPosition();
         if (gamepad2.left_bumper && ((xPos - teleop.cappingServoX.getPosition()) <= 0.02)){
-            teleop.cappingServoX.setPosition(xPos - 0.05);
+            teleop.cappingServoX.setPosition(xPos - 0.03);
         } else if (gamepad2.right_bumper && (teleop.cappingServoX.getPosition() - xPos) <= 0.02){
-            teleop.cappingServoX.setPosition(xPos + 0.05);
+            teleop.cappingServoX.setPosition(xPos + 0.03);
         }
-//        if (!gamepad2.a) {
-//            robot.cappingServoX.setPosition(gamepad2.left_stick_x);
-//        }
         teleop.cappingServoY.setPosition(gamepad2.left_stick_y);
         teleop.cappingMotor.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
     }
@@ -254,7 +255,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             intaketoggle = 0;
             cubeIntaking = true;
         }
-        if (TimeSinceStamp2() >= 1 && ScrewToggle() == 0 && cubeIntaking) {
+        if (TimeSinceStamp2() >= 0.25 && ScrewToggle() == 0 && cubeIntaking && (Math.abs(teleop.Screw_Motor.getTargetPosition() - teleop.Screw_Motor.getCurrentPosition()) <= 10)) {
             intaketoggle = 1;
             cubeIntaking = false;
             timestamp3 = teleop.runtime.time();
@@ -320,10 +321,13 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
     }
     public void intake(){
-        if (intakeToggle() == 1 && ScrewToggle() == 0 && (Math.abs(teleop.Screw_Motor.getTargetPosition() - teleop.Screw_Motor.getCurrentPosition()) <= 10)) {
+        if (intakeToggle() == 1 && ScrewToggle() == 0) {
             teleop.Top_Intake_Motor.setPower(1);
             teleop.Bottom_Intake_Motor.setPower(1);
             screwtoggle = 0;
+        }else if(cubeIntaking){
+            teleop.Top_Intake_Motor.setPower(0.5);
+            teleop.Bottom_Intake_Motor.setPower(0);
         } else if (Intake_Reverse) {
             teleop.Top_Intake_Motor.setPower(-1);
             teleop.Bottom_Intake_Motor.setPower(-1);

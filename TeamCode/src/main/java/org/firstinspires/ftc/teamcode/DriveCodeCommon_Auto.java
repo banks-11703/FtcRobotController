@@ -323,20 +323,29 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
     public void BlueScoreWarehouse(){
-        Pose2d startPose = new Pose2d(6.5,61,Math.toRadians(-90));
+        Pose2d startPose = new Pose2d(7,63,Math.toRadians(-90));
         setPoseEstimate(startPose);
-        Trajectory traj = trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(-12, 36), Math.toRadians(-90))
-
+        Trajectory traj1 = trajectoryBuilder(startPose)
+                .splineToConstantHeading(new Vector2d(-12, 44), Math.toRadians(-90))
                 .build();
-        followTrajectory(traj);
+        Trajectory traj2 = trajectoryBuilder(traj1.end())
+                .lineToLinearHeading(new Pose2d(12, 66.5,Math.toRadians(0)))
+                .build();
 
-        followTrajectory(
-                trajectoryBuilder(traj.end(), true)
-                        .splineTo(new Vector2d(12, 66.5), Math.toRadians(0))
-                        .lineTo(new Vector2d(28, 66.5))
-                        .lineTo(new Vector2d(28, 56))
-                        .build()
-        );
+        Trajectory traj3 = trajectoryBuilder(traj2.end())
+                .forward(26)
+                .build();
+        Trajectory traj4 = trajectoryBuilder(traj3.end())
+                .strafeRight(26.5)
+                .build();
+        Trajectory traj5 = trajectoryBuilder(traj4.end())
+                .forward(24)
+                .build();
+        followTrajectory(traj1);
+        followTrajectory(traj2);
+        followTrajectory(traj3);
+        followTrajectory(traj4);
+        followTrajectory(traj5);
+        turn(Math.toRadians(-90));
     }
 }
