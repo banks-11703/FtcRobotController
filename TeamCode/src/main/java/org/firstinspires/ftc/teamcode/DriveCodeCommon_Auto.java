@@ -322,30 +322,35 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
     public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
     }
+    Vector2d vectorBlueRightStart = new Vector2d(-41.5,63);
+    Pose2d blueRightStart = new Pose2d(vectorBlueRightStart,Math.toRadians(-90));
+    Pose2d redRightStart = new Pose2d(7,-63,Math.toRadians(90));
+    Pose2d blueLeftStart = new Pose2d(7,63,Math.toRadians(-90));
+    Pose2d redLeftStart = new Pose2d(-41.5,-63,Math.toRadians(90));
+    Pose2d blueHubScore = new Pose2d(-12,44, Math.toRadians(-90));
+    Pose2d redHubScore = new Pose2d(-12,-44, Math.toRadians(90));
+    Pose2d blueHubScoreSide = new Pose2d(-33,24.3, Math.toRadians(0));
+    Pose2d redHubScoreSide = new Pose2d(-33,-24.3, Math.toRadians(0));
+    Pose2d blueWarehouseOutsideOpening = new Pose2d(12,66.5, Math.toRadians(0));
+    Pose2d redWarehouseOutsideOpening = new Pose2d(12,-66.5, Math.toRadians(0));
+    Pose2d blueWarehouseInsideOpening = new Pose2d(12,66.5, Math.toRadians(0));
+    Pose2d redWarehouseInsideOpening = new Pose2d(12,-66.5, Math.toRadians(0));
+    Pose2d blueWarehouseFinal = new Pose2d(65.5,36, Math.toRadians(-90));
+    Pose2d redWarehouseFinal = new Pose2d(65.5,-36, Math.toRadians(90));
+    Pose2d blueStorage = new Pose2d(65.5,36, Math.toRadians(-90));
+    Pose2d redStorage = new Pose2d(65.5,-36, Math.toRadians(90));
+    //Pose2d  = new Pose2d(,, Math.toRadians());
     public void BlueScoreWarehouse(){
-        Pose2d startPose = new Pose2d(7,63,Math.toRadians(-90));
-        setPoseEstimate(startPose);
-        Trajectory traj1 = trajectoryBuilder(startPose)
+        setPoseEstimate(blueRightStart);
+        Trajectory traj1 = trajectoryBuilder(blueLeftStart)
                 .splineToConstantHeading(new Vector2d(-12, 44), Math.toRadians(-90))
                 .build();
         Trajectory traj2 = trajectoryBuilder(traj1.end())
-                .lineToLinearHeading(new Pose2d(12, 66.5,Math.toRadians(0)))
-                .build();
-
-        Trajectory traj3 = trajectoryBuilder(traj2.end())
-                .forward(26)
-                .build();
-        Trajectory traj4 = trajectoryBuilder(traj3.end())
-                .strafeRight(26.5)
-                .build();
-        Trajectory traj5 = trajectoryBuilder(traj4.end())
-                .forward(24)
+                .splineToLinearHeading(blueWarehouseOutsideOpening,Math.toRadians(0))
+                .lineToLinearHeading(blueWarehouseInsideOpening)
+                .lineToSplineHeading(blueWarehouseFinal)
                 .build();
         followTrajectory(traj1);
         followTrajectory(traj2);
-        followTrajectory(traj3);
-        followTrajectory(traj4);
-        followTrajectory(traj5);
-        turn(Math.toRadians(-90));
     }
 }

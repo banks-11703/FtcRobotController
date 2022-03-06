@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -11,9 +12,10 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
-@TeleOp(name = "Robot_2_DriveCodeCommon", group = "Linear Opmode")
+
+@TeleOp(name = "DriveCodeCommon_Teleop", group = "Linear Opmode")
 @Disabled
-public class Robot_2_DriveCodeCommon extends LinearOpMode {
+public class DriveCodeCommon_Teleop extends LinearOpMode {
     TikhHardware_Teleop teleop = new TikhHardware_Teleop();
     double forward_reverse;
     double rotate;
@@ -27,6 +29,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
     int side = 0;// 0 = left 1 = right
     int mode = 0;//0 = nothing
     int Duck_Spinner_direction = 0;
+    int speed = 0;
     double Timestamp = 0;
     double Timestamp2 = 0;
     double timestamp3 = 0;
@@ -119,7 +122,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         strafe = gamepad1.left_stick_x;
         screw_reverse = gamepad1.left_bumper;
         y_is_pressed = gamepad2.y; //Screw
-        Spinner = gamepad2.b;
+        Spinner = gamepad1.b;
         dpad_down_is_pressed = gamepad2.dpad_down; // Duck Spinner Direction / Team
         Stopper = gamepad1.dpad_left; //
         button_x_is_pressed = gamepad1.x; // Intake
@@ -156,6 +159,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         teleop.FrontRightDrive.setPower((+forward_reverse - rotate + strafe) / 1.5);
         teleop.BackRightDrive.setPower((+forward_reverse - rotate - strafe) / 1.5);
     }
+
     public int intakeToggle() {
         return intaketoggle % 2;
     }
@@ -232,20 +236,19 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
         teleop.Stopper_Servo.setPosition(0.5);
     }
-    public void autoduck(){
-        if (gamepad1.x){
-//            teleop.Bottom_Intake_Motor.
-        }
-    }
+
     public void capping() {
-        teleop.cappingServoY.scaleRange(0.3, 0.55);
+
+        teleop.cappingServoY.scaleRange(0.55, 0.75);
         xPos = teleop.cappingServoX.getPosition();
-        if (gamepad2.left_bumper && ((xPos - teleop.cappingServoX.getPosition()) <= 0.02)){
+        if (gamepad2.left_bumper && ((xPos - teleop.cappingServoX.getPosition()) <= 0.02)) {
             teleop.cappingServoX.setPosition(xPos - 0.03);
-        } else if (gamepad2.right_bumper && (teleop.cappingServoX.getPosition() - xPos) <= 0.02){
+        } else if (gamepad2.right_bumper && (teleop.cappingServoX.getPosition() - xPos) <= 0.02) {
             teleop.cappingServoX.setPosition(xPos + 0.03);
         }
-        teleop.cappingServoY.setPosition(gamepad2.left_stick_y);
+        if (!gamepad2.a) {
+            teleop.cappingServoY.setPosition(gamepad2.left_stick_y);
+        }
         teleop.cappingMotor.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
     }
 
@@ -255,7 +258,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             intaketoggle = 0;
             cubeIntaking = true;
         }
-        if (TimeSinceStamp2() >= 0.25 && ScrewToggle() == 0 && cubeIntaking && (Math.abs(teleop.Screw_Motor.getTargetPosition() - teleop.Screw_Motor.getCurrentPosition()) <= 10)) {
+        if (TimeSinceStamp2() >= 0.55 && ScrewToggle() == 0 && cubeIntaking && (Math.abs(teleop.Screw_Motor.getTargetPosition() - teleop.Screw_Motor.getCurrentPosition()) <= 10)) {
             intaketoggle = 1;
             cubeIntaking = false;
             timestamp3 = teleop.runtime.time();
@@ -303,7 +306,8 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             }
         }
     }
-    public void screw(){
+
+    public void screw() {
         if (ScrewToggle() == 1) {
             teleop.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             teleop.Screw_Motor.setPower(-0.7);
@@ -320,22 +324,68 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
             }
         }
     }
-    public void intake(){
+
+    public void intake() {
         if (intakeToggle() == 1 && ScrewToggle() == 0) {
             teleop.Top_Intake_Motor.setPower(1);
             teleop.Bottom_Intake_Motor.setPower(1);
             screwtoggle = 0;
-        }else if(cubeIntaking){
-            teleop.Top_Intake_Motor.setPower(0.5);
-            teleop.Bottom_Intake_Motor.setPower(0);
+        } else if (cubeIntaking) {
+            teleop.Top_Intake_Motor.setPower(0.3);
+            teleop.Bottom_Intake_Motor.setPower(-0.3);
         } else if (Intake_Reverse) {
             teleop.Top_Intake_Motor.setPower(-1);
             teleop.Bottom_Intake_Motor.setPower(-1);
+        } else if (gamepad1.b) {
+        autoDuck(384,0.3,0.05);
         } else {
             teleop.Top_Intake_Motor.setPower(0);
             teleop.Bottom_Intake_Motor.setPower(0);
         }
     }
+    public boolean spinDuck(int ticks,){
+        teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("hi",1);
+        telemetry.update();
+        teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        teleop.Bottom_Intake_Motor.setTargetPosition(ticks);
+        teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        DuckRampcelleration(power, power, rate);
+        MotorPower(0);
+        teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        if ()
+    }
+    public void autoDuck(int ticks, double power, double rate) {
+        if (button_b_was_pressed && SpinnerDirection() == 0) {
+            boolean completion;
+            Timestamp = teleop.runtime.time();
+            ResetWheelEncoders();
+            teleopverticalDrive(24, 0.3, 0.05);
+            completion = teleophorizontalDrive(-30, 0.3, 0.05);
+            if (!completion) {
+                RunWithoutWheelEncoders();
+            }
+            if (completion) {
+                teleopverticalDrive(100, 0.5, 0.1);
+                RunWithoutWheelEncoders();
+            }
+        } else if (button_b_was_pressed && SpinnerDirection() == 1) {
+            boolean completion;
+            Timestamp = teleop.runtime.time();
+            ResetWheelEncoders();
+            teleopverticalDrive(24, 0.3, 0.05);
+            completion = teleophorizontalDrive(30, 0.3, 0.05);
+            if (!completion) {
+                RunWithoutWheelEncoders();
+            }
+            if (completion) {
+                teleopverticalDrive(100, 0.5, 0.1);
+                RunWithoutWheelEncoders();
+            }
+        }
+    }
+
     public void Telemetry() {
         if (ServoMode() == 0) {
             telemetry.addData("ScoringMode:", "Hub");
@@ -357,10 +407,7 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         if (!cubeInScrewOpening) {
             telemetry.addData("Cube not in screw opening", teleop.intakeSensor.getDistance(DistanceUnit.INCH));
         }
-        telemetry.addData("Switch", teleop.ScrewDetector.getValue());
         telemetry.addData("Screw Pos", teleop.Screw_Motor.getCurrentPosition());
-        telemetry.addData("Capping Servo X", teleop.cappingServoX.getPosition());
-        telemetry.addData("Distance", teleop.intakeSensor.getDistance(DistanceUnit.INCH));
         telemetry.addData("Target - Current ", java.lang.Math.abs(java.lang.Math.abs(teleop.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(teleop.Screw_Motor.getCurrentPosition())));
         telemetry.update();
     }
@@ -554,6 +601,29 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         }
     }
 
+    public boolean DuckRampcelleration(double distance, double power, double rate) {
+        //MotorPower(power);
+        Timestamp = teleop.runtime.time();
+        telemetry.addData("time check", TimeSinceStamp());
+        telemetry.update();
+        while (teleop.Bottom_Intake_Motor.isBusy() && opModeIsActive()) {
+            if (java.lang.Math.abs(teleop.Bottom_Intake_Motor.getTargetPosition()) - java.lang.Math.abs(teleop.Bottom_Intake_Motor.getCurrentPosition()) > 10 && TimeSinceStamp() >= 0.2 && power < MaxPower) {
+                Timestamp = teleop.runtime.time();
+                telemetry.addData("power", power);
+                if (!gamepad1.dpad_right) {
+                    teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    return false;
+                }
+                teleop.Bottom_Intake_Motor.setPower(power += rate); // power = power + 0.05;
+            } else {
+                telemetry.addData("bruh", "");
+            }
+            telemetry.update();
+            capping();
+        }
+        return true;
+    }
+
     public boolean TeleopRampcelleration(double distance, double power, double rate) {
         //MotorPower(power);
         double Ramp_Distance = (distance / 3); // inches
@@ -674,85 +744,85 @@ public class Robot_2_DriveCodeCommon extends LinearOpMode {
         teleop.Bottom_Intake_Motor.setPower(0);
     }
 
-    public void RedRightDSW() {
-        verticalDrive(13.5, 0.2, 0.1);
-        dropIntake();
-        horizontalDrive(-38.5, 0.3, 0.1);
-        verticalDrive(-5.5, 0.1, 0.1);
-        spinDuckRed();
-        HighHold();
-        sleep(500);
-        teleop.Screw_Motor.setPower(-1);
-        verticalDrive(17, 0.2, 0.1);//in 20
-        horizontalDrive(-5, 0.2, 0.1);
-        horizontalDrive(61, 0.2, 0.1);
-        verticalDrive(1, 0.2, 0.1);
-        ScoreTop();
-        sleep(1000);
-        HighHold();
-        teleop.Screw_Motor.setPower(0);
-        verticalDrive(-6, 0.2, 0.1);
-        horizontalDrive(25, 0.2, 0.1);
-        turn(-90, 0.1);
-        horizontalDrive(27, 0.3, 0.1);
-        verticalDrive(40, 0.3, 0.1);
-    }
-
-    public void RedRightSW() {
-        verticalDrive(5, 0.3, 0.1);
-        dropIntake();
-        verticalDrive(13, 0.2, 0.1);
-        horizontalDrive(-22, 0.2, 0.1);
-        verticalDrive(5, 0.2, 0.1);
-        sleep(1000);
-        ScoreTop();
-        sleep(1000);
-        HighHold();
-        verticalDrive(-8, 0.2, 0.1);
-        horizontalDrive(20, 0.2, 0.1);
-        turn(90, 0.1);
-        horizontalDrive(-20, 0.3, 0.1);
-        verticalDrive(-40, 0.3, 0.1);
-    }
-
-    public void BlueLeftSW() {
-        verticalDrive(20, 0.1, 0.1);
-        horizontalDrive(22, 0.1, 0.1);
-        verticalDrive(2, 0.1, 0.1);
-        ScoreLow();
-        sleep(1000);
-        HighHold();
-        verticalDrive(-6, 0.1, 0.1);
-        horizontalDrive(-25, 0.1, 0.1);
-        turn(-90, 0.1);
-        horizontalDrive(27, 0.2, 0.1);
-        verticalDrive(-40, 0.3, 0.1);
-        sleep(1000);
-        HighHold();
-        verticalDrive(-6, 0.1, 0.1);
-        horizontalDrive(-25, 0.1, 0.1);
-        turn(-90, 0.1);
-        horizontalDrive(20, 0.2, 0.1);
-        verticalDrive(-40, 0.3, 0.1);
-    }
-
-    public void BlueRightDSW() {
-        verticalDrive(5, 0.2, 0.1);
-        dropIntake();
-        turn(90, 0.2);
-        horizontalDrive(-4, 0.2, 0.1);
-        verticalDrive(-17.5, 0.1, 0.1);
-        sleep(250);
-        spinDuckBlue();
-        horizontalDrive(45, 0.2, 0.1);
-        verticalDrive(33, 0.2, 0.1);
-        sleep(1000);
-        ScoreTop();
-        sleep(1000);
-        HighHold();
-        horizontalDrive(-57, 0.3, 0.1);
-        verticalDrive(75, 0.3, 0.1);
-    }
+//    public void RedRightDSW() {
+//        verticalDrive(13.5, 0.2, 0.1);
+//        dropIntake();
+//        horizontalDrive(-38.5, 0.3, 0.1);
+//        verticalDrive(-5.5, 0.1, 0.1);
+//        spinDuckRed();
+//        HighHold();
+//        sleep(500);
+//        teleop.Screw_Motor.setPower(-1);
+//        verticalDrive(17, 0.2, 0.1);//in 20
+//        horizontalDrive(-5, 0.2, 0.1);
+//        horizontalDrive(61, 0.2, 0.1);
+//        verticalDrive(1, 0.2, 0.1);
+//        ScoreTop();
+//        sleep(1000);
+//        HighHold();
+//        teleop.Screw_Motor.setPower(0);
+//        verticalDrive(-6, 0.2, 0.1);
+//        horizontalDrive(25, 0.2, 0.1);
+//        turn(-90, 0.1);
+//        horizontalDrive(27, 0.3, 0.1);
+//        verticalDrive(40, 0.3, 0.1);
+//    }
+//
+//    public void RedRightSW() {
+//        verticalDrive(5, 0.3, 0.1);
+//        dropIntake();
+//        verticalDrive(13, 0.2, 0.1);
+//        horizontalDrive(-22, 0.2, 0.1);
+//        verticalDrive(5, 0.2, 0.1);
+//        sleep(1000);
+//        ScoreTop();
+//        sleep(1000);
+//        HighHold();
+//        verticalDrive(-8, 0.2, 0.1);
+//        horizontalDrive(20, 0.2, 0.1);
+//        turn(90, 0.1);
+//        horizontalDrive(-20, 0.3, 0.1);
+//        verticalDrive(-40, 0.3, 0.1);
+//    }
+//
+//    public void BlueLeftSW() {
+//        verticalDrive(20, 0.1, 0.1);
+//        horizontalDrive(22, 0.1, 0.1);
+//        verticalDrive(2, 0.1, 0.1);
+//        ScoreLow();
+//        sleep(1000);
+//        HighHold();
+//        verticalDrive(-6, 0.1, 0.1);
+//        horizontalDrive(-25, 0.1, 0.1);
+//        turn(-90, 0.1);
+//        horizontalDrive(27, 0.2, 0.1);
+//        verticalDrive(-40, 0.3, 0.1);
+//        sleep(1000);
+//        HighHold();
+//        verticalDrive(-6, 0.1, 0.1);
+//        horizontalDrive(-25, 0.1, 0.1);
+//        turn(-90, 0.1);
+//        horizontalDrive(20, 0.2, 0.1);
+//        verticalDrive(-40, 0.3, 0.1);
+//    }
+//
+//    public void BlueRightDSW() {
+//        verticalDrive(5, 0.2, 0.1);
+//        dropIntake();
+//        turn(90, 0.2);
+//        horizontalDrive(-4, 0.2, 0.1);
+//        verticalDrive(-17.5, 0.1, 0.1);
+//        sleep(250);
+//        spinDuckBlue();
+//        horizontalDrive(45, 0.2, 0.1);
+//        verticalDrive(33, 0.2, 0.1);
+//        sleep(1000);
+//        ScoreTop();
+//        sleep(1000);
+//        HighHold();
+//        horizontalDrive(-57, 0.3, 0.1);
+//        verticalDrive(75, 0.3, 0.1);
+//    }
 
     public void spinDuckRed() {
         teleop.Bottom_Intake_Motor.setPower(0.8);

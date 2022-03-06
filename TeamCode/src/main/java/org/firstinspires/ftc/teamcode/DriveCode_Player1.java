@@ -1,10 +1,12 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "DriveCode_Player1", group = "Robot 2")
-public class Robot_2_DriveCode_Player1 extends Robot_2_DriveCodeCommon {
+public class DriveCode_Player1 extends DriveCodeCommon_Teleop {
+
     @Override
     public void runOpMode() {
         teleop.init(hardwareMap);
