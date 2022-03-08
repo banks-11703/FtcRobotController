@@ -362,7 +362,7 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
     final double HHold = 0.7; //
     final double HScore = 0.175; //
     final double HHub = 0.015; //
-    final double LHold = 0.8; //
+    final double LHold = 0.9; //
     final double LScore = 0.6; //
     final double LRelease = 0.4; //
     public void HighHold() {
@@ -417,7 +417,7 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
                 .build();
         Trajectory traj4 = trajectoryBuilder(traj3.end())
                 .splineToLinearHeading(new Pose2d(38,38), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(63,42), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(55,42), Math.toRadians(-90))
                 .build();
         followTrajectory(traj1);
         Screw_Motor.setPower(0);
@@ -430,15 +430,16 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
         }
         followTrajectory(traj2);
         followTrajectory(traj3);
+        HighHold();
         followTrajectory(traj4);
         turn(Math.toRadians(-90));
     }
     public void RedScoreRightWarehouse(){
-        if (barcode == 0){
+        if (barcode == 2){
             HoldMid();
         } else if (barcode == 1){
             HoldMid();
-        }else if (barcode == 2){
+        }else if (barcode == 0){
             HighHold();
         }
         Screw_Motor.setPower(-0.7);
@@ -459,16 +460,17 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
                 .splineToLinearHeading(new Pose2d(63,-42), Math.toRadians(90))
                 .build();
         followTrajectory(traj1);
-        Screw_Motor.setPower(0);
-        if (barcode == 0){
+        Screw_Motor.setPower(2);
+        if (barcode == 2){
             ScoreLow();
         } else if (barcode == 1){
             ScoreMid();
-        }else if (barcode == 2){
+        }else if (barcode == 0){
             ScoreTop();
         }
         followTrajectory(traj2);
         followTrajectory(traj3);
+        HighHold();
         followTrajectory(traj4);
         turn(Math.toRadians(-90));
     }

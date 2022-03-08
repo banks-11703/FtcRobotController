@@ -133,7 +133,6 @@ public class Autonomous extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
-        drive.BlueScoreLeftWarehouse();
         telemetry.addData("Entered OpMode", "");
         telemetry.update();
         drive.HighHold();

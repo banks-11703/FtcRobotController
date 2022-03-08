@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -289,39 +290,43 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
             Timestamp2 = teleop.runtime.time();
             intaketoggle = 0;
             cubeIntaking = true;
-            teleop.redLED.setState(true);
-            teleop.greenLED.setState(false);
-            teleop.redLED1.setState(true);
-            teleop.greenLED1.setState(false);
+            teleop.redLED.setState(false);
+            teleop.greenLED.setState(true);
+            teleop.redLED1.setState(false);
+            teleop.greenLED1.setState(true);
         }
         if (TimeSinceStamp2() >= 0.55 && ScrewToggle() == 0 && cubeIntaking && (Math.abs(teleop.Screw_Motor.getTargetPosition() - teleop.Screw_Motor.getCurrentPosition()) <= 10)) {
             intaketoggle = 1;
             cubeIntaking = false;
             timestamp3 = teleop.runtime.time();
-            teleop.redLED.setState(true);
-            teleop.greenLED.setState(false);
-            teleop.redLED1.setState(true);
-            teleop.greenLED1.setState(false);
+            teleop.redLED.setState(false);
+            teleop.greenLED.setState(true);
+            teleop.redLED1.setState(false);
+            teleop.greenLED1.setState(true);
         }
         if (teleop.intakeSensor.getDistance(DistanceUnit.INCH) >= 2.9) {
-            teleop.redLED.setState(true);
-            teleop.greenLED.setState(false);
-            teleop.redLED1.setState(true);
-            teleop.greenLED1.setState(false);
             cubeInScrewOpening = false;
+            teleop.redLED.setState(false);
+            teleop.greenLED.setState(true);
+            teleop.redLED1.setState(false);
+            teleop.greenLED1.setState(true);
         } else if (teleop.intakeSensor.getDistance(DistanceUnit.INCH) <= 2.9) {
             cubeInScrewOpening = true;
             screwtoggle = 0;
             timestamp4 = teleop.runtime.time();
             cubeWasInScrewOpening = true;
+            teleop.redLED.setState(false);
+            teleop.greenLED.setState(true);
+            teleop.redLED1.setState(false);
+            teleop.greenLED1.setState(true);
+        }
+        if (timestamp4 >= 2 && !cubeInScrewOpening && cubeWasInScrewOpening) {
+            intaketoggle = 0;
             teleop.redLED.setState(true);
             teleop.greenLED.setState(false);
             teleop.redLED1.setState(true);
             teleop.greenLED1.setState(false);
-        }
-        if (timestamp4 >= 2 && !cubeInScrewOpening && cubeWasInScrewOpening) {
-            intaketoggle = 0;
-            cubeWasInScrewOpening = false;
+        } else{
             teleop.redLED.setState(false);
             teleop.greenLED.setState(true);
             teleop.redLED1.setState(false);
@@ -361,6 +366,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
 
     public void screw() {
         if (ScrewToggle() == 1) {
+            cubeWasInScrewOpening = false;
             teleop.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             teleop.Screw_Motor.setPower(-0.7);
             intaketoggle = 0;
@@ -383,7 +389,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
             teleop.Bottom_Intake_Motor.setPower(1);
             screwtoggle = 0;
         } else if (cubeIntaking) {
-            teleop.Top_Intake_Motor.setPower(0.3);
+            teleop.Top_Intake_Motor.setPower(0.4);
             teleop.Bottom_Intake_Motor.setPower(-0.3);
         } else if (Intake_Reverse) {
             teleop.Top_Intake_Motor.setPower(-1);
@@ -451,6 +457,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         if (!cubeInScrewOpening) {
             telemetry.addData("Cube not in screw opening", teleop.intakeSensor.getDistance(DistanceUnit.INCH));
         }
+        telemetry.addData("Speed", speed);
         telemetry.addData("Screw Pos", teleop.Screw_Motor.getCurrentPosition());
         telemetry.addData("Target - Current ", java.lang.Math.abs(java.lang.Math.abs(teleop.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(teleop.Screw_Motor.getCurrentPosition())));
         telemetry.update();
@@ -1089,23 +1096,5 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
 //            }
 //        }
 //    }
-    public enum Color {
-        red, green, amber, flashRed, flashRG, flashAmber
-    }
-
-    public void lightSequence() {
-        Color color = Color.red;
-        if (gamepad2.x) {
-            teleop.redLED.setState(true);
-            teleop.greenLED.setState(false);
-            teleop.redLED1.setState(true);
-            teleop.greenLED1.setState(false);
-        } else {
-            teleop.redLED.setState(false);
-            teleop.greenLED.setState(true);
-            teleop.redLED1.setState(false);
-            teleop.greenLED1.setState(true);
-        }
-    }
 }
 
