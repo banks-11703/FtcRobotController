@@ -82,6 +82,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
     boolean cubeIntaking;
     boolean cubeInScrewOpening;
     boolean cubeWasInScrewOpening;
+    boolean sped;
     private final Object runningNotifier = new Object();
 
     public enum DuckScoring {
@@ -149,7 +150,28 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
             Override++;
         }
     }
+    public void Player_2_FastDrive() {
+        forward_reverse = gamepad1.left_stick_y;
+        rotate = gamepad1.right_stick_x;
+        strafe = gamepad1.left_stick_x;
+        screw_reverse = gamepad1.left_bumper;
+        y_is_pressed = gamepad2.y; //Screw
+        button_b_is_pressed = gamepad1.b;
+        dpad_down_is_pressed = gamepad2.dpad_down; // Duck Spinner Direction / Team
+        Stopper = gamepad1.dpad_left; //
+        button_x_is_pressed = gamepad1.x; // Intake
+        button_a_is_pressed = gamepad1.a; // score
+        dpad_up_is_pressed = gamepad1.dpad_up; // scoring mode
+        Intake_Reverse = gamepad1.right_bumper;
+        dpad_right_is_pressed = gamepad1.dpad_right; // Auto Warehouse
+        override = gamepad2.back && gamepad2.start;
+        shutdown = gamepad2.a && gamepad2.b && gamepad2.y;
+        teleop.BackLeftDrive.setPower((+forward_reverse + rotate + strafe));
+        teleop.FrontLeftDrive.setPower((+forward_reverse + rotate - strafe));
+        teleop.FrontRightDrive.setPower((+forward_reverse - rotate + strafe));
+        teleop.BackRightDrive.setPower((+forward_reverse - rotate - strafe));
 
+    }
     public void Player_2_Override() {
         forward_reverse = gamepad2.left_stick_y;
         rotate = gamepad2.right_stick_x;
@@ -267,23 +289,43 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
             Timestamp2 = teleop.runtime.time();
             intaketoggle = 0;
             cubeIntaking = true;
+            teleop.redLED.setState(true);
+            teleop.greenLED.setState(false);
+            teleop.redLED1.setState(true);
+            teleop.greenLED1.setState(false);
         }
         if (TimeSinceStamp2() >= 0.55 && ScrewToggle() == 0 && cubeIntaking && (Math.abs(teleop.Screw_Motor.getTargetPosition() - teleop.Screw_Motor.getCurrentPosition()) <= 10)) {
             intaketoggle = 1;
             cubeIntaking = false;
             timestamp3 = teleop.runtime.time();
+            teleop.redLED.setState(true);
+            teleop.greenLED.setState(false);
+            teleop.redLED1.setState(true);
+            teleop.greenLED1.setState(false);
         }
         if (teleop.intakeSensor.getDistance(DistanceUnit.INCH) >= 2.9) {
+            teleop.redLED.setState(true);
+            teleop.greenLED.setState(false);
+            teleop.redLED1.setState(true);
+            teleop.greenLED1.setState(false);
             cubeInScrewOpening = false;
         } else if (teleop.intakeSensor.getDistance(DistanceUnit.INCH) <= 2.9) {
             cubeInScrewOpening = true;
             screwtoggle = 0;
             timestamp4 = teleop.runtime.time();
             cubeWasInScrewOpening = true;
+            teleop.redLED.setState(true);
+            teleop.greenLED.setState(false);
+            teleop.redLED1.setState(true);
+            teleop.greenLED1.setState(false);
         }
         if (timestamp4 >= 2 && !cubeInScrewOpening && cubeWasInScrewOpening) {
             intaketoggle = 0;
             cubeWasInScrewOpening = false;
+            teleop.redLED.setState(false);
+            teleop.greenLED.setState(true);
+            teleop.redLED1.setState(false);
+            teleop.greenLED1.setState(true);
         }
     }
 
@@ -956,7 +998,6 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         }
         return duckPosition;
     }
-
     /**
      * @return enum of space the duck is in.
      * @description Get position duck is in.
@@ -1054,7 +1095,6 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
 
     public void lightSequence() {
         Color color = Color.red;
-
         if (gamepad2.x) {
             teleop.redLED.setState(true);
             teleop.greenLED.setState(false);
@@ -1066,8 +1106,6 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
             teleop.redLED1.setState(false);
             teleop.greenLED1.setState(true);
         }
-
-
     }
 }
 

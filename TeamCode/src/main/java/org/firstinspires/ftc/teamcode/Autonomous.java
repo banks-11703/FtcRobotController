@@ -21,7 +21,7 @@ public class Autonomous extends LinearOpMode {
         boolean button_a_was_pressed = false;
         boolean button_x_was_pressed = false;
         boolean button_b_was_pressed = false;
-        int barcode;
+        
         initVuforia();
         telemetry.addData("does it work", "");
         telemetry.update();
@@ -166,13 +166,13 @@ public class Autonomous extends LinearOpMode {
 
             switch (duckPosition) {
                 case LEFT:
-                    barcode = 0;
+                    drive.barcode = 0;
                     break;
                 case MIDDLE:
-                    barcode = 1;
+                    drive.barcode = 1;
                     break;
                 case RIGHT:
-                    barcode = 2;
+                    drive.barcode = 2;
                     break;
                 default:
                     duckPosition = DuckPosition.LEFT;
@@ -202,18 +202,21 @@ public class Autonomous extends LinearOpMode {
             telemetry.update();
             switch (duckPosition) {
                 case LEFT:
-                    barcode = 0;
+                    drive.barcode = 0;
+                    drive.RedScoreRightWarehouse();
                     break;
                 case MIDDLE:
-                    barcode = 1;
+                    drive.barcode = 1;
+                    drive.RedScoreRightWarehouse();
                     break;
                 case RIGHT:
-                    barcode = 2;
+                    drive.barcode = 2;
+                    drive.RedScoreRightWarehouse();
                     break;
                 default:
                     duckPosition = DuckPosition.LEFT;
                     telemetry.addData("it's broken", "");
-
+                    drive.RedScoreRightWarehouse();
                     break;
             }
         }//Red, Right, Score & Warehouse           :/
@@ -238,15 +241,15 @@ public class Autonomous extends LinearOpMode {
 
             switch (duckPosition) {
                 case LEFT:
-                    barcode = 0;
+                    drive.barcode = 0;
                     drive.BlueScoreLeftWarehouse();
                     break;
                 case MIDDLE:
-                    barcode = 1;
+                    drive.barcode = 1;
                     drive.BlueScoreLeftWarehouse();
                     break;
                 case RIGHT:
-                    barcode = 2;
+                    drive.barcode = 2;
                     drive.BlueScoreLeftWarehouse();
                     break;
                 default:
@@ -271,13 +274,13 @@ public class Autonomous extends LinearOpMode {
 
             switch (duckPosition) {
                 case LEFT:
-                    barcode = 0;
+                    drive.barcode = 0;
                     break;
                 case MIDDLE:
-                    barcode = 1;
+                    drive.barcode = 1;
                     break;
                 case RIGHT:
-                    barcode = 2;
+                    drive.barcode = 2;
                     break;
                 default:
                     duckPosition = DuckPosition.LEFT;
@@ -294,13 +297,13 @@ public class Autonomous extends LinearOpMode {
 
             switch (duckPosition) {
                 case LEFT:
-                    barcode = 0;
+                    drive.barcode = 0;
                     break;
                 case MIDDLE:
-                    barcode = 1;
+                    drive.barcode = 1;
                     break;
                 case RIGHT:
-                    barcode = 2;
+                    drive.barcode = 2;
                     break;
                 default:
                     duckPosition = DuckPosition.LEFT;
@@ -314,8 +317,6 @@ public class Autonomous extends LinearOpMode {
         }//telemetry not in init feature
         telemetry.update();
     }
-
-
     public static final String VUFORIA_KEY =
             "AX+OlhD/////AAABmchQ+gluEkQLp3sQrhqiF3KHXxsnEsgLAJDu9DSV2wC7G6+9s0Uu9q6Z4aKcCBw6z78OwtprS93nTxJmhXG56BASKXvkqGnrvWtBboz4/IdpGMdfND1atvPm2D4TuE3PPw5nw2VSrHvUWu86aThoKYJIR0fAgqSIlzgcdZ9KLishl5n5KQLeBJpXCsW1tWvYV1Jkw3AAqxPoG5mR9ORbRTu/VXfvJKI6uQQBoAIziccUNtb7i2IoyjN/Dh4Juk9Y3r+GcXlTIBVygDyUgxyL2E+TL8IYzq2snIhTkZpCebeM5+ULPVZrI7xkAj2D/SwG0r23lsWLE105tDs3xjBOlhF/VfG7UOp+fXKt9xqIMnbu";
     public VuforiaLocalizer vuforia;
@@ -327,14 +328,12 @@ public class Autonomous extends LinearOpMode {
             "Duck",
             "Marker"
     };
-
     public void initVuforia() {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
-
     public void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
@@ -344,7 +343,6 @@ public class Autonomous extends LinearOpMode {
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
     }
-
     public DuckPosition waitUntilStart() {
         DuckPosition duckPosition = DuckPosition.UNKNOWN;
         while (!opModeIsActive()) {
@@ -361,7 +359,6 @@ public class Autonomous extends LinearOpMode {
         }
         return duckPosition;
     }
-
     /**
      * @return enum of space the duck is in.
      * @description Get position duck is in.
@@ -389,17 +386,13 @@ public class Autonomous extends LinearOpMode {
             return DuckPosition.LEFT;
         }
     }
-
     private final Object runningNotifier = new Object();
-
 public enum DuckScoring {
     TOP, MIDDLE, BOTTOM
 }
-
 public enum DuckPosition {
     LEFT, MIDDLE, RIGHT, UNKNOWN
 }
-
     // TODO: Complete this function
     public DuckScoring convertDuckPosition(int duckPosition, boolean isLeft) {
         return DuckScoring.TOP;

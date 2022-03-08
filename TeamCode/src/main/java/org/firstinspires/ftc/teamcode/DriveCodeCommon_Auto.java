@@ -75,6 +75,7 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
     private List<DcMotorEx> motors;
     public Servo HighGoal;
     public Servo LowGoal;
+    public DcMotor Screw_Motor;
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
@@ -127,6 +128,7 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
         rightFront = hardwareMap.get(DcMotorEx.class, "fr");
         HighGoal = hardwareMap.get(Servo.class, "hg");
         LowGoal = hardwareMap.get(Servo.class, "lg");
+        Screw_Motor = hardwareMap.get(DcMotor.class, "sm");
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
@@ -345,6 +347,7 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
     int team = 0;// 0 = red 1 = blue
     int side = 0;// 0 = left 1 = right
     int mode = 0;//0 = nothing
+    int barcode;
     public int Team() {
         return team % 2;
     }
@@ -392,6 +395,14 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
         LowGoal.setPosition(LRelease);
     }
     public void BlueScoreLeftWarehouse(){
+        if (barcode == 0){
+            HoldMid();
+        } else if (barcode == 1){
+            HoldMid();
+        }else if (barcode == 2){
+            HighHold();
+        }
+        Screw_Motor.setPower(-0.7);
         Pose2d startPose = new Pose2d(7,63,Math.toRadians(-90));
         setPoseEstimate(startPose);
         Trajectory traj1 = trajectoryBuilder(startPose)
@@ -409,12 +420,28 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
                 .splineToLinearHeading(new Pose2d(63,42), Math.toRadians(-90))
                 .build();
         followTrajectory(traj1);
+        Screw_Motor.setPower(0);
+        if (barcode == 0){
+            ScoreLow();
+        } else if (barcode == 1){
+            ScoreMid();
+        }else if (barcode == 2){
+            ScoreTop();
+        }
         followTrajectory(traj2);
         followTrajectory(traj3);
         followTrajectory(traj4);
         turn(Math.toRadians(-90));
     }
     public void RedScoreRightWarehouse(){
+        if (barcode == 0){
+            HoldMid();
+        } else if (barcode == 1){
+            HoldMid();
+        }else if (barcode == 2){
+            HighHold();
+        }
+        Screw_Motor.setPower(-0.7);
         Pose2d startPose = new Pose2d(7,-63,Math.toRadians(90));
         setPoseEstimate(startPose);
         Trajectory traj1 = trajectoryBuilder(startPose)
@@ -432,6 +459,14 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
                 .splineToLinearHeading(new Pose2d(63,-42), Math.toRadians(90))
                 .build();
         followTrajectory(traj1);
+        Screw_Motor.setPower(0);
+        if (barcode == 0){
+            ScoreLow();
+        } else if (barcode == 1){
+            ScoreMid();
+        }else if (barcode == 2){
+            ScoreTop();
+        }
         followTrajectory(traj2);
         followTrajectory(traj3);
         followTrajectory(traj4);
