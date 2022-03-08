@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -70,14 +71,15 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
 
     private TrajectoryFollower follower;
-
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
-
+    public Servo HighGoal;
+    public Servo LowGoal;
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
     public DriveCodeCommon_Auto(HardwareMap hardwareMap) {
+
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
@@ -123,7 +125,8 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
         leftRear = hardwareMap.get(DcMotorEx.class, "bl");
         rightRear = hardwareMap.get(DcMotorEx.class, "br");
         rightFront = hardwareMap.get(DcMotorEx.class, "fr");
-
+        HighGoal = hardwareMap.get(Servo.class, "hg");
+        LowGoal = hardwareMap.get(Servo.class, "lg");
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
@@ -323,7 +326,7 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
     Vector2d vectorBlueRightStart = new Vector2d(-41.5,63);
-    Pose2d blueRightStart = new Pose2d(vectorBlueRightStart,Math.toRadians(-90));
+    Pose2d blueRightStart = new Pose2d(-41.5,63,Math.toRadians(-90));
     Pose2d redRightStart = new Pose2d(7,-63,Math.toRadians(90));
     Pose2d blueLeftStart = new Pose2d(7,63,Math.toRadians(-90));
     Pose2d redLeftStart = new Pose2d(-41.5,-63,Math.toRadians(90));
@@ -333,24 +336,105 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
     Pose2d redHubScoreSide = new Pose2d(-33,-24.3, Math.toRadians(0));
     Pose2d blueWarehouseOutsideOpening = new Pose2d(12,66.5, Math.toRadians(0));
     Pose2d redWarehouseOutsideOpening = new Pose2d(12,-66.5, Math.toRadians(0));
-    Pose2d blueWarehouseInsideOpening = new Pose2d(12,66.5, Math.toRadians(0));
-    Pose2d redWarehouseInsideOpening = new Pose2d(12,-66.5, Math.toRadians(0));
+    Pose2d blueWarehouseInsideOpening = new Pose2d(38,66.5, Math.toRadians(0));
+    Pose2d redWarehouseInsideOpening = new Pose2d(38,-66.5, Math.toRadians(0));
     Pose2d blueWarehouseFinal = new Pose2d(65.5,36, Math.toRadians(-90));
     Pose2d redWarehouseFinal = new Pose2d(65.5,-36, Math.toRadians(90));
     Pose2d blueStorage = new Pose2d(65.5,36, Math.toRadians(-90));
     Pose2d redStorage = new Pose2d(65.5,-36, Math.toRadians(90));
-    //Pose2d  = new Pose2d(,, Math.toRadians());
-    public void BlueScoreWarehouse(){
-        setPoseEstimate(blueRightStart);
-        Trajectory traj1 = trajectoryBuilder(blueLeftStart)
-                .splineToConstantHeading(new Vector2d(-12, 44), Math.toRadians(-90))
+    int team = 0;// 0 = red 1 = blue
+    int side = 0;// 0 = left 1 = right
+    int mode = 0;//0 = nothing
+    public int Team() {
+        return team % 2;
+    }
+
+    public int Side() {
+        return side % 2;
+    }
+
+    public int Mode() {
+        return mode % 3;
+    }
+    final double HHold = 0.7; //
+    final double HScore = 0.175; //
+    final double HHub = 0.015; //
+    final double LHold = 0.8; //
+    final double LScore = 0.6; //
+    final double LRelease = 0.4; //
+    public void HighHold() {
+        HighGoal.setPosition(HHold);
+        LowGoal.setPosition(LHold);
+    }
+
+    public void ScoreHub() {
+        HighGoal.setPosition(HHub);
+        LowGoal.setPosition(LHold);
+    }
+
+    public void ScoreTop() {
+        HighGoal.setPosition(HScore);
+        LowGoal.setPosition(LHold);
+    }
+
+    public void HoldMid() {
+        HighGoal.setPosition(HScore);
+        LowGoal.setPosition(LHold);
+    }
+
+    public void ScoreMid() {
+        HighGoal.setPosition(HScore);
+        LowGoal.setPosition(LScore);
+    }
+
+    public void ScoreLow() {
+        HighGoal.setPosition(HScore);
+        LowGoal.setPosition(LRelease);
+    }
+    public void BlueScoreLeftWarehouse(){
+        Pose2d startPose = new Pose2d(7,63,Math.toRadians(-90));
+        setPoseEstimate(startPose);
+        Trajectory traj1 = trajectoryBuilder(startPose)
+                .splineToConstantHeading(new Vector2d(-12, 40.5), Math.toRadians(-90))
                 .build();
         Trajectory traj2 = trajectoryBuilder(traj1.end())
-                .splineToLinearHeading(blueWarehouseOutsideOpening,Math.toRadians(0))
-                .lineToLinearHeading(blueWarehouseInsideOpening)
-                .lineToSplineHeading(blueWarehouseFinal)
+                .lineToLinearHeading(new Pose2d(12, 66.5,Math.toRadians(0)))
+                .build();
+
+        Trajectory traj3 = trajectoryBuilder(traj2.end())
+                .lineToSplineHeading(new Pose2d(38,66.5, Math.toRadians(0)))
+                .build();
+        Trajectory traj4 = trajectoryBuilder(traj3.end())
+                .splineToLinearHeading(new Pose2d(38,38), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(63,42), Math.toRadians(-90))
                 .build();
         followTrajectory(traj1);
         followTrajectory(traj2);
+        followTrajectory(traj3);
+        followTrajectory(traj4);
+        turn(Math.toRadians(-90));
+    }
+    public void RedScoreRightWarehouse(){
+        Pose2d startPose = new Pose2d(7,-63,Math.toRadians(90));
+        setPoseEstimate(startPose);
+        Trajectory traj1 = trajectoryBuilder(startPose)
+                .splineToConstantHeading(new Vector2d(-12, -40.5), Math.toRadians(90))
+                .build();
+        Trajectory traj2 = trajectoryBuilder(traj1.end())
+                .lineToLinearHeading(new Pose2d(12, -66.5,Math.toRadians(0)))
+                .build();
+
+        Trajectory traj3 = trajectoryBuilder(traj2.end())
+                .lineToSplineHeading(new Pose2d(38,-66.5, Math.toRadians(0)))
+                .build();
+        Trajectory traj4 = trajectoryBuilder(traj3.end())
+                .splineToLinearHeading(new Pose2d(38,-38), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(63,-42), Math.toRadians(90))
+                .build();
+        followTrajectory(traj1);
+        followTrajectory(traj2);
+        followTrajectory(traj3);
+        followTrajectory(traj4);
+        turn(Math.toRadians(-90));
     }
 }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -14,8 +15,15 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 
 @TeleOp(name = "DriveCodeCommon_Teleop", group = "Linear Opmode")
+
 @Disabled
 public class DriveCodeCommon_Teleop extends LinearOpMode {
+    @Config
+    public static class RobotConstants{
+        public static int duckticks=5000;
+        public static double duckpower=.1;
+        public static double duckrate=0.05;
+    }
     TikhHardware_Teleop teleop = new TikhHardware_Teleop();
     double forward_reverse;
     double rotate;
@@ -34,13 +42,14 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
     double Timestamp2 = 0;
     double timestamp3 = 0;
     double timestamp4 = 0;
+    double DuckMaxPower = 0.8;
     double MaxPower = 1;
     double MinPower = 0.1;
     final double HHold = 0.7; //
     final double HScore = 0.175; //
     final double HHub = 0.015; //
     final double LHold = 0.8; //
-    final double LScore = 0.55; //
+    final double LScore = 0.6; //
     final double LRelease = 0.4; //
     double wheel_Dia = 3.93701;// inches
     double ticksPerRotation = 384.5;
@@ -122,7 +131,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         strafe = gamepad1.left_stick_x;
         screw_reverse = gamepad1.left_bumper;
         y_is_pressed = gamepad2.y; //Screw
-        Spinner = gamepad1.b;
+        button_b_is_pressed = gamepad1.b;
         dpad_down_is_pressed = gamepad2.dpad_down; // Duck Spinner Direction / Team
         Stopper = gamepad1.dpad_left; //
         button_x_is_pressed = gamepad1.x; // Intake
@@ -239,12 +248,13 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
 
     public void capping() {
 
-        teleop.cappingServoY.scaleRange(0.55, 0.75);
-        xPos = teleop.cappingServoX.getPosition();
+        // todo removed Line below
+//        xPos = teleop.cappingServoX.getPosition();
+        xPos = 0;
         if (gamepad2.left_bumper && ((xPos - teleop.cappingServoX.getPosition()) <= 0.02)) {
-            teleop.cappingServoX.setPosition(xPos - 0.03);
+            teleop.cappingServoX.setPosition(xPos -= 0.03);
         } else if (gamepad2.right_bumper && (teleop.cappingServoX.getPosition() - xPos) <= 0.02) {
-            teleop.cappingServoX.setPosition(xPos + 0.03);
+            teleop.cappingServoX.setPosition(xPos += 0.03);
         }
         if (!gamepad2.a) {
             teleop.cappingServoY.setPosition(gamepad2.left_stick_y);
@@ -337,51 +347,43 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
             teleop.Top_Intake_Motor.setPower(-1);
             teleop.Bottom_Intake_Motor.setPower(-1);
         } else if (gamepad1.b) {
-        autoDuck(384,0.3,0.05);
+            autoDuck(RobotConstants.duckticks,RobotConstants.duckpower,RobotConstants.duckrate);
         } else {
             teleop.Top_Intake_Motor.setPower(0);
             teleop.Bottom_Intake_Motor.setPower(0);
         }
     }
-    public boolean spinDuck(int ticks,){
+    public boolean spinDuck(int ticks, double power, double rate){
         teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("hi",1);
-        telemetry.update();
         teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         teleop.Bottom_Intake_Motor.setTargetPosition(ticks);
         teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        DuckRampcelleration(power, power, rate);
+        boolean completion = DuckRampcelleration(ticks, power, rate);
         MotorPower(0);
-        teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        if ()
+        return completion;
     }
     public void autoDuck(int ticks, double power, double rate) {
-        if (button_b_was_pressed && SpinnerDirection() == 0) {
+        if (SpinnerDirection() == 0) {
             boolean completion;
             Timestamp = teleop.runtime.time();
-            ResetWheelEncoders();
-            teleopverticalDrive(24, 0.3, 0.05);
-            completion = teleophorizontalDrive(-30, 0.3, 0.05);
+            completion = spinDuck(ticks,power,rate);
             if (!completion) {
-                RunWithoutWheelEncoders();
+                teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
             if (completion) {
-                teleopverticalDrive(100, 0.5, 0.1);
-                RunWithoutWheelEncoders();
+                teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
-        } else if (button_b_was_pressed && SpinnerDirection() == 1) {
+        } else if (SpinnerDirection() == 1) {
             boolean completion;
             Timestamp = teleop.runtime.time();
-            ResetWheelEncoders();
-            teleopverticalDrive(24, 0.3, 0.05);
-            completion = teleophorizontalDrive(30, 0.3, 0.05);
+            completion = spinDuck(-ticks,power,rate);
             if (!completion) {
-                RunWithoutWheelEncoders();
+                teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
             if (completion) {
-                teleopverticalDrive(100, 0.5, 0.1);
-                RunWithoutWheelEncoders();
+                teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
         }
     }
@@ -413,7 +415,11 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
     }
 
     public void Toggles_2P() {
-
+        if (button_b_is_pressed && !button_b_was_pressed) {
+            button_b_was_pressed = true;
+        } else if (!button_b_is_pressed && button_b_was_pressed) {
+            button_b_was_pressed = false;
+        }
         if (button_a_is_pressed && !button_a_was_pressed) {
 
             button_a_was_pressed = true;
@@ -602,21 +608,26 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
     }
 
     public boolean DuckRampcelleration(double distance, double power, double rate) {
-        //MotorPower(power);
+
         Timestamp = teleop.runtime.time();
         telemetry.addData("time check", TimeSinceStamp());
         telemetry.update();
         while (teleop.Bottom_Intake_Motor.isBusy() && opModeIsActive()) {
-            if (java.lang.Math.abs(teleop.Bottom_Intake_Motor.getTargetPosition()) - java.lang.Math.abs(teleop.Bottom_Intake_Motor.getCurrentPosition()) > 10 && TimeSinceStamp() >= 0.2 && power < MaxPower) {
+            capping();
+            if (java.lang.Math.abs(teleop.Bottom_Intake_Motor.getTargetPosition()) - java.lang.Math.abs(teleop.Bottom_Intake_Motor.getCurrentPosition()) > 10 && TimeSinceStamp() >= 0.05 && power < DuckMaxPower) {
                 Timestamp = teleop.runtime.time();
                 telemetry.addData("power", power);
-                if (!gamepad1.dpad_right) {
+                if (!gamepad1.b) {
                     teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     return false;
                 }
                 teleop.Bottom_Intake_Motor.setPower(power += rate); // power = power + 0.05;
             } else {
                 telemetry.addData("bruh", "");
+                if (!gamepad1.b) {
+                    teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    return false;
+                }
             }
             telemetry.update();
             capping();
@@ -934,8 +945,8 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         while (!opModeIsActive()) {
             synchronized (runningNotifier) {
                 try {
-                    //duckPosition = getDuckPosition();
-                    duckPosition = DuckPosition.LEFT;
+                    duckPosition = getDuckPosition();
+                    //duckPosition = DuckPosition.LEFT;
                     runningNotifier.wait();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();

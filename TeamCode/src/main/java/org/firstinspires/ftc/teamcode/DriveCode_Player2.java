@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -10,6 +11,7 @@ public class DriveCode_Player2 extends DriveCodeCommon_Teleop {
         teleop.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         Telemetry();
+        teleop.cappingServoY.scaleRange(0.55, 0.75);
         waitForStart();
         teleop.runtime.reset();
         while (opModeIsActive()) {
