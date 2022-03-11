@@ -1,6 +1,4 @@
 package org.firstinspires.ftc.teamcode;
-import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
@@ -37,6 +35,8 @@ public class DriveCode_Player2 extends DriveCodeCommon_Teleop {
             autoWarehouse();
             screw();
             intake();
+            duckSpinner(RobotConstants.initDuckSpeed,RobotConstants.duckrate);
+            //showdown is when button a,b,y all pressed
             if (shutdown) {
                 screwtoggle = 0;
                 intaketoggle = 0;

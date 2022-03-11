@@ -76,6 +76,9 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
     public Servo HighGoal;
     public Servo LowGoal;
     public DcMotor Screw_Motor;
+    public DcMotor Bottom_Intake_Motor;
+    public Servo cappingServoX;
+    public Servo cappingServoY;
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
@@ -129,6 +132,9 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
         HighGoal = hardwareMap.get(Servo.class, "hg");
         LowGoal = hardwareMap.get(Servo.class, "lg");
         Screw_Motor = hardwareMap.get(DcMotor.class, "sm");
+        Bottom_Intake_Motor = hardwareMap.get(DcMotor.class, "bi");
+        cappingServoX = hardwareMap.get(Servo.class, "leftrightcappingservo");
+        cappingServoY = hardwareMap.get(Servo.class, "updowncappingservo");
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
@@ -362,29 +368,32 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
     final double HHold = 0.7; //
     final double HScore = 0.175; //
     final double HHub = 0.015; //
-    final double LHold = 0.9; //
-    final double LScore = 0.6; //
+    final double MHold = 0.8; //
+    final double LScore = 0.65; //
     final double LRelease = 0.4; //
     public void HighHold() {
         HighGoal.setPosition(HHold);
-        LowGoal.setPosition(LHold);
+        LowGoal.setPosition(MHold);
     }
 
     public void ScoreHub() {
         HighGoal.setPosition(HHub);
-        LowGoal.setPosition(LHold);
+        LowGoal.setPosition(MHold);
     }
 
     public void ScoreTop() {
         HighGoal.setPosition(HScore);
-        LowGoal.setPosition(LHold);
+        LowGoal.setPosition(MHold);
     }
 
     public void HoldMid() {
         HighGoal.setPosition(HScore);
-        LowGoal.setPosition(LHold);
+        LowGoal.setPosition(MHold);
     }
-
+    public void HoldLow() {
+        HighGoal.setPosition(HScore);
+        LowGoal.setPosition(MHold);
+    }
     public void ScoreMid() {
         HighGoal.setPosition(HScore);
         LowGoal.setPosition(LScore);
@@ -394,30 +403,39 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
         HighGoal.setPosition(HScore);
         LowGoal.setPosition(LRelease);
     }
+    public void intakeCaper(){
+        Bottom_Intake_Motor.setPower(1);
+        cappingServoX.setPosition(0.5);
+        cappingServoY.setPosition(0.5);
+    }
+    // Barcode left 0 = low 1 = mid 2 = high
+    // Barcode right 0 = hid 1 = mid 2 = low
     public void BlueScoreLeftWarehouse(){
         if (barcode == 0){
-            HoldMid();
+            HoldLow();
         } else if (barcode == 1){
             HoldMid();
         }else if (barcode == 2){
             HighHold();
         }
+
         Screw_Motor.setPower(-0.7);
-        Pose2d startPose = new Pose2d(7,63,Math.toRadians(-90));
+        Pose2d startPose = new Pose2d(9,63,Math.toRadians(-90));
         setPoseEstimate(startPose);
         Trajectory traj1 = trajectoryBuilder(startPose)
-                .splineToConstantHeading(new Vector2d(-12, 40.5), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(-12, 42.5), Math.toRadians(-90))
                 .build();
         Trajectory traj2 = trajectoryBuilder(traj1.end())
                 .lineToLinearHeading(new Pose2d(12, 66.5,Math.toRadians(0)))
                 .build();
-
         Trajectory traj3 = trajectoryBuilder(traj2.end())
-                .lineToSplineHeading(new Pose2d(38,66.5, Math.toRadians(0)))
+                .lineTo(new Vector2d(38,66.5))
                 .build();
         Trajectory traj4 = trajectoryBuilder(traj3.end())
-                .splineToLinearHeading(new Pose2d(38,38), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(55,42), Math.toRadians(-90))
+                .lineTo(new Vector2d(38,38))
+                .build();
+        Trajectory traj5 = trajectoryBuilder(traj4.end())
+                .lineToLinearHeading(new Pose2d(60,42, Math.toRadians(-90)))
                 .build();
         followTrajectory(traj1);
         Screw_Motor.setPower(0);
@@ -428,11 +446,16 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
         }else if (barcode == 2){
             ScoreTop();
         }
+
         followTrajectory(traj2);
-        followTrajectory(traj3);
         HighHold();
+        followTrajectory(traj3);
         followTrajectory(traj4);
-        turn(Math.toRadians(-90));
+        intakeCaper();
+        followTrajectory(traj5);
+        Bottom_Intake_Motor.setPower(0);
+
+//        turn(Math.toRadians(-90));
     }
     public void RedScoreRightWarehouse(){
         if (barcode == 2){
@@ -446,21 +469,22 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
         Pose2d startPose = new Pose2d(7,-63,Math.toRadians(90));
         setPoseEstimate(startPose);
         Trajectory traj1 = trajectoryBuilder(startPose)
-                .splineToConstantHeading(new Vector2d(-12, -40.5), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(-12, -42.5), Math.toRadians(90))
                 .build();
         Trajectory traj2 = trajectoryBuilder(traj1.end())
                 .lineToLinearHeading(new Pose2d(12, -66.5,Math.toRadians(0)))
                 .build();
-
         Trajectory traj3 = trajectoryBuilder(traj2.end())
-                .lineToSplineHeading(new Pose2d(38,-66.5, Math.toRadians(0)))
+                .lineTo(new Vector2d(38,-66.5))
                 .build();
         Trajectory traj4 = trajectoryBuilder(traj3.end())
-                .splineToLinearHeading(new Pose2d(38,-38), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(63,-42), Math.toRadians(90))
+                .lineTo(new Vector2d(38,-38))
+                .build();
+        Trajectory traj5 = trajectoryBuilder(traj4.end())
+                .lineToLinearHeading(new Pose2d(60,-42, Math.toRadians(90)))
                 .build();
         followTrajectory(traj1);
-        Screw_Motor.setPower(2);
+        Screw_Motor.setPower(0);
         if (barcode == 2){
             ScoreLow();
         } else if (barcode == 1){
@@ -468,10 +492,12 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
         }else if (barcode == 0){
             ScoreTop();
         }
+        intakeCaper();
         followTrajectory(traj2);
         followTrajectory(traj3);
         HighHold();
         followTrajectory(traj4);
-        turn(Math.toRadians(-90));
+        Bottom_Intake_Motor.setPower(1);
+        followTrajectory(traj5);
     }
 }

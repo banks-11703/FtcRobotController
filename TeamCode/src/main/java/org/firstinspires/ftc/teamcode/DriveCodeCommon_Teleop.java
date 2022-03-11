@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -20,11 +19,12 @@ import java.util.List;
 @Disabled
 public class DriveCodeCommon_Teleop extends LinearOpMode {
     @Config
-    public static class RobotConstants{
-        public static int duckticks=5000;
-        public static double duckpower=.1;
-        public static double duckrate=0.05;
+    public static class RobotConstants {
+        public static int duckticks = 2200;
+        public static double initDuckSpeed = 0.2;
+        public static double duckrate = 0.035;
     }
+
     TikhHardware_Teleop teleop = new TikhHardware_Teleop();
     double forward_reverse;
     double rotate;
@@ -39,10 +39,12 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
     int mode = 0;//0 = nothing
     int Duck_Spinner_direction = 0;
     int speed = 0;
-    double Timestamp = 0;
+
+    double Timestamp = teleop.runtime.time();
     double Timestamp2 = 0;
     double timestamp3 = 0;
     double timestamp4 = 0;
+    double timestamp5 = 0;
     double DuckMaxPower = 0.8;
     double MaxPower = 1;
     double MinPower = 0.1;
@@ -50,12 +52,13 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
     final double HScore = 0.175; //
     final double HHub = 0.015; //
     final double LHold = 0.8; //
-    final double LScore = 0.6; //
+    final double LScore = 0.65; //
     final double LRelease = 0.4; //
     double wheel_Dia = 3.93701;// inches
     double ticksPerRotation = 384.5;
     double rotations = 4.325;
-    double xPos;
+    double xPos = 0;
+    double yPos = 0;
     boolean dpad_up_was_pressed = false;
     boolean button_a_was_pressed = false;
     boolean y_was_pressed = false;
@@ -84,6 +87,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
     boolean cubeInScrewOpening;
     boolean cubeWasInScrewOpening;
     boolean sped;
+    double duckSpeed;
     private final Object runningNotifier = new Object();
 
     public enum DuckScoring {
@@ -151,6 +155,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
             Override++;
         }
     }
+
     public void Player_2_FastDrive() {
         forward_reverse = gamepad1.left_stick_y;
         rotate = gamepad1.right_stick_x;
@@ -173,6 +178,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         teleop.BackRightDrive.setPower((+forward_reverse - rotate - strafe));
 
     }
+
     public void Player_2_Override() {
         forward_reverse = gamepad2.left_stick_y;
         rotate = gamepad2.right_stick_x;
@@ -213,7 +219,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
     }
 
     public int SpinnerDirection() {
-        return Duck_Spinner_direction % 2;
+        return (2 * (Duck_Spinner_direction % 2) - 1);
     }
 
     public void HighHold() {
@@ -270,17 +276,19 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
     }
 
     public void capping() {
-
-        // todo removed Line below
-//        xPos = teleop.cappingServoX.getPosition();
-        xPos = 0;
-        if (gamepad2.left_bumper && ((xPos - teleop.cappingServoX.getPosition()) <= 0.02)) {
-            teleop.cappingServoX.setPosition(xPos -= 0.03);
-        } else if (gamepad2.right_bumper && (teleop.cappingServoX.getPosition() - xPos) <= 0.02) {
-            teleop.cappingServoX.setPosition(xPos += 0.03);
+        if (gamepad2.left_stick_x < -0.1 && ((xPos - teleop.cappingServoX.getPosition()) <= 0.02)) {
+            teleop.cappingServoX.setPosition(xPos + 0.025);
+            xPos = teleop.cappingServoX.getPosition();
+        } else if (gamepad2.left_stick_x > 0.1 && (teleop.cappingServoX.getPosition() - xPos) <= 0.02) {
+            teleop.cappingServoX.setPosition(xPos - 0.025);
+            xPos = teleop.cappingServoX.getPosition();
         }
-        if (!gamepad2.a) {
-            teleop.cappingServoY.setPosition(gamepad2.left_stick_y);
+        if (gamepad2.left_stick_y < -0.1 && ((yPos - teleop.cappingServoY.getPosition()) <= 0.02)) {
+            teleop.cappingServoY.setPosition(yPos - 0.03);
+            yPos = teleop.cappingServoY.getPosition();
+        } else if (gamepad2.left_stick_y > 0.1 && (teleop.cappingServoY.getPosition() - yPos) <= 0.02) {
+            teleop.cappingServoY.setPosition(yPos + 0.03);
+            yPos = teleop.cappingServoY.getPosition();
         }
         teleop.cappingMotor.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
     }
@@ -326,7 +334,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
             teleop.greenLED.setState(false);
             teleop.redLED1.setState(true);
             teleop.greenLED1.setState(false);
-        } else{
+        } else {
             teleop.redLED.setState(false);
             teleop.greenLED.setState(true);
             teleop.redLED1.setState(false);
@@ -383,6 +391,17 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         }
     }
 
+    public void duckSpinner(double power, double rate) {
+        if (gamepad1.b && intakeToggle() == 0) {
+            if (TimeSinceStamp5() >= 0.025 && Math.abs(duckSpeed) <= 1) {
+                timestamp5 = teleop.runtime.time();
+                teleop.Bottom_Intake_Motor.setPower(SpinnerDirection() * (duckSpeed += rate));
+            }
+        } else {
+             duckSpeed = RobotConstants.initDuckSpeed;
+        }
+    }
+
     public void intake() {
         if (intakeToggle() == 1 && ScrewToggle() == 0) {
             teleop.Top_Intake_Motor.setPower(1);
@@ -394,14 +413,13 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         } else if (Intake_Reverse) {
             teleop.Top_Intake_Motor.setPower(-1);
             teleop.Bottom_Intake_Motor.setPower(-1);
-        } else if (gamepad1.b) {
-            autoDuck(RobotConstants.duckticks,RobotConstants.duckpower,RobotConstants.duckrate);
-        } else {
+        } else if (!gamepad1.b) {
             teleop.Top_Intake_Motor.setPower(0);
             teleop.Bottom_Intake_Motor.setPower(0);
         }
     }
-    public boolean spinDuck(int ticks, double power, double rate){
+
+    public boolean spinDuck(int ticks, double power, double rate) {
         teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         teleop.Bottom_Intake_Motor.setTargetPosition(ticks);
@@ -410,11 +428,12 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         MotorPower(0);
         return completion;
     }
+
     public void autoDuck(int ticks, double power, double rate) {
         if (SpinnerDirection() == 0) {
             boolean completion;
             Timestamp = teleop.runtime.time();
-            completion = spinDuck(ticks,power,rate);
+            completion = spinDuck(ticks, power, rate);
             if (!completion) {
                 teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
@@ -424,7 +443,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         } else if (SpinnerDirection() == 1) {
             boolean completion;
             Timestamp = teleop.runtime.time();
-            completion = spinDuck(-ticks,power,rate);
+            completion = spinDuck(-ticks, power, rate);
             if (!completion) {
                 teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 teleop.Bottom_Intake_Motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -460,6 +479,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         telemetry.addData("Speed", speed);
         telemetry.addData("Screw Pos", teleop.Screw_Motor.getCurrentPosition());
         telemetry.addData("Target - Current ", java.lang.Math.abs(java.lang.Math.abs(teleop.Screw_Motor.getTargetPosition()) - java.lang.Math.abs(teleop.Screw_Motor.getCurrentPosition())));
+        telemetry.addData("DuckSpeed",  RobotConstants.initDuckSpeed);
         telemetry.update();
     }
 
@@ -731,6 +751,10 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
 
     public double TimeSinceStamp4() {
         return teleop.runtime.time() - timestamp4;
+    }
+
+    public double TimeSinceStamp5() {
+        return teleop.runtime.time() - timestamp5;
     }
 
     public void MotorPower(double power) {
@@ -1005,6 +1029,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         }
         return duckPosition;
     }
+
     /**
      * @return enum of space the duck is in.
      * @description Get position duck is in.

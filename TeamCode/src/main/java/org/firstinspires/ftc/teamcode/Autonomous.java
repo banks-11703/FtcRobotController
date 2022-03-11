@@ -23,9 +23,9 @@ public class Autonomous extends LinearOpMode {
         boolean button_b_was_pressed = false;
         
         initVuforia();
+        initTfod();
         telemetry.addData("does it work", "");
         telemetry.update();
-        initTfod();
         telemetry.addData("does it work2", "");
         telemetry.update();
         if (tfod != null) {
