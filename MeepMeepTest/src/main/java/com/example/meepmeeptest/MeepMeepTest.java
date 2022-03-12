@@ -10,7 +10,7 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTest {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
+        MeepMeep meepMeep = new MeepMeep(600);
 
         // Declare our first bot
         RoadRunnerBotEntity myFirstBot = new DefaultBotBuilder(meepMeep)
@@ -20,11 +20,11 @@ public class MeepMeepTest {
                 .setConstraints(64.31821099615379, 30, Math.toRadians(180), Math.toRadians(180), 15.21)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(7,63,Math.toRadians(-90)))
-                                .splineToConstantHeading(new Vector2d(-12, 40.5), Math.toRadians(-90))
-                                .lineToLinearHeading(new Pose2d(12, 66.5,Math.toRadians(0)))
-                                .lineTo(new Vector2d(38,66.5))
-                                .lineTo(new Vector2d(38,38))
-                                .lineToLinearHeading(new Pose2d(55,42, Math.toRadians(-90)))
+                                .splineToConstantHeading(new Vector2d(-12, 41), Math.toRadians(-90))
+                                .back(12)
+                                .lineToLinearHeading(new Pose2d(-55.5, 55.5,Math.toRadians(100)))
+                                .back(10)
+                                .lineToLinearHeading(new Pose2d(-59, 35,Math.toRadians(0)))
                                 .build()
                 );
 
@@ -34,12 +34,10 @@ public class MeepMeepTest {
                 .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(64.31821099615379, 30, Math.toRadians(180), Math.toRadians(180), 15.21)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(7,-63,Math.toRadians(90)))
-                        .splineToConstantHeading(new Vector2d(-12, -40.5), Math.toRadians(90))
-                        .lineToLinearHeading(new Pose2d(12, -66.5,Math.toRadians(0)))
-                        .lineTo(new Vector2d(38,-66.5))
-                        .lineTo(new Vector2d(38,-38))
-                        .lineToLinearHeading(new Pose2d(55,-42, Math.toRadians(90)))
+                        drive.trajectorySequenceBuilder(new Pose2d(7.5,-65,Math.toRadians(90)))
+                                .splineToConstantHeading(new Vector2d(-12, -43), Math.toRadians(90))
+                                .back(1)
+                                .splineToSplineHeading(new Pose2d(-65, -43,Math.toRadians(0)),Math.toRadians(135))
                                 .build()
                 );
 

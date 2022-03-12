@@ -10,7 +10,7 @@ public class DriveCode_Player2 extends DriveCodeCommon_Teleop {
         teleop.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         Telemetry();
-        teleop.cappingServoY.scaleRange(0.55, 0.75);
+        teleop.cappingServoY.scaleRange(0.55, 0.85);
         waitForStart();
         teleop.runtime.reset();
         teleop.redLED.setMode(DigitalChannel.Mode.OUTPUT);
@@ -39,6 +39,7 @@ public class DriveCode_Player2 extends DriveCodeCommon_Teleop {
             //showdown is when button a,b,y all pressed
             if (shutdown) {
                 screwtoggle = 0;
+                teleop.Screw_Motor.setPower(0);
                 intaketoggle = 0;
                 teleop.Bottom_Intake_Motor.setPower(0);
             }

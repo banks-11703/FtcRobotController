@@ -21,23 +21,21 @@ public class Autonomous extends LinearOpMode {
         boolean button_a_was_pressed = false;
         boolean button_x_was_pressed = false;
         boolean button_b_was_pressed = false;
-        
-        initVuforia();
-        initTfod();
-        telemetry.addData("does it work", "");
+        drive.cappingServoY.scaleRange(0.3, 0.75);
+        telemetry.addData("Point", "Vuforia");
         telemetry.update();
-        telemetry.addData("does it work2", "");
+        initVuforia();
+        telemetry.addData("Point", "Tfod");
+        telemetry.update();
+        initTfod();
+        telemetry.addData("Point", "Tfod zoom");
         telemetry.update();
         if (tfod != null) {
             tfod.activate();
             tfod.setZoom(1, 16.0 / 9.0);
         }
-        telemetry.addData("Unknown", "");
-        telemetry.update();
         DuckPosition duckPosition = DuckPosition.UNKNOWN;
-
         boolean done = false;
-
         while (!done) {
             boolean button_a_is_pressed = gamepad1.a;
             boolean button_b_is_pressed = gamepad1.b;
@@ -73,17 +71,22 @@ public class Autonomous extends LinearOpMode {
                 telemetry.addData("Side", "Left");
                 telemetry.addData("Mode", "Nothing");
                 telemetry.update();
-            } else if (drive.Team() == 0 && drive.Mode() == 2 && drive.Side() == 1) {
-                telemetry.addData("Team", "Red");
-                telemetry.addData("Side", "Right");
-                telemetry.addData("Mode", "Warehouse");
-                telemetry.update();
             } else if (drive.Team() == 0 && drive.Mode() == 1 && drive.Side() == 0) {
                 telemetry.addData("Team", "Red");
                 telemetry.addData("Side", "Left");
-                telemetry.addData("Mode", "Duck, Score, and Warehouse");
+                telemetry.addData("Mode", "Score, and Warehouse");
                 telemetry.update();
-            } else if (drive.Team() == 0 && drive.Mode() == 0 && drive.Side() == 1) {
+            }else if (drive.Team() == 0 && drive.Mode() == 2 && drive.Side() == 0) {
+                telemetry.addData("Team", "Red");
+                telemetry.addData("Side", "Left");
+                telemetry.addData("Mode", "Duck, and Storage");
+                telemetry.update();
+            }else if (drive.Team() == 0 && drive.Mode() == 2 && drive.Side() == 1) {
+                telemetry.addData("Team", "Red");
+                telemetry.addData("Side", "Right");
+                telemetry.addData("Mode", "Nothing");
+                telemetry.update();
+            }  else if (drive.Team() == 0 && drive.Mode() == 0 && drive.Side() == 1) {
                 telemetry.addData("Team", "Red");
                 telemetry.addData("Side", "Right");
                 telemetry.addData("Mode", "Nothing");
@@ -92,6 +95,16 @@ public class Autonomous extends LinearOpMode {
                 telemetry.addData("Team", "Red");
                 telemetry.addData("Side", "Right");
                 telemetry.addData("Mode", "Score & Warehouse");
+                telemetry.update();
+            } else if (drive.Team() == 0 && drive.Mode() == 3 && drive.Side() == 0) {
+                telemetry.addData("Team", "Red");
+                telemetry.addData("Side", "Left");
+                telemetry.addData("Mode", "Score & Duck & Storage");
+                telemetry.update();
+            } else if (drive.Team() == 0 && drive.Mode() == 3 && drive.Side() == 1) {
+                telemetry.addData("Team", "Red");
+                telemetry.addData("Side", "Right");
+                telemetry.addData("Mode", "Nothing");
                 telemetry.update();
             } else if (drive.Team() == 1 && drive.Mode() == 0 && drive.Side() == 0) {
                 telemetry.addData("Team", "Blue");
@@ -103,22 +116,37 @@ public class Autonomous extends LinearOpMode {
                 telemetry.addData("Side", "Right");
                 telemetry.addData("Mode", "Nothing");
                 telemetry.update();
-            } else if (drive.Team() == 1 && drive.Mode() == 2 && drive.Side() == 0) {
-                telemetry.addData("Team", "Blue");
-                telemetry.addData("Side", "Left");
-                telemetry.addData("Mode", "Warehouse");
-                telemetry.update();
-            } else if (drive.Team() == 1 && drive.Mode() == 1 && drive.Side() == 1) {
-                telemetry.addData("Team", "Blue");
-                telemetry.addData("Side", "Right");
-                telemetry.addData("Mode", "Duck, Score, and Warehouse");
-                telemetry.update();
-            } else if (drive.Team() == 1 && drive.Mode() == 1 && drive.Side() == 0) {
+            }    else if (drive.Team() == 1 && drive.Mode() == 1 && drive.Side() == 0) {
                 telemetry.addData("Team", "Blue");
                 telemetry.addData("Side", "Left");
                 telemetry.addData("Mode", "Score & Warehouse");
                 telemetry.update();
-            } else {
+            }else if (drive.Team() == 1 && drive.Mode() == 1 && drive.Side() == 1) {
+                telemetry.addData("Team", "Blue");
+                telemetry.addData("Side", "Right");
+                telemetry.addData("Mode", "Score & Warehouse");
+                telemetry.update();
+            } else if (drive.Team() == 1 && drive.Mode() == 2 && drive.Side() == 0) {
+                telemetry.addData("Team", "Blue");
+                telemetry.addData("Side", "Left");
+                telemetry.addData("Mode", "Nothing");
+                telemetry.update();
+            }else if (drive.Team() == 1 && drive.Mode() == 2 && drive.Side() == 1) {
+                telemetry.addData("Team", "Blue");
+                telemetry.addData("Side", "Right");
+                telemetry.addData("Mode", "Duck & Storage");
+                telemetry.update();
+            }else if (drive.Team() == 1 && drive.Mode() == 3 && drive.Side() == 1) {
+                telemetry.addData("Team", "Blue");
+                telemetry.addData("Side", "Right");
+                telemetry.addData("Mode", "Score & Duck & Storage");
+                telemetry.update();
+            } else if (drive.Team() == 1 && drive.Mode() == 3 && drive.Side() == 0) {
+                telemetry.addData("Team", "Blue");
+                telemetry.addData("Side", "Left");
+                telemetry.addData("Mode", "Nothing");
+                telemetry.update();
+            }else {
                 telemetry.addData("You did the stupid", "Not in Initialization");
                 telemetry.update();
             }
@@ -157,43 +185,48 @@ public class Autonomous extends LinearOpMode {
             telemetry.addData("Mode", "Nothing");
             telemetry.update();
         }//Red, Left, Nothing                           ✔
-        else if (drive.Team() == 0 && drive.Mode() == 1 && drive.Side() == 0) {
-            telemetry.addData("Team", "Red");
-            telemetry.addData("Side", "Left");
-            telemetry.addData("Mode", "Duck, Score, and Warehouse");
-            telemetry.update();
-
-            switch (duckPosition) {
-                case LEFT:
-                    drive.barcode = 0;
-                    break;
-                case MIDDLE:
-                    drive.barcode = 1;
-                    break;
-                case RIGHT:
-                    drive.barcode = 2;
-                    break;
-                default:
-                    duckPosition = DuckPosition.LEFT;
-                    telemetry.addData("it's broken", "");
-
-                    break;
-            }
-
-            telemetry.update();
-        }//Red, Left, Duck, Score, and Warehouse   :)
-        else if (drive.Team() == 0 && drive.Mode() == 2 && drive.Side() == 1) {
-            telemetry.addData("Team", "Red");
-            telemetry.addData("Side", "Right");
-            telemetry.addData("Mode", "Warehouse");
-            telemetry.update();
-        }//Red, Right, Warehouse                   ✔
         else if (drive.Team() == 0 && drive.Mode() == 0 && drive.Side() == 1) {
             telemetry.addData("Team", "Red");
             telemetry.addData("Side", "Right");
             telemetry.addData("Mode", "Nothing");
             telemetry.update();
         }//Red, Right, Nothing                     ✔
+        else if (drive.Team() == 0 && drive.Mode() == 1 && drive.Side() == 0) {
+            telemetry.addData("Team", "Red");
+            telemetry.addData("Side", "Left");
+            telemetry.addData("Mode", "Score, and Warehouse");
+            telemetry.update();
+
+            switch (duckPosition) {
+                case LEFT:
+                    drive.barcode = 0;
+                    drive.RedLeftScore();
+                    sleep(500);
+                    drive.RedScoreLeftWarehouse();
+                    break;
+                case MIDDLE:
+                    drive.barcode = 1;
+                    drive.RedLeftScore();
+                    sleep(500);
+                    drive.RedScoreLeftWarehouse();
+                    break;
+                case RIGHT:
+                    drive.barcode = 2;
+                    drive.RedLeftScore();
+                    sleep(500);
+                    drive.RedScoreLeftWarehouse();
+                    break;
+                default:
+                    duckPosition = DuckPosition.LEFT;
+                    telemetry.addData("it's broken", "");
+                    drive.RedLeftScore();
+                    sleep(500);
+                    drive.RedScoreLeftWarehouse();
+                    break;
+            }
+
+            telemetry.update();
+        }//Red, Left, Score, and Warehouse   ✔
         else if (drive.Team() == 0 && drive.Mode() == 1 && drive.Side() == 1) {
             telemetry.addData("Team", "Red");
             telemetry.addData("Side", "Right");
@@ -202,36 +235,76 @@ public class Autonomous extends LinearOpMode {
             switch (duckPosition) {
                 case LEFT:
                     drive.barcode = 0;
+                    drive.RedRightScore();
+                    sleep(500);
                     drive.RedScoreRightWarehouse();
                     break;
                 case MIDDLE:
                     drive.barcode = 1;
+                    drive.RedRightScore();
+                    sleep(500);
                     drive.RedScoreRightWarehouse();
                     break;
                 case RIGHT:
                     drive.barcode = 2;
+                    drive.RedRightScore();
+                    sleep(500);
                     drive.RedScoreRightWarehouse();
                     break;
                 default:
                     duckPosition = DuckPosition.LEFT;
                     telemetry.addData("it's broken", "");
+                    drive.RedRightScore();
+                    sleep(500);
                     drive.RedScoreRightWarehouse();
                     break;
             }
-        }//Red, Right, Score & Warehouse           :/
-
+        }//Red, Right, Score & Warehouse           ✔
         else if (drive.Team() == 1 && drive.Mode() == 0 && drive.Side() == 0) {
             telemetry.addData("Team", "Blue");
             telemetry.addData("Side", "Left");
             telemetry.addData("Mode", "Nothing");
             telemetry.update();
         }//Blue, Left, Nothing                     ✔
+        else if (drive.Team() == 1 && drive.Mode() == 0 && drive.Side() == 1) {
+            telemetry.addData("Team", "Blue");
+            telemetry.addData("Side", "Right");
+            telemetry.addData("Mode", "Nothing");
+            telemetry.update();
+        }//Blue, Right, Nothing                    ✔
         else if (drive.Team() == 1 && drive.Mode() == 2 && drive.Side() == 0) {
             telemetry.addData("Team", "Blue");
             telemetry.addData("Side", "Left");
-            telemetry.addData("Mode", "Warehouse");
+            telemetry.addData("Mode", "Duck, Warehouse");
             telemetry.update();
-        }//Blue, Left, Warehouse                   ✔
+            switch (duckPosition) {
+                case LEFT:
+                    drive.barcode = 0;
+                    drive.BlueDuckRight();
+                    sleep(1000);
+                    drive.BlueDuckStorage2();
+                    break;
+                case MIDDLE:
+                    drive.barcode = 1;
+                    drive.BlueDuckRight();
+                    sleep(1000);
+                    drive.BlueDuckStorage2();
+                    break;
+                case RIGHT:
+                    drive.barcode = 2;
+                    drive.BlueDuckRight();
+                    sleep(1000);
+                    drive.BlueDuckStorage2();
+                    break;
+                default:
+                    duckPosition = DuckPosition.LEFT;
+                    telemetry.addData("it's broken", "");
+                    drive.BlueDuckRight();
+                    sleep(1000);
+                    drive.BlueDuckStorage2();
+                    break;
+            }
+        }//Blue, Left, Duck, Warehouse
         else if (drive.Team() == 1 && drive.Mode() == 1 && drive.Side() == 0) {
             telemetry.addData("Team", "Blue");
             telemetry.addData("Side", "Left");
@@ -241,78 +314,187 @@ public class Autonomous extends LinearOpMode {
             switch (duckPosition) {
                 case LEFT:
                     drive.barcode = 0;
+                    drive.BlueLeftScore();
+                    sleep(500);
                     drive.BlueScoreLeftWarehouse();
                     break;
                 case MIDDLE:
                     drive.barcode = 1;
+                    drive.BlueLeftScore();
+                    sleep(500);
                     drive.BlueScoreLeftWarehouse();
                     break;
                 case RIGHT:
                     drive.barcode = 2;
+                    drive.BlueLeftScore();
+                    sleep(500);
                     drive.BlueScoreLeftWarehouse();
                     break;
                 default:
                     duckPosition = DuckPosition.LEFT;
                     telemetry.addData("it's broken", "");
+                    drive.BlueLeftScore();
+                    sleep(500);
                     drive.BlueScoreLeftWarehouse();
                     break;
             }
 
-        }//Blue, Left, Score & Warehouse           :)
-        else if (drive.Team() == 1 && drive.Mode() == 0 && drive.Side() == 1) {
-            telemetry.addData("Team", "Blue");
-            telemetry.addData("Side", "Right");
-            telemetry.addData("Mode", "Nothing");
-            telemetry.update();
-        }//Blue, Right, Nothing                    ✔
+        }//Blue, Left, Score & Warehouse           ✔
         else if (drive.Team() == 1 && drive.Mode() == 1 && drive.Side() == 1) {
             telemetry.addData("Team", "Blue");
-            telemetry.addData("Side", "Right");
-            telemetry.addData("Mode", "Duck, Score, and Warehouse");
-            telemetry.update();
-
-            switch (duckPosition) {
-                case LEFT:
-                    drive.barcode = 0;
-                    break;
-                case MIDDLE:
-                    drive.barcode = 1;
-                    break;
-                case RIGHT:
-                    drive.barcode = 2;
-                    break;
-                default:
-                    duckPosition = DuckPosition.LEFT;
-                    telemetry.addData("it's broken", "");
-
-                    break;
-            }
-        }//Blue, Right, Duck, Score, and Warehouse
-        else if (drive.Team() == 1 && drive.Mode() == 0 && drive.Side() == 1) {
-            telemetry.addData("Team", "Blue");
             telemetry.addData("Side", "Left");
-            telemetry.addData("Mode", "Duck, Score, and Warehouse");
+            telemetry.addData("Mode", "Score & Warehouse");
             telemetry.update();
 
             switch (duckPosition) {
                 case LEFT:
                     drive.barcode = 0;
+                    drive.BlueLeftScore();
+                    sleep(500);
+                    drive.BlueScoreLeftWarehouse();
                     break;
                 case MIDDLE:
                     drive.barcode = 1;
+                    drive.BlueLeftScore();
+                    sleep(500);
+                    drive.BlueScoreLeftWarehouse();
                     break;
                 case RIGHT:
                     drive.barcode = 2;
+                    drive.BlueLeftScore();
+                    sleep(500);
+                    drive.BlueScoreLeftWarehouse();
                     break;
                 default:
                     duckPosition = DuckPosition.LEFT;
                     telemetry.addData("it's broken", "");
-
+                    drive.BlueLeftScore();
+                    sleep(500);
+                    drive.BlueScoreLeftWarehouse();
                     break;
             }
-        }//Blue, Left, Duck, Score, and Warehouse
+
+        }//Blue, Right, Score & Warehouse           ✔
+        else if (drive.Team() == 0 && drive.Mode() == 2 && drive.Side() == 0) {
+            telemetry.addData("Team", "Red");
+            telemetry.addData("Side", "Left");
+            telemetry.addData("Mode", "Duck, and Storage");
+            telemetry.update();
+
+            switch (duckPosition) {
+                case LEFT:
+                    drive.barcode = 0;
+                    drive.RedDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    break;
+                case MIDDLE:
+                    drive.barcode = 1;
+                    drive.RedDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    break;
+                case RIGHT:
+                    drive.barcode = 2;
+                    drive.RedDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    break;
+                default:
+                    duckPosition = DuckPosition.LEFT;
+                    telemetry.addData("it's broken", "");
+                    drive.RedDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    break;
+            }
+        }//Red, Left, Duck, and Storage
+        else if (drive.Team() == 0 && drive.Mode() == 3 && drive.Side() == 0) {
+            telemetry.addData("Team", "Red");
+            telemetry.addData("Side", "Right");
+            telemetry.addData("Mode", "Duck, Score, and Storage");
+            telemetry.update();
+
+            switch (duckPosition) {
+                case LEFT:
+                    drive.barcode = 0;
+                    drive.RedLeftScore();
+                    sleep(500);
+                    drive.RedScoreDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    break;
+                case MIDDLE:
+                    drive.barcode = 1;
+                    drive.RedLeftScore();
+                    sleep(500);
+                    drive.RedScoreDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    break;
+                case RIGHT:
+                    drive.barcode = 2;
+                    drive.RedLeftScore();
+                    sleep(500);
+                    drive.RedScoreDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    break;
+                default:
+                    duckPosition = DuckPosition.LEFT;
+                    telemetry.addData("it's broken", "");
+                    drive.RedLeftScore();
+                    sleep(500);
+                    drive.RedScoreDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    break;
+            }
+        }//Red, Left, Score, Duck and Storage
+        else if (drive.Team() == 1 && drive.Mode() == 3 && drive.Side() == 1) {
+            telemetry.addData("Team", "Red");
+            telemetry.addData("Side", "Left");
+            telemetry.addData("Mode", "Duck, and Storage");
+            telemetry.update();
+
+            switch (duckPosition) {
+                case LEFT:
+                    drive.barcode = 0;
+                    drive.BlueLeftScore();
+                    sleep(500);
+                    drive.BlueScoreDuckStorage();
+                    sleep(3000);
+                    drive.BlueDuckStorage2();
+                    break;
+                case MIDDLE:
+                    drive.barcode = 1;
+                    drive.BlueLeftScore();
+                    sleep(500);
+                    drive.BlueScoreDuckStorage();
+                    sleep(3000);
+                    drive.BlueDuckStorage2();
+                    break;
+                case RIGHT:
+                    drive.barcode = 2;
+                    drive.BlueLeftScore();
+                    sleep(500);
+                    drive.BlueScoreDuckStorage();
+                    sleep(3000);
+                    drive.BlueDuckStorage2();
+                    break;
+                default:
+                    duckPosition = DuckPosition.LEFT;
+                    telemetry.addData("it's broken", "");
+                    drive.BlueLeftScore();
+                    sleep(500);
+                    drive.BlueScoreDuckStorage();
+                    sleep(3000);
+                    drive.BlueDuckStorage2();
+                    break;
+            }
+        }//Blue, Right, Score, Duck and Storage
         else {
-            telemetry.addData("You did the stupid", "Not in Initialization");
+            telemetry.addData("You did the stupid", "You chose nothing");
         }//telemetry not in init feature
         telemetry.update();
     }
