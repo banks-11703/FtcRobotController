@@ -29,14 +29,11 @@
 
 package org.firstinspires.ftc.teamcode.Old;
 
-import android.widget.Spinner;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.configuration.annotations.ServoType;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
@@ -201,8 +198,6 @@ public class Old_RedDriveCode_Player1 extends LinearOpMode {
             else if (dpad_right_is_pressed){Intake_Servo.setPower(1);}
             else{ Intake_Servo.setPower(0);}
 
-
-            //todo (Friday) Get Motor Encoder working
             if (ArmPosMode == 0) {
                 PivotMotor.setTargetPosition(Intake);
             }

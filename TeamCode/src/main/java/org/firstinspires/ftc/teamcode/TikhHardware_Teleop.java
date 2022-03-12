@@ -30,13 +30,16 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-public class Robot_2_TikhHardware
+public class TikhHardware_Teleop
 {
     public DcMotor FrontLeftDrive = null;
     public DcMotor BackLeftDrive = null;
@@ -47,13 +50,22 @@ public class Robot_2_TikhHardware
     public DcMotor Top_Intake_Motor;
     public DcMotor Bottom_Intake_Motor;// also duck spinner
     public DcMotor Screw_Motor;
+    public DcMotor cappingMotor;
     public Servo Stopper_Servo;
+    public Servo cappingServoX;
+    public Servo cappingServoY;
     public TouchSensor ScrewDetector;
+    public TouchSensor intakeDetector;
+    public DistanceSensor intakeSensor;
+    public DigitalChannel redLED;
+    public DigitalChannel greenLED;
+    public DigitalChannel redLED1;
+    public DigitalChannel greenLED1;
     public ElapsedTime runtime = new ElapsedTime();
     HardwareMap hwMap           =  null;
 
 
-    public Robot_2_TikhHardware(){
+    public TikhHardware_Teleop(){
 
     }
 
@@ -69,12 +81,22 @@ public class Robot_2_TikhHardware
         Top_Intake_Motor = hwMap.get(DcMotor.class, "ti");
         Bottom_Intake_Motor = hwMap.get(DcMotor.class, "bi");
         Screw_Motor = hwMap.get(DcMotor.class, "sm");
+        cappingMotor = hwMap.get(DcMotor.class, "cm");
         Stopper_Servo = hwMap.get(Servo.class, "ss");
+        cappingServoX = hwMap.get(Servo.class, "leftrightcappingservo");
+        cappingServoY = hwMap.get(Servo.class, "updowncappingservo");
         ScrewDetector = hwMap.get(TouchSensor.class, "ts");
+        intakeDetector = hwMap.get(TouchSensor.class, "ID");
+        intakeSensor = hwMap.get(DistanceSensor.class,"is");
+        redLED= hwMap.get(DigitalChannel.class, "red");
+        greenLED = hwMap.get(DigitalChannel.class, "green");
+        redLED1 = hwMap.get(DigitalChannel.class, "red1");
+        greenLED1 = hwMap.get(DigitalChannel.class, "green1");
         FrontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         FrontRightDrive.setDirection(DcMotor.Direction.REVERSE);
         BackLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         BackRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        Bottom_Intake_Motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
  }
 
