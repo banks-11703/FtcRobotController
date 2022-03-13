@@ -373,7 +373,7 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
     }
 
     public int Mode() {
-        return mode % 4;
+        return mode % 5;
     }
     final double HHold = 0.7; //
     final double HScore = 0.175; //
@@ -381,6 +381,7 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
     final double MHold = 0.8; //
     final double LScore = 0.65; //
     final double LRelease = 0.4; //
+
     public void HighHold() {
         HighGoal.setPosition(HHold);
         LowGoal.setPosition(MHold);
@@ -459,10 +460,10 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
             HighHold();
         }
         Screw_Motor.setPower(-0.7);
-        Pose2d startPose = new Pose2d(-30.5,65,Math.toRadians(-90));
+        Pose2d startPose = new Pose2d(-28,63,Math.toRadians(-90));
         setPoseEstimate(startPose);
         Trajectory traj1 = trajectoryBuilder(startPose)
-                .splineToConstantHeading(new Vector2d(-12, 43), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(-12, 39.5), Math.toRadians(-90))
                 .build();
         moveTapeMeasure();
         followTrajectory(traj1);
@@ -485,10 +486,10 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
             HighHold();
         }
         Screw_Motor.setPower(-0.7);
-        Pose2d startPose = new Pose2d(-30.5,-65,Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-28,-63,Math.toRadians(90));
         setPoseEstimate(startPose);
         Trajectory traj1 = trajectoryBuilder(startPose)
-                .splineToConstantHeading(new Vector2d(-12, -43), Math.toRadians(90))
+            .lineTo(new Vector2d(-12, -39.5))
                 .build();
         moveTapeMeasure();
         followTrajectory(traj1);
@@ -605,46 +606,103 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
 //        turn(Math.toRadians(-90));
     }
     public void BlueScoreDuckStorage(){
-        Pose2d startPose = new Pose2d(-12, 43,Math.toRadians(-90));
+        Pose2d startPose = new Pose2d(-12, 39.5,Math.toRadians(-90));
         setPoseEstimate(startPose);
         Trajectory traj1 = trajectoryBuilder(startPose)
-                .splineToConstantHeading(new Vector2d(-30.5,65), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(-28,63), Math.toRadians(-90))
                 .build();
         Trajectory traj3 = trajectoryBuilder(traj1.end())
                 .lineToLinearHeading(new Pose2d(-60, 60,Math.toRadians(-180)))
                 .build();
+        Bottom_Intake_Motor.setPower(0.5);
         followTrajectory(traj1);
         HighHold();
         followTrajectory(traj3);
-        Bottom_Intake_Motor.setPower(0.3);
+
 
 //        turn(Math.toRadians(-90));
     }
     public void BlueDuckRight(){
 
-        Pose2d startPose = new Pose2d(-30.5,65,Math.toRadians(-90));
+        Pose2d startPose = new Pose2d(-33.5,63,Math.toRadians(-90));
         setPoseEstimate(startPose);
-        Trajectory traj3 = trajectoryBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(-60, 60,Math.toRadians(-180)))
+        Trajectory traj1 = trajectoryBuilder(startPose)
+                .forward(12)
+                .build();
+        Trajectory traj2 = trajectoryBuilder(traj1.end())
+                .lineToLinearHeading(new Pose2d(-55, 49.5,Math.toRadians(90)))
+                .build();
+        Trajectory traj3 = trajectoryBuilder(traj2.end())
+                .lineToLinearHeading(new Pose2d(-65, 57,Math.toRadians(90)))
                 .build();
 
         HighHold();
-        followTrajectory(traj3);
+        Bottom_Intake_Motor.setPower(1);
+        followTrajectory(traj1);
         Bottom_Intake_Motor.setPower(0.3);
+        followTrajectory(traj2);
+        followTrajectory(traj3);
 
 //        turn(Math.toRadians(-90));
     }
     public void BlueDuckStorage2(){
         Bottom_Intake_Motor.setPower(0);
-        Pose2d startPose = new Pose2d(-60, 60,Math.toRadians(-180));
+        Pose2d startPose = new Pose2d(-65, 57,Math.toRadians(90));
         setPoseEstimate(startPose);
         Trajectory traj1 = trajectoryBuilder(startPose)
-                .back(10)
+                .back(6.5)
                 .build();
         intakeCaper();
         HighHold();
         Trajectory traj2 = trajectoryBuilder(traj1.end())
-                .lineToLinearHeading(new Pose2d(-65, 43,Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-61, 42,Math.toRadians(0)))
+                .build();
+        followTrajectory(traj1);
+        followTrajectory(traj2);
+
+//        turn(Math.toRadians(-90));
+    }
+    public void BlueDuckScoreStorage2(){
+        Bottom_Intake_Motor.setPower(0);
+        Pose2d startPose = new Pose2d(-61, 42,Math.toRadians(0));
+        setPoseEstimate(startPose);
+        Trajectory traj1 = trajectoryBuilder(startPose)
+                .strafeRight(12)
+                .build();
+        Trajectory traj2 = trajectoryBuilder(traj1.end())
+                .lineTo(new Vector2d(-33,24))
+                .build();
+        if (barcode == 0){
+            HoldLow();
+        } else if (barcode == 1){
+            HoldMid();
+        }else if (barcode == 2){
+            HighHold();
+        }
+        Screw_Motor.setPower(-0.6);
+        followTrajectory(traj1);
+        followTrajectory(traj2);
+        Screw_Motor.setPower(0);
+        if (barcode == 0){
+            ScoreLow();
+        } else if (barcode == 1){
+            ScoreMid();
+        }else if (barcode == 2){
+            ScoreTop();
+        }
+//        turn(Math.toRadians(-90));
+    }
+    public void BlueDuckScoreStorage3(){
+        Bottom_Intake_Motor.setPower(0);
+        Pose2d startPose = new Pose2d(-33, 24,Math.toRadians(0));
+        setPoseEstimate(startPose);
+        Trajectory traj1 = trajectoryBuilder(startPose)
+                .back(24)
+                .build();
+        intakeCaper();
+        HighHold();
+        Trajectory traj2 = trajectoryBuilder(traj1.end())
+                .lineToConstantHeading(new Vector2d(-65,42))
                 .build();
         followTrajectory(traj1);
         followTrajectory(traj2);
@@ -813,36 +871,90 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
 
         Pose2d startPose = new Pose2d(-30.5,-65,Math.toRadians(90));
         setPoseEstimate(startPose);
-        Trajectory traj1 = trajectoryBuilder(startPose)
+        Trajectory traj2 = trajectoryBuilder(startPose)
+                .forward(1)
+                .build();
+        Trajectory traj3 = trajectoryBuilder(traj2.end())
+                .forward(1)
+                .build();
+        Trajectory traj1 = trajectoryBuilder(traj3.end())
 
                 .lineToLinearHeading(new Pose2d(-60, -60,Math.toRadians(-180)))
                 .build();
 
+        followTrajectory(traj2);
+        Bottom_Intake_Motor.setPower(1);
+        followTrajectory(traj3);
+        Bottom_Intake_Motor.setPower(-0.4);
         followTrajectory(traj1);
         HighHold();
-        Bottom_Intake_Motor.setPower(-0.4);
 
+
+//        turn(Math.toRadians(-90));
+    }
+    public void RedDuckScoreStorage2(){
+        Bottom_Intake_Motor.setPower(0);
+        Pose2d startPose = new Pose2d(-65, -40,Math.toRadians(0));
+        setPoseEstimate(startPose);
+        Trajectory traj1 = trajectoryBuilder(startPose)
+                .strafeLeft(12)
+                .build();
+        Trajectory traj2 = trajectoryBuilder(traj1.end())
+                .lineTo(new Vector2d(-33.5,-23))
+                .build();
+        if (barcode == 0){
+            HoldLow();
+        } else if (barcode == 1){
+            HoldMid();
+        }else if (barcode == 2){
+            HighHold();
+        }
+        Screw_Motor.setPower(-0.6);
+        followTrajectory(traj1);
+        followTrajectory(traj2);
+        Screw_Motor.setPower(0);
+        if (barcode == 0){
+            ScoreLow();
+        } else if (barcode == 1){
+            ScoreMid();
+        }else if (barcode == 2){
+            ScoreTop();
+        }
 //        turn(Math.toRadians(-90));
     }
     public void RedScoreDuckLeft(){
-
-        Pose2d startPose = new Pose2d(-12, -43,Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-12, -39.5,Math.toRadians(90));
         setPoseEstimate(startPose);
         Trajectory traj1 = trajectoryBuilder(startPose)
-                .splineToConstantHeading(new Vector2d(-40,-65),Math.toRadians(90))
+                .lineTo(new Vector2d(-28,-63))
                 .build();
-        Trajectory traj2 = trajectoryBuilder(startPose)
-
-                .lineToLinearHeading(new Pose2d(-60, -60,Math.toRadians(-180)))
+        Trajectory traj2 = trajectoryBuilder(traj1.end())
+                .lineToLinearHeading(new Pose2d(-60, -59.5,Math.toRadians(-180)))
                 .build();
-
+        Bottom_Intake_Motor.setPower(1);
         followTrajectory(traj1);
-        HighHold();
         Bottom_Intake_Motor.setPower(-0.4);
+        followTrajectory(traj2);
+        HighHold();
+//        turn(Math.toRadians(-90));
+    }
+    public void RedDuckScoreStorage3(){
+        Bottom_Intake_Motor.setPower(0);
+        Pose2d startPose = new Pose2d(-33, -24,Math.toRadians(0));
+        setPoseEstimate(startPose);
+        Trajectory traj1 = trajectoryBuilder(startPose)
+                .back(26)
+                .build();
+        intakeCaper();
+        HighHold();
+        Trajectory traj2 = trajectoryBuilder(traj1.end())
+                .lineToConstantHeading(new Vector2d(-65,-40))
+                .build();
+        followTrajectory(traj1);
+        followTrajectory(traj2);
 
 //        turn(Math.toRadians(-90));
     }
-
     public void RedDuckStorage2(){
         Bottom_Intake_Motor.setPower(0);
         Pose2d startPose = new Pose2d(-60, -60,Math.toRadians(-180));

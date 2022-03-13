@@ -101,6 +101,11 @@ public class Autonomous extends LinearOpMode {
                 telemetry.addData("Side", "Left");
                 telemetry.addData("Mode", "Score & Duck & Storage");
                 telemetry.update();
+            }else if (drive.Team() == 0 && drive.Mode() == 4 && drive.Side() == 0) {
+                telemetry.addData("Team", "Red");
+                telemetry.addData("Side", "left");
+                telemetry.addData("Mode", "ToberTech Special");
+                telemetry.update();
             } else if (drive.Team() == 0 && drive.Mode() == 3 && drive.Side() == 1) {
                 telemetry.addData("Team", "Red");
                 telemetry.addData("Side", "Right");
@@ -145,6 +150,16 @@ public class Autonomous extends LinearOpMode {
                 telemetry.addData("Team", "Blue");
                 telemetry.addData("Side", "Left");
                 telemetry.addData("Mode", "Nothing");
+                telemetry.update();
+            }else if (drive.Team() == 1 && drive.Mode() == 4 && drive.Side() == 0) {
+                telemetry.addData("Team", "Blue");
+                telemetry.addData("Side", "Left");
+                telemetry.addData("Mode", "Nothing");
+                telemetry.update();
+            }else if (drive.Team() == 1 && drive.Mode() == 4 && drive.Side() == 1) {
+                telemetry.addData("Team", "Blue");
+                telemetry.addData("Side", "Right");
+                telemetry.addData("Mode", "ToberTech Special");
                 telemetry.update();
             }else {
                 telemetry.addData("You did the stupid", "Not in Initialization");
@@ -451,8 +466,8 @@ public class Autonomous extends LinearOpMode {
                     break;
             }
         }//Red, Left, Score, Duck and Storage
-        else if (drive.Team() == 1 && drive.Mode() == 3 && drive.Side() == 1) {
-            telemetry.addData("Team", "Red");
+        else if (drive.Team() == 1 && drive.Mode() == 3 && drive.Side() == 1){
+            telemetry.addData("Team", "Blue");
             telemetry.addData("Side", "Left");
             telemetry.addData("Mode", "Duck, and Storage");
             telemetry.update();
@@ -493,6 +508,98 @@ public class Autonomous extends LinearOpMode {
                     break;
             }
         }//Blue, Right, Score, Duck and Storage
+        else if (drive.Team() == 0 && drive.Mode() == 4 && drive.Side() == 0) {
+            telemetry.addData("Team", "Red");
+            telemetry.addData("Side", "left");
+            telemetry.addData("Mode", "ToberTech Special");
+            telemetry.update();
+
+            switch (duckPosition) {
+                case LEFT:
+                    drive.barcode = 0;
+                    drive.RedDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    drive.RedDuckScoreStorage2();
+                    sleep(600);
+                    drive.RedDuckScoreStorage3();
+                    break;
+                case MIDDLE:
+                    drive.barcode = 1;
+                    drive.RedDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    drive.RedDuckScoreStorage2();
+                    sleep(600);
+                    drive.RedDuckScoreStorage3();
+                    break;
+                case RIGHT:
+                    drive.barcode = 2;
+                    drive.RedDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    drive.RedDuckScoreStorage2();
+                    sleep(600);
+                    drive.RedDuckScoreStorage3();
+                    break;
+                default:
+                    duckPosition = DuckPosition.LEFT;
+                    telemetry.addData("it's broken", "");
+                    drive.RedDuckLeft();
+                    sleep(3000);
+                    drive.RedDuckStorage2();
+                    drive.RedDuckScoreStorage2();
+                    sleep(600);
+                    drive.RedDuckScoreStorage3();
+                    break;
+            }
+        }//Red, Left, Score, Duck and Storage
+        else if (drive.Team() == 1 && drive.Mode() == 4 && drive.Side() == 1){
+            telemetry.addData("Team", "Blue");
+            telemetry.addData("Side", "Right");
+            telemetry.addData("Mode", "ToberTech Special");
+            telemetry.update();
+
+            switch (duckPosition) {
+                case LEFT:
+                    drive.barcode = 2;
+                    drive.BlueDuckRight();
+                    sleep(5000);
+                    drive.BlueDuckStorage2();
+                    drive.BlueDuckScoreStorage2();
+                    sleep(600);
+                    drive.BlueDuckScoreStorage3();
+                    break;
+                case MIDDLE:
+                    drive.barcode = 0;
+                    drive.BlueDuckRight();
+                    sleep(5000);
+                    drive.BlueDuckStorage2();
+                    drive.BlueDuckScoreStorage2();
+                    sleep(600);
+                    drive.BlueDuckScoreStorage3();
+                    break;
+                case RIGHT:
+                    drive.barcode = 1;
+                    drive.BlueDuckRight();
+                    sleep(5000);
+                    drive.BlueDuckStorage2();
+                    drive.BlueDuckScoreStorage2();
+                    sleep(600);
+                    drive.BlueDuckScoreStorage3();
+                    break;
+                default:
+                    duckPosition = DuckPosition.LEFT;
+                    telemetry.addData("it's broken", "");
+                    drive.BlueDuckRight();
+                    sleep(5000);
+                    drive.BlueDuckStorage2();
+                    drive.BlueDuckScoreStorage2();
+                    sleep(600);
+                    drive.BlueDuckScoreStorage3();
+                    break;
+            }
+        }//Blue, Right, Duck, Score and Storage (ToberTech Special)
         else {
             telemetry.addData("You did the stupid", "You chose nothing");
         }//telemetry not in init feature
