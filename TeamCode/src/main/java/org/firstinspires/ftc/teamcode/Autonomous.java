@@ -520,9 +520,9 @@ public class Autonomous extends LinearOpMode {
                     drive.RedDuckLeft();
                     sleep(3000);
                     drive.RedDuckStorage2();
-                    drive.RedDuckScoreStorage2();
-                    sleep(600);
-                    drive.RedDuckScoreStorage3();
+                    drive.RedDuckScoreStorage2Bottom();
+                    sleep(700);
+                    drive.RedDuckScoreStorage3Bottom();
                     break;
                 case MIDDLE:
                     drive.barcode = 1;
@@ -530,7 +530,7 @@ public class Autonomous extends LinearOpMode {
                     sleep(3000);
                     drive.RedDuckStorage2();
                     drive.RedDuckScoreStorage2();
-                    sleep(600);
+                    sleep(700);
                     drive.RedDuckScoreStorage3();
                     break;
                 case RIGHT:
@@ -539,7 +539,7 @@ public class Autonomous extends LinearOpMode {
                     sleep(3000);
                     drive.RedDuckStorage2();
                     drive.RedDuckScoreStorage2();
-                    sleep(600);
+                    sleep(700);
                     drive.RedDuckScoreStorage3();
                     break;
                 default:
@@ -549,7 +549,7 @@ public class Autonomous extends LinearOpMode {
                     sleep(3000);
                     drive.RedDuckStorage2();
                     drive.RedDuckScoreStorage2();
-                    sleep(600);
+                    sleep(700);
                     drive.RedDuckScoreStorage3();
                     break;
             }
@@ -575,9 +575,9 @@ public class Autonomous extends LinearOpMode {
                     drive.BlueDuckRight();
                     sleep(5000);
                     drive.BlueDuckStorage2();
-                    drive.BlueDuckScoreStorage2();
+                    drive.BlueDuckScoreStorage2Bottom();
                     sleep(600);
-                    drive.BlueDuckScoreStorage3();
+                    drive.BlueDuckScoreStorage3Bottom();
                     break;
                 case RIGHT:
                     drive.barcode = 1;

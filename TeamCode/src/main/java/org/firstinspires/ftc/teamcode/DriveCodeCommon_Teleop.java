@@ -465,10 +465,10 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         } else {
             telemetry.addData("ScoringMode:", "Low");
         }
-        if (SpinnerDirection() == 0) {
-            telemetry.addData("Team", "Blue");
-        } else {
+        if (SpinnerDirection() == -1) {
             telemetry.addData("Team", "Red");
+        } else {
+            telemetry.addData("Team", "Blue");
         }
         if (cubeInScrewOpening) {
             telemetry.addData("Cube in screw opening", teleop.intakeSensor.getDistance(DistanceUnit.INCH));
