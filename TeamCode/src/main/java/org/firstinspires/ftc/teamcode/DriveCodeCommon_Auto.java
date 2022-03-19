@@ -756,7 +756,6 @@ public class DriveCodeCommon_Auto extends MecanumDrive {
 
 //        turn(Math.toRadians(-90));
     }
-
     public void BlueDuckWarehouse2(){
         Bottom_Intake_Motor.setPower(0);
         Pose2d startPose = new Pose2d(-55.5, 55.5,Math.toRadians(100));
