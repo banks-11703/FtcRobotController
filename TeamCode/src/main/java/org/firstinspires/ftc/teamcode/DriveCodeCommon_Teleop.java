@@ -87,6 +87,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
     boolean cubeInScrewOpening;
     boolean cubeWasInScrewOpening;
     boolean sped;
+    boolean screwShutOff;
     double duckSpeed;
     private final Object runningNotifier = new Object();
 
@@ -137,7 +138,7 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
         strafe = gamepad1.left_stick_x;
         screw_reverse = gamepad1.left_bumper;
         y_is_pressed = gamepad2.y; //Screw
-        button_b_is_pressed = gamepad1.b;
+        button_b_is_pressed = gamepad1.b; // Screw Shut off
         dpad_down_is_pressed = gamepad2.dpad_down; // Duck Spinner Direction / Team
         Stopper = gamepad1.dpad_left; //
         button_x_is_pressed = gamepad1.x; // Intake
@@ -382,11 +383,15 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
             teleop.Screw_Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             teleop.Screw_Motor.setPower(0.2);
         } else if (ScrewToggle() == 0) {
-            teleop.Screw_Motor.setPower(-0.1);
-            if (teleop.ScrewDetector.isPressed()) {
-                teleop.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                teleop.Screw_Motor.setTargetPosition(-145);
-                teleop.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            teleop.Screw_Motor.setPower(0);
+            if(!screwShutOff) {
+                teleop.Screw_Motor.setPower(-0.1);
+                if (teleop.ScrewDetector.isPressed()) {
+                    teleop.Screw_Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    teleop.Screw_Motor.setTargetPosition(-145);
+                    teleop.Screw_Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+
             }
         }
     }
@@ -485,9 +490,11 @@ public class DriveCodeCommon_Teleop extends LinearOpMode {
 
     public void Toggles_2P() {
         if (button_b_is_pressed && !button_b_was_pressed) {
+           screwShutOff = true;
             button_b_was_pressed = true;
         } else if (!button_b_is_pressed && button_b_was_pressed) {
             button_b_was_pressed = false;
+            screwShutOff = false;
         }
         if (button_a_is_pressed && !button_a_was_pressed) {
 
