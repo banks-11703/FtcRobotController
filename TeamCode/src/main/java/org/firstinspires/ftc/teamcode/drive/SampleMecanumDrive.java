@@ -22,10 +22,15 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
@@ -73,7 +78,23 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
-
+    public Servo HighGoal;
+    public Servo LowGoal;
+    public DcMotor Top_Intake_Motor;
+    public DcMotor Bottom_Intake_Motor;// also duck spinner
+    public DcMotor Screw_Motor;
+    public DcMotor cappingMotor;
+    public Servo Stopper_Servo;
+    public Servo cappingServoX;
+    public Servo cappingServoY;
+    public TouchSensor ScrewDetector;
+    public TouchSensor intakeDetector;
+    public DistanceSensor intakeSensor;
+    public DigitalChannel redLED;
+    public DigitalChannel greenLED;
+    public DigitalChannel redLED1;
+    public DigitalChannel greenLED1;
+    public ElapsedTime runtime = new ElapsedTime();
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
@@ -123,7 +144,23 @@ public class SampleMecanumDrive extends MecanumDrive {
         leftRear = hardwareMap.get(DcMotorEx.class, "bl");
         rightRear = hardwareMap.get(DcMotorEx.class, "br");
         rightFront = hardwareMap.get(DcMotorEx.class, "fr");
-
+        HighGoal = hardwareMap.get(Servo.class, "hg");
+        LowGoal = hardwareMap.get(Servo.class, "lg");
+        Top_Intake_Motor = hardwareMap.get(DcMotor.class, "ti");
+        Bottom_Intake_Motor = hardwareMap.get(DcMotor.class, "bi");
+        Screw_Motor = hardwareMap.get(DcMotor.class, "sm");
+        cappingMotor = hardwareMap.get(DcMotor.class, "cm");
+        Stopper_Servo = hardwareMap.get(Servo.class, "ss");
+        cappingServoX = hardwareMap.get(Servo.class, "leftrightcappingservo");
+        cappingServoY = hardwareMap.get(Servo.class, "updowncappingservo");
+        ScrewDetector = hardwareMap.get(TouchSensor.class, "ts");
+        intakeDetector = hardwareMap.get(TouchSensor.class, "ID");
+        intakeSensor = hardwareMap.get(DistanceSensor.class,"is");
+        redLED= hardwareMap.get(DigitalChannel.class, "red");
+        greenLED = hardwareMap.get(DigitalChannel.class, "green");
+        redLED1 = hardwareMap.get(DigitalChannel.class, "red1");
+        greenLED1 = hardwareMap.get(DigitalChannel.class, "green1");
+        Bottom_Intake_Motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
